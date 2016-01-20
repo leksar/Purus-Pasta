@@ -67,7 +67,8 @@ public class GOut {
         defstate();
     }
 
-    public static class GLException extends RuntimeException {
+    @SuppressWarnings("serial")
+	public static class GLException extends RuntimeException {
         public int code;
         public String str;
         private static javax.media.opengl.glu.GLU glu = new javax.media.opengl.glu.GLU();
@@ -108,25 +109,29 @@ public class GOut {
         }
     }
 
-    public static class GLInvalidEnumException extends GLException {
+    @SuppressWarnings("serial")
+	public static class GLInvalidEnumException extends GLException {
         public GLInvalidEnumException() {
             super(GL.GL_INVALID_ENUM);
         }
     }
 
-    public static class GLInvalidValueException extends GLException {
+    @SuppressWarnings("serial")
+	public static class GLInvalidValueException extends GLException {
         public GLInvalidValueException() {
             super(GL.GL_INVALID_VALUE);
         }
     }
 
-    public static class GLInvalidOperationException extends GLException {
+    @SuppressWarnings("serial")
+	public static class GLInvalidOperationException extends GLException {
         public GLInvalidOperationException() {
             super(GL.GL_INVALID_OPERATION);
         }
     }
 
-    public static class GLOutOfMemoryException extends GLException {
+    @SuppressWarnings("serial")
+	public static class GLOutOfMemoryException extends GLException {
         public GLOutOfMemoryException() {
             super(GL.GL_OUT_OF_MEMORY);
         }
@@ -542,6 +547,9 @@ public class GOut {
 
     public void chcolor() {
         usestate(States.color);
+    }
+    public void chcolor(Color c, int a) {
+        chcolor(c.getRed(), c.getGreen(), c.getBlue(), a);
     }
 
     Color getcolor() {

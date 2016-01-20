@@ -33,7 +33,6 @@ import haven.glsl.*;
 
 import static haven.glsl.Cons.*;
 
-import haven.Resource.Tile;
 import haven.MapMesh.Scan;
 import haven.Surface.Vertex;
 import haven.Surface.MeshVertex;
@@ -41,9 +40,9 @@ import haven.Surface.MeshVertex;
 import javax.media.opengl.*;
 import java.awt.Color;
 
+@SuppressWarnings("deprecation")
 public class WaterTile extends Tiler {
     public final int depth;
-    private static final Material.Colors bcol = new Material.Colors(new Color(128, 128, 128), new Color(255, 255, 255), new Color(0, 0, 0), new Color(0, 0, 0));
     public final Tiler.MCons bottom;
 
     public static class Bottom extends MapMesh.Hooks {
@@ -56,7 +55,7 @@ public class WaterTile extends Tiler {
 
         public Bottom(MapMesh m) {
             this.m = m;
-            MapMesh.MapSurface ms = m.data(m.gnd);
+            MapMesh.MapSurface ms = m.data(MapMesh.gnd);
             this.vs = ms.vs;
             Scan ts = ms.ts;
             this.surf = new Vertex[vs.l];
@@ -201,12 +200,6 @@ public class WaterTile extends Tiler {
 
         private ShaderMacro[] shaders = {
                 new ShaderMacro() {
-                    final AutoVarying skyc = new AutoVarying(Type.VEC3) {
-                        protected Expression root(VertexContext vctx) {
-                            return (mul(icam.ref(), reflect(MiscLib.vertedir(vctx).depref(), vctx.eyen.depref())));
-                        }
-                    };
-
                     public void modify(final ProgramContext prog) {
                         MiscLib.fragedir(prog.fctx);
                         final ValBlock.Value nmod = prog.fctx.uniform.new Value(Type.VEC3) {

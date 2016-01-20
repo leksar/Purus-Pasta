@@ -36,11 +36,12 @@ import haven.GLState.Buffer;
 import haven.GLProgram.VarID;
 
 public abstract class InstancedUniform {
-    public final Slot[] deps;
+    @SuppressWarnings("rawtypes")
+	public final Slot[] deps;
     public final Uniform.AutoApply uniform;
     public final Attribute.AutoInstanced attrib;
 
-    public InstancedUniform(Type type, String infix, Slot... deps) {
+    public InstancedUniform(Type type, String infix, @SuppressWarnings("rawtypes") Slot... deps) {
         this.deps = deps;
         uniform = new Uniform.AutoApply(type, infix, deps) {
             public void apply(GOut g, VarID location) {
@@ -78,7 +79,7 @@ public abstract class InstancedUniform {
     protected abstract void unbindiarr(GOut g, GLBuffer buf);
 
     public static abstract class Mat4 extends InstancedUniform {
-        public Mat4(String infix, Slot... deps) {
+        public Mat4(String infix, Slot<?>... deps) {
             super(Type.MAT4, infix, deps);
         }
 

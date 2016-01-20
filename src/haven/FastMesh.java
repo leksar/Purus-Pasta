@@ -350,6 +350,8 @@ public class FastMesh implements FRendered, Rendered.Instanced, Disposable {
                     case DLIST:
                         compiler = new DLCompiler();
                         break;
+				default:
+					break;
                 }
                 curmode = g.gc.pref.meshmode.val;
             }
@@ -417,7 +419,8 @@ public class FastMesh implements FRendered, Rendered.Instanced, Disposable {
         }
     }
 
-    @Resource.LayerName("mesh")
+    @SuppressWarnings("serial")
+	@Resource.LayerName("mesh")
     public static class MeshRes extends Resource.Layer implements Resource.IDLayer<Integer> {
         public transient FastMesh m;
         public transient Material.Res mat;

@@ -45,7 +45,8 @@ public class AvaRender {
         return (comp);
     }
 
-    private static class IntException extends RuntimeException {
+    @SuppressWarnings("serial")
+	private static class IntException extends RuntimeException {
         private IntException(InterruptedException cause) {
             super(cause);
         }
@@ -163,7 +164,6 @@ public class AvaRender {
         }
     };
 
-    @SuppressWarnings("unchecked")
     public static void main(String[] args) throws Exception {
         Indir<Resource> base = Resource.local().load("gfx/borka/body");
 	List<MD> mod = Arrays.asList(new MD(Resource.local().load("gfx/borka/male"), ResData.wrap(Arrays.asList(Resource.local().load("gfx/borka/male")))));

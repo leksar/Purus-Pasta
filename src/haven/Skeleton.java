@@ -556,7 +556,8 @@ public class Skeleton {
         return (f.create(this, owner, res, sdt));
     }
 
-    @Resource.LayerName("skel")
+    @SuppressWarnings("serial")
+	@Resource.LayerName("skel")
     public static class Res extends Resource.Layer {
         public final transient Skeleton s;
 
@@ -863,7 +864,8 @@ public class Skeleton {
         }
     }
 
-    @Resource.LayerName("skan")
+    @SuppressWarnings("serial")
+	@Resource.LayerName("skan")
     public static class ResPose extends Resource.Layer implements Resource.IDLayer<Integer> {
         public final int id;
         public final float len;
@@ -997,7 +999,8 @@ public class Skeleton {
         }
     }
 
-    @Resource.LayerName("boneoff")
+    @SuppressWarnings("serial")
+	@Resource.LayerName("boneoff")
     public static class BoneOffset extends Resource.Layer implements Resource.IDLayer<String> {
         public final String nm;
         public final transient Command[] prog;

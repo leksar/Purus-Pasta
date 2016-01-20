@@ -250,7 +250,7 @@ public class Text {
             });
         }
 
-        public static UText forfield(Furnace fnd, final Object obj, String fn) {
+        public static UText<Object> forfield(Furnace fnd, final Object obj, String fn) {
             final java.lang.reflect.Field f;
             try {
                 f = obj.getClass().getField(fn);
@@ -268,7 +268,7 @@ public class Text {
             });
         }
 
-        public static UText forfield(Object obj, String fn) {
+        public static UText<?> forfield(Object obj, String fn) {
             return (forfield(std, obj, fn));
         }
     }

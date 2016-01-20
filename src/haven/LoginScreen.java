@@ -56,6 +56,7 @@ public class LoginScreen extends Widget {
         ll.show();
         ll.raise();
     	}
+
     private static abstract class Login extends Widget {
         abstract Object[] data();
 

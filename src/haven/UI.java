@@ -26,13 +26,16 @@
 
 package haven;
 
-import java.util.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
 import java.awt.Color;
 import java.awt.event.InputEvent;
-
-import static haven.Utils.el;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.TreeMap;
 
 public class UI {
     public RootWidget root;

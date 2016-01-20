@@ -75,6 +75,29 @@ public class Fightsess extends Widget {
         pho = (int) (pl.sczu.mul(20f).y) - 20;
     }
 
+    private static final Resource tgtfx = Resource.local().loadwait("gfx/hud/combat/trgtarw");
+    private final Map<Pair<Long, Resource>, Sprite> cfx = new CacheMap<Pair<Long, Resource>, Sprite>();
+    private final Collection<Sprite> curfx = new ArrayList<Sprite>();
+
+    private void fxon(long gobid, Resource fx) {
+	MapView map = getparent(GameUI.class).map;
+	Gob gob = ui.sess.glob.oc.getgob(gobid);
+	if((map == null) || (gob == null))
+	    return;
+	Pair<Long, Resource> id = new Pair<Long, Resource>(gobid, fx);
+	Sprite spr = cfx.get(id);
+	if(spr == null)
+	    cfx.put(id, spr = Sprite.create(null, fx, Message.nil));
+	map.drawadd(gob.loc.apply(spr));
+	curfx.add(spr);
+    }
+
+    public void tick(double dt) {
+	for(Sprite spr : curfx)
+	    spr.tick((int)(dt * 1000));
+	curfx.clear();
+    }
+
     private static final Text.Furnace ipf = new PUtils.BlurFurn(new Text.Foundry(Text.serif, 18, new Color(128, 128, 255)).aa(true), 1, 1, new Color(48, 48, 96));
     private final Text.UText<?> ip = new Text.UText<Integer>(ipf) {
         public String text(Integer v) {
@@ -99,14 +122,26 @@ public class Fightsess extends Widget {
         updatepos();
         double now = System.currentTimeMillis() / 1000.0;
 
-        for (Buff buff : fv.buffs.children(Buff.class))
-            buff.draw(g.reclip(pcc.add(-buff.c.x - Buff.cframe.sz().x - 20, buff.c.y + pho - Buff.cframe.sz().y), buff.sz));
-        if (fv.current != null) {
-            for (Buff buff : fv.current.buffs.children(Buff.class))
+        DefBar my = new DefBar();
+        for(Buff buff : fv.buffs.children(Buff.class)) {
+            Coord c = pcc.add(-buff.c.x - Buff.cframe.sz().x - 20, buff.c.y + pho - Buff.cframe.sz().y);
+    		buff.draw(g.reclip(c, buff.sz));
+            my.addBuff(buff);
+    	}
+        my.draw(g, pcc.add(-Buff.cframe.sz().x - 20,pho - Buff.cframe.sz().y));
+    	if(fv.current != null) {
+            DefBar opp = new DefBar();
+    	    for(Buff buff : fv.current.buffs.children(Buff.class)) {
                 buff.draw(g.reclip(pcc.add(buff.c.x + 20, buff.c.y + pho - Buff.cframe.sz().y), buff.sz));
+                opp.addBuff(buff);
+            }
+            opp.draw(g, pcc.add(20, pho - Buff.cframe.sz().y));
 
             g.aimage(ip.get().tex(), pcc.add(-75, 0), 1, 0.5);
             g.aimage(oip.get().tex(), pcc.add(75, 0), 0, 0.5);
+
+	    if(fv.lsrel.size() > 1)
+		fxon(fv.current.gobid, tgtfx);
         }
 
         if (now < fv.atkct) {
@@ -219,5 +254,43 @@ public class Fightsess extends Widget {
             return (true);
         }
         return (super.globtype(key, ev));
+    }
+    private static class DefBar {
+        private static final Coord bsz = new Coord(20, 10);
+
+        private final Map<AttackType, List<Buff>> defs = new HashMap<AttackType, List<Buff>>();
+
+        public void addBuff(Buff buff) {
+            Resource.Image img = buff.getImage();
+            if (img != null) {
+                int attackType = CombatHelper.getAttackType(img.img);
+                for (AttackType type : AttackType.All) {
+                    if ((type.value & attackType) != 0) {
+                        List<Buff> buffs = defs.get(type);
+                        if (buffs == null) {
+                            buffs = new ArrayList<Buff>();
+                            defs.put(type, buffs);
+                        }
+                        buffs.add(buff);
+                    }
+                }
+            }
+        }
+
+        public void draw(GOut g, Coord c) {
+            int y = 15;
+            for (AttackType type : defs.keySet()) {
+                int x = 0;
+                for (Buff buff : defs.get(type)) {
+                    g.chcolor(type.color, 128);
+                    g.frect(c.add(x, -y), new Coord((buff.ameter * bsz.x) / 100, bsz.y));
+                    g.chcolor(Color.LIGHT_GRAY);
+                    g.rect(c.add(x, -y), bsz);
+                    g.chcolor();
+                    x += bsz.x + 5;
+                }
+                y += bsz.y + 5;
+            }
+        }
     }
 }

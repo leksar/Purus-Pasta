@@ -27,15 +27,12 @@
 package haven.glsl;
 
 import static haven.glsl.Cons.*;
-import static haven.glsl.Function.PDir.*;
 import static haven.glsl.Type.*;
-
-import haven.glsl.ValBlock.Value;
 
 public class GLColorVary implements ShaderMacro {
     public static final AutoVarying color = new AutoVarying(VEC4) {
         protected Expression root(VertexContext vctx) {
-            return (vctx.gl_Color.ref());
+            return (VertexContext.gl_Color.ref());
         }
     };
 

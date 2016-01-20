@@ -33,8 +33,6 @@ import haven.MapMesh.Scan;
 import haven.MapMesh.Model;
 import haven.Surface.Vertex;
 import haven.Tiler.MPart;
-import haven.Tiler.SModel;
-import haven.Tiler.VertFactory;
 import haven.Surface.MeshVertex;
 
 import static haven.MCache.tilesz;
@@ -208,7 +206,7 @@ public class Ridges extends MapMesh.Hooks {
         Coord3f base = new Coord3f(tc.add(tccs[e]).add(tc.add(tccs[(e + 1) % 4])).mul(tilesz).mul(1, -1)).div(2);
         base.z = lo;
         float segi = (float) (hi - lo) / (float) nseg;
-        Random rnd = m.grnd(m.ul.add(tc));
+        Random rnd = MapMesh.grnd(m.ul.add(tc));
         rnd.setSeed(rnd.nextInt() + e);
         float bb = (rnd.nextFloat() - 0.5f) * 3.5f;
         float cfac = -eds * Math.min((hi - lo) * (5.0f / 37.0f), 5.5f);

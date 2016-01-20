@@ -570,7 +570,18 @@ public class OptWnd extends Window {
                 Utils.setprefd("sfxquernvol", vol);
             }
         }, new Coord(250, y));
+        y += 20;
+        audio.add(new CheckBox("Disable metallic mining sound") {
+            {
+                a = Config.nometallicsfx;
+            }
 
+            public void set(boolean val) {
+                Utils.setprefb("nometallicsfx", val);
+                Config.nometallicsfx = val;
+                a = val;
+            }
+        }, new Coord(250, y));
         audio.add(new PButton(200, "Back", 27, main), new Coord(270, 360));
         audio.pack();
 
@@ -882,8 +893,43 @@ public class OptWnd extends Window {
                 a = val;
             }
         }, new Coord(520, y));
+        y += 35;
+        display.add(new CheckBox("Highlight party members") {
+            {
+                a = Config.highlightParty;
+            }
+
+            public void set(boolean val) {
+                Utils.setprefb("highlightParty", val);
+                Config.highlightParty = val;
+                a = val;
+            }
+        }, new Coord(520, y));
+        y += 35;
+        display.add(new CheckBox("Show troughs/beehives radius") {
+            {
+                a = Config.showfarmrad;
+            }
+
+            public void set(boolean val) {
+                Utils.setprefb("showfarmrad", val);
+                Config.showfarmrad = val;
+                a = val;
+            }
+        }, new Coord(520, y));
+        y += 35;
+        display.add(new CheckBox("Show animal radius") {
+            {
+                a = Config.showanimalrad;
+            }
+
+            public void set(boolean val) {
+                Utils.setprefb("showanimalrad", val);
+                Config.showanimalrad = val;
+                a = val;
+            }
+        }, new Coord(520, y));
         // -------------------------------------------- display 3rd column
-        y = 0;
 
         display.add(new Button(220, "Reset Windows (req. logout)") {
             @Override
@@ -1084,12 +1130,12 @@ public class OptWnd extends Window {
         y += 35;
         general.add(new CheckBox("Print server time to System log") {
             {
-                a = Config.servertime;
+                a = Config.servertimesyslog;
             }
 
             public void set(boolean val) {
-                Utils.setprefb("servertime", val);
-                Config.servertime = val;
+                Utils.setprefb("servertimesyslog", val);
+                Config.servertimesyslog = val;
                 a = val;
             }
         }, new Coord(0, y));
@@ -1191,6 +1237,55 @@ public class OptWnd extends Window {
                 a = val;
             }
         }, new Coord(0, y));
+        y += 35;
+        general.add(new CheckBox("Show server time") {
+            {
+                a = Config.showservertime;
+            }
+
+            public void set(boolean val) {
+                Utils.setprefb("showservertime", val);
+                Config.showservertime = val;
+                a = val;
+            }
+        }, new Coord(0, y));
+        // -------------------------------------------- general 2nd column
+        y = 0;
+        general.add(new CheckBox("Show swimming/tracking/crime buffs (req. logout)") {
+            {
+                a = Config.showtoggles;
+            }
+
+            public void set(boolean val) {
+                Utils.setprefb("showtoggles", val);
+                Config.showtoggles = val;
+                a = val;
+            }
+        }, new Coord(260, y));
+        y += 35;
+        general.add(new CheckBox("Select System log on login") {
+            {
+                a = Config.syslogonlogin;
+            }
+
+            public void set(boolean val) {
+                Utils.setprefb("syslogonlogin", val);
+                Config.syslogonlogin = val;
+                a = val;
+            }
+        }, new Coord(260, y));
+        y += 35;
+        general.add(new CheckBox("Automatically select 'Split' action") {
+            {
+                a = Config.autosplit;
+            }
+
+            public void set(boolean val) {
+                Utils.setprefb("autosplit", val);
+                Config.autosplit = val;
+                a = val;
+            }
+        }, new Coord(260, y));
 
         general.add(new PButton(200, "Back", 27, main), new Coord(270, 360));
         general.pack();
@@ -1251,6 +1346,18 @@ public class OptWnd extends Window {
         y = 0;
         hide.add(new Label("Ctrl + h to toggle hide"), new Coord(0, y));
         y += 35;
+        hide.add(new CheckBox("Hide Everything") {
+            {
+                a = Config.hideall;
+            }
+
+            public void set(boolean val) {
+                Utils.setprefb("hideall", val);
+                Config.hideall = val;
+                a = val;
+            }
+        }, new Coord(0, y));
+        y += 35;
         hide.add(new CheckBox("Hide Trees") {
             {
                 a = Config.hidetrees;
@@ -1258,6 +1365,17 @@ public class OptWnd extends Window {
             public void set(boolean val) {
                 Utils.setprefb("hidetrees", val);
                 Config.hidetrees = val;
+                a = val;
+            }
+        }, new Coord(0,y));
+        y += 35;
+        hide.add(new CheckBox("Hide Bushes") {
+            {
+                a = Config.hidebushes;
+            }
+            public void set(boolean val) {
+                Utils.setprefb("hidebushes", val);
+                Config.hidebushes = val;
                 a = val;
             }
         }, new Coord(0,y));
@@ -1294,6 +1412,18 @@ public class OptWnd extends Window {
                     public void set(boolean val) {
                         Utils.setprefb("hidewagons", val);
                         Config.hidewagons = val;
+                        a = val;
+                    }
+                }, new Coord(0, y));
+                y += 35;
+                hide.add(new CheckBox("Hide Houses (Hides also door)") {
+                    {
+                        a = Config.hidehouses;
+                    }
+
+                    public void set(boolean val) {
+                        Utils.setprefb("hidehouses", val);
+                        Config.hidehouses = val;
                         a = val;
                     }
                 }, new Coord(0, y));
@@ -1418,6 +1548,19 @@ public class OptWnd extends Window {
                 a = val;
             }
         }, new Coord(0, y));
+        y += 35;
+        control.add(new CheckBox("Force hardware cursor (req. restart)") {
+            {
+                a = Config.hwcursor;
+            }
+
+            public void set(boolean val) {
+                Utils.setprefb("hwcursor", val);
+                Config.hwcursor = val;
+                a = val;
+            }
+        }, new Coord(0, y));
+
 
         control.add(new PButton(200, "Back", 27, main), new Coord(270, 360));
         control.pack();

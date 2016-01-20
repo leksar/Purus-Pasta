@@ -36,6 +36,7 @@ import javax.imageio.*;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
+@SuppressWarnings("serial")
 public class Resource implements Serializable {
     private static File rescustom = new File("res");
     private static ResCache prscache;
@@ -194,7 +195,8 @@ public class Resource implements Serializable {
         }
     }
 
-    public static class HttpSource implements ResSource, Serializable {
+    @SuppressWarnings("static-access")
+	public static class HttpSource implements ResSource, Serializable {
         private final transient SslHelper ssl;
         public URL baseurl;
 
@@ -654,7 +656,7 @@ public class Resource implements Serializable {
     public static void addurl(URL url) {
         ResSource src = new HttpSource(url);
         if (prscache != null) {
-            class Caching extends TeeSource {
+			class Caching extends TeeSource {
                 private final transient ResCache cache;
 
                 Caching(ResSource bk, ResCache cache) {
@@ -897,14 +899,17 @@ public class Resource implements Serializable {
         }
     }
 
-    @LayerName("neg")
+	@LayerName("neg")
     public class Neg extends Layer {
         public Coord cc;
+        public Coord ac, bc;
         public Coord[][] ep;
 
         public Neg(Message buf) {
             cc = cdec(buf);
-            buf.skip(12);
+            ac = cdec(buf);
+            bc = cdec(buf);
+            buf.skip(4);
             ep = new Coord[8][0];
             int en = buf.uint8();
             for (int i = 0; i < en; i++) {
@@ -920,7 +925,7 @@ public class Resource implements Serializable {
         }
     }
 
-    @LayerName("anim")
+	@LayerName("anim")
     public class Anim extends Layer {
         private int[] ids;
         public int id, d;
@@ -1120,7 +1125,6 @@ public class Resource implements Serializable {
     public static class OrigTileset implements LayerFactory<Tileset> {
         public Tileset cons(Resource res, Message buf) {
             Tileset ret = res.new Tileset();
-            int fl = buf.uint8();
             int flnum = buf.uint16();
             ret.flavprob = buf.uint16();
             for (int i = 0; i < flnum; i++) {
@@ -1137,7 +1141,7 @@ public class Resource implements Serializable {
         }
     }
 
-    @LayerName("pagina")
+	@LayerName("pagina")
     public class Pagina extends Layer {
         public final String text;
 
@@ -1149,7 +1153,7 @@ public class Resource implements Serializable {
         }
     }
 
-    @LayerName("action")
+	@LayerName("action")
     public class AButton extends Layer {
         public final String name;
         public final Named parent;
@@ -1192,7 +1196,7 @@ public class Resource implements Serializable {
         }
     }
 
-    @LayerName("code")
+	@LayerName("code")
     public class Code extends Layer {
         public final String name;
         transient public final byte[] data;
@@ -1262,9 +1266,8 @@ public class Resource implements Serializable {
         }
     }
 
-    @LayerName("codeentry")
+	@LayerName("codeentry")
     public class CodeEntry extends Layer {
-        private String clnm;
         private Map<String, Code> clmap = new TreeMap<String, Code>();
         private Map<String, String> pe = new TreeMap<String, String>();
         private Collection<Indir<Resource>> classpath = new LinkedList<Indir<Resource>>();
@@ -1418,7 +1421,7 @@ public class Resource implements Serializable {
         }
     }
 
-    @LayerName("audio")
+	@LayerName("audio")
     public class Audio extends Layer implements IDLayer<String> {
         transient public byte[] coded;
         public final String id;
@@ -1511,22 +1514,12 @@ public class Resource implements Serializable {
         }
     }
 
-    private void readall(InputStream in, byte[] buf) throws IOException {
-        int ret, off = 0;
-        while (off < buf.length) {
-            ret = in.read(buf, off, buf.length - off);
-            if (ret < 0)
-                throw (new LoadException("Incomplete resource at " + name, this));
-            off += ret;
-        }
-    }
-
     public <L extends Layer> Collection<L> layers(final Class<L> cl) {
         used = true;
         return (new AbstractCollection<L>() {
             public int size() {
                 int s = 0;
-                for (L l : this)
+                for (@SuppressWarnings("unused") L l : this)
                     s++;
                 return (s);
             }
@@ -1593,7 +1586,8 @@ public class Resource implements Serializable {
         return (o.name.equals(this.name) && (o.ver == this.ver));
     }
 
-    private void load(InputStream st) throws IOException {
+    @SuppressWarnings("resource")
+	private void load(InputStream st) throws IOException {
         Message in = new StreamMessage(st);
         byte[] sig = "Haven Resource 1".getBytes(Utils.ascii);
         if (!Arrays.equals(sig, in.bytes(sig.length)))
@@ -1626,7 +1620,7 @@ public class Resource implements Serializable {
     public Named indir() {
         if (indir != null)
             return (indir);
-        class Ret extends Named implements Serializable {
+		class Ret extends Named implements Serializable {
             Ret(String name, int ver) {
                 super(name, ver);
             }

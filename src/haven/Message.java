@@ -59,6 +59,7 @@ public abstract class Message {
         }
     };
 
+    @SuppressWarnings("serial")
     public static class BinError extends RuntimeException {
         public BinError(String message) {
             super(message);
@@ -73,12 +74,14 @@ public abstract class Message {
         }
     }
 
+    @SuppressWarnings("serial")
     public static class EOF extends BinError {
         public EOF(String message) {
             super(message);
         }
     }
 
+    @SuppressWarnings("serial")
     public static class FormatError extends BinError {
         public FormatError(String message) {
             super(message);

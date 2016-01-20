@@ -99,7 +99,8 @@ public class ChatUI extends Widget {
         resize(this.sz);
     }
 
-    public static class ChatAttribute extends Attribute {
+    @SuppressWarnings("serial")
+	public static class ChatAttribute extends Attribute {
         private ChatAttribute(String name) {
             super(name);
         }
@@ -179,7 +180,7 @@ public class ChatUI extends Widget {
     public static abstract class Channel extends Widget {
         public final List<Message> msgs = new LinkedList<Message>();
         private final Scrollbar sb;
-        private final IButton cb;
+        public final IButton cb;
         public int urgency = 0;
 
         public static abstract class Message {
@@ -347,7 +348,7 @@ public class ChatUI extends Widget {
                     }
                     throw (new IllegalStateException("CharPos message is no longer contained in the log"));
                 } else if (a.part != b.part) {
-                    for (RichText.Part part = ((RichText) a.msg.text()).parts; part != null; part = part.next) {
+                    for (RichText.Part part = ((RichText) a.msg.text()).parts; part != null;) {
                         if (part == a.part)
                             return (-1);
                         else
@@ -1135,13 +1136,11 @@ public class ChatUI extends Widget {
     }
 
     private class Notification {
-        public final Channel chan;
         public final Text chnm;
         public final Channel.Message msg;
         public final long time = System.currentTimeMillis();
 
         private Notification(Channel chan, Channel.Message msg) {
-            this.chan = chan;
             this.msg = msg;
             this.chnm = chansel.nf[0].render(chan.name());
         }
@@ -1313,6 +1312,9 @@ public class ChatUI extends Widget {
                 doff = c;
             } else {
                 resize(sz.x, savedh = Math.max(111, sz.y + doff.y - c.y));
+                GameUI gui = gameui();
+                if (gui.questpanel != null)
+                    gui.questpanel.c = new Coord(10, gui.sz.y - gui.chat.sz.y - gui.beltwdg.sz.y - gui.questpanel.sz.y - 10);
             }
         } else {
             super.mousemove(c);

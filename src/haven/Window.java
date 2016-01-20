@@ -27,7 +27,6 @@
 package haven;
 
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.image.BufferedImage;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -55,6 +54,7 @@ public class Window extends Widget implements DTarget {
     public static final int capo = 7, capio = 2;
     public static final Coord dlmrgn = new Coord(23, 14), dsmrgn = new Coord(9, 9);
     public static final BufferedImage ctex = Resource.loadimg("gfx/hud/fonttex");
+    
     public static final Text.Furnace cf = new Text.Imager(new PUtils.TexFurn(new Text.Foundry(Text.sans, 14).aa(true), ctex)) {
         protected BufferedImage proc(Text text) {
             return (rasterimg(blurmask2(text.img.getRaster(), 1, 1, Color.BLACK)));
@@ -94,7 +94,7 @@ public class Window extends Widget implements DTarget {
     public static final Set<String> persistentwnds = new HashSet<String>(
             Arrays.asList("Timers", "Inventory", "Equipment", "Crafting", "Character Sheet", "Kith & Kin", "Crate",
                     "Cupboard", "Barrel", "Table", "Cauldron", "Stockpile", "Tub", "Ore Smelter", "Land survey",
-                    "Quiver"));
+                    "Quiver", "Stone Casket", "Chicken Coop", "Extraction Press", "Oven", "Large Chest"));
 
     @RName("wnd")
     public static class $_ implements Factory {
@@ -219,10 +219,6 @@ public class Window extends Widget implements DTarget {
         return (max);
     }
 
-    private void placecbtn() {
-        cbtn.c = xlate(new Coord(ctl.x + csz.x - cbtn.sz.x, ctl.y).add(2, -2), false);
-    }
-
     public void resize(Coord sz) {
         asz = sz;
         csz = asz.add(mrgn.mul(2));
@@ -339,5 +335,10 @@ public class Window extends Widget implements DTarget {
 
     public boolean ismousegrab() {
         return dm != null;
+    }
+    public void setLocal(boolean value) {
+    }
+
+    public void setHideOnClose(boolean value) {
     }
 }

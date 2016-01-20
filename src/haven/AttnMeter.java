@@ -41,7 +41,7 @@ public class AttnMeter extends Widget {
         g.image(bg, Coord.z);
     }
 
-    static class CRec implements Comparable {
+    static class CRec implements Comparable<Object> {
         public String name;
         public long time;
         public int attn;

@@ -63,7 +63,8 @@ public class HashBMap<K, V> extends AbstractMap<K, V> implements BMap<K, V> {
                         private final Iterator<Entry<K, V>> iter = fmap.entrySet().iterator();
                         private Entry<K, V> next, last;
 
-                        class IteredEntry<K, V> implements Entry<K, V> {
+                        @SuppressWarnings("hiding")
+						class IteredEntry<K, V> implements Entry<K, V> {
                             private final K k;
                             private final V v;
 
@@ -80,8 +81,9 @@ public class HashBMap<K, V> extends AbstractMap<K, V> implements BMap<K, V> {
                                 return (v);
                             }
 
-                            public boolean equals(Object o) {
-                                return ((o instanceof IteredEntry) && (((IteredEntry) o).k == k) && (((IteredEntry) o).v == v));
+                            @SuppressWarnings("unchecked")
+							public boolean equals(Object o) {
+                                return ((o instanceof IteredEntry) && (((IteredEntry<?, ?>) o).k == k) && (((IteredEntry<?, ?>) o).v == v));
                             }
 
                             public int hashCode() {

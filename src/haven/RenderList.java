@@ -40,7 +40,8 @@ public class RenderList {
     public class Slot {
         public Rendered r;
         public GLState.Buffer os = new GLState.Buffer(cfg), cs = new GLState.Buffer(cfg);
-        public Rendered.Order o;
+        @SuppressWarnings("rawtypes")
+		public Rendered.Order o;
         public boolean d;
         public Slot p;
         public int ihash;
@@ -241,7 +242,8 @@ public class RenderList {
         Arrays.sort(list, 0, nd, cmp);
     }
 
-    public static class RLoad extends Loading {
+    @SuppressWarnings("serial")
+	public static class RLoad extends Loading {
         public RLoad(Loading cause) {
             super(cause);
         }

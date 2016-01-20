@@ -3,7 +3,7 @@
 <project name="hafen" default="deftgt">
   <property name="name" value="Purus Pasta"/>
 	<!-- MUISTA PÄIVITTÄÄ VERSIO -->
-  <property name="version" value="2.4.6"/>
+  <property name="version" value="2.9.0"/>
 
   <target name="build-env">
     <mkdir dir="build" />
@@ -30,11 +30,11 @@
 	<pathelement path="lib/jogl.jar" />
 	<pathelement path="lib/gluegen-rt.jar" />
 	<pathelement path="lib/jnlp.jar" />
-	<pathelement path="lib/jorbis.jar" />
     <pathelement path="lib/jsoup-1.8.3.jar" />
-	<pathelement path="lib/jogg.jar" />
 	<pathelement path="lib/jglob.jar" />
     <pathelement path="lib/commons-io-2.4.jar" />
+    <pathelement path="lib/gson-2.3.1.jar" />
+      	
       </classpath>
       <compilerarg value="-Xlint:unchecked" />
       <compilerarg value="-Xlint:-options" />
@@ -54,12 +54,6 @@
 
   <target name="lib-classes" depends="build-env" unless="unpacked-lib">
     <mkdir dir="build/classes-lib" />
-    <unjar src="lib/jogg.jar" dest="build/classes-lib">
-      <patternset excludes="META-INF/**" />
-    </unjar>
-    <unjar src="lib/jorbis.jar" dest="build/classes-lib">
-      <patternset excludes="META-INF/**" />
-    </unjar>
     <unjar src="lib/jglob.jar" dest="build/classes-lib">
       <patternset excludes="META-INF/**" />
     </unjar>
@@ -73,6 +67,7 @@
       <fileset dir="build/classes" />
       <fileset dir="build/classes-lib" />
     	<zipgroupfileset dir="lib" includes="commons-io-2.4.jar"/>
+    	<zipgroupfileset dir="lib" includes="gson-2.3.1.jar"/>
       <manifest>
 	<attribute name="Main-Class" value="haven.MainFrame" />
 	<attribute name="Class-Path" value="jogl.jar gluegen-rt.jar builtin-res.jar hafen-res.jar amber-res.jar pasta-res.jar " />

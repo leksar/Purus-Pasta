@@ -28,6 +28,7 @@ package haven;
 
 import java.util.*;
 
+import haven.Composited.Model.Layer;
 import haven.Skeleton.Pose;
 import haven.Skeleton.PoseMod;
 
@@ -128,7 +129,7 @@ public class Composited implements Rendered {
         this.morph = new PoseMorph(pose);
     }
 
-    private static final Rendered.Order modorder = new Rendered.Order<Model.Layer>() {
+    private static final Order<Layer> modorder = new Rendered.Order<Model.Layer>() {
         public int mainz() {
             return (1);
         }
@@ -374,7 +375,6 @@ public class Composited implements Rendered {
         for (Iterator<ED> i = nequ.iterator(); i.hasNext(); ) {
             ED ed = i.next();
             try {
-                Equ prev = null;
                 for (Equ equ : this.equ) {
                     if (equ.desc.equals(ed)) {
                         equ.matched = true;

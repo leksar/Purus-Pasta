@@ -166,7 +166,7 @@ public class Equipory extends Widget implements DTarget {
         super.draw(g);
 
         if (armorclass == null) {
-            int h = 0, s = 0;
+            int h = 0, s = 0, t = 0;
             try {
                 for (int i = 0; i < quickslots.length; i++) {
                     WItem itm = quickslots[i];
@@ -176,6 +176,7 @@ public class Equipory extends Widget implements DTarget {
                                 try {
                                     h += (int) info.getClass().getDeclaredField("hard").get(info);
                                     s += (int) info.getClass().getDeclaredField("soft").get(info);
+                                    t = h + s;
                                 } catch (Exception ex) { // ignore everything
                                 }
                             }
@@ -183,7 +184,7 @@ public class Equipory extends Widget implements DTarget {
                         }
                     }
                 }
-                armorclass = Text.render("Armor Class: " + h + "/" + s, Color.BLACK, acf).tex();
+                armorclass = Text.render("Armor Class: " + h + "/" + s + " (" + t + ")", Color.BLACK, acf).tex();
             } catch (Exception e) { // fail silently
             }
         }

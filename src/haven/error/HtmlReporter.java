@@ -39,7 +39,8 @@ public class HtmlReporter {
             "os.arch", "os.name", "os.version",
             "thnm", "usr",
     };
-    public static final Class[] boring = {
+    @SuppressWarnings("rawtypes")
+	public static final Class[] boring = {
             RuntimeException.class,
             javax.media.opengl.GLException.class,
     };
@@ -262,7 +263,7 @@ public class HtmlReporter {
     public static Throwable findrootexc(Throwable t) {
         if (t.getCause() == null)
             return (t);
-        for (Class b : boring) {
+        for (Class<?> b : boring) {
             if (t.getClass() == b)
                 return (findrootexc(t.getCause()));
         }

@@ -45,7 +45,6 @@ public class TestView extends PView {
 
     public TestView(Coord sz) {
         super(sz);
-        PointedCam cam;
         camera = new PointedCam();
         camera.a = (float) Math.PI * 3 / 2;
         camera.e = (float) Math.PI / 2;

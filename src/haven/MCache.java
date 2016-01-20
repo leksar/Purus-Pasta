@@ -26,9 +26,17 @@
 
 package haven;
 
-import java.awt.image.BufferedImage;
-import java.util.*;
-import java.lang.ref.*;
+import java.lang.ref.Reference;
+import java.lang.ref.SoftReference;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.Random;
+import java.util.Set;
+import java.util.TreeMap;
 
 import haven.Resource.Tileset;
 
@@ -50,10 +58,10 @@ public class MCache {
     Session sess;
     Set<Overlay> ols = new HashSet<Overlay>();
     public int olseq = 0;
-    Random gen = new Random();
     Map<Integer, Defrag> fragbufs = new TreeMap<Integer, Defrag>();
 
-    public static class LoadingMap extends Loading {
+    @SuppressWarnings("serial")
+	public static class LoadingMap extends Loading {
         public LoadingMap() {
             super("Waiting for map data...");
         }
@@ -118,7 +126,6 @@ public class MCache {
             MapMesh mesh;
             Defer.Future<MapMesh> dmesh;
             Rendered[] ols;
-            int deftag;
         }
 
         private class Flavobj extends Gob {
@@ -235,7 +242,6 @@ public class MCache {
 
         private void buildcut(final Coord cc) {
             final Cut cut = geticut(cc);
-            final int deftag = ++cut.deftag;
             Defer.Future<?> prev = cut.dmesh;
             cut.dmesh = Defer.later(new Defer.Callable<MapMesh>() {
                 public MapMesh call() {

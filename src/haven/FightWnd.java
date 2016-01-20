@@ -399,7 +399,8 @@ public class FightWnd extends Widget {
         }
     }
 
-    public static class CombatSchools extends ArrayList<CombatSchools.School> {
+    @SuppressWarnings("serial")
+	public static class CombatSchools extends ArrayList<CombatSchools.School> {
         public CombatSchools(int initialCapacity) {
             super(initialCapacity);
         }

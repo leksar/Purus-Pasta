@@ -90,7 +90,6 @@ public class GPUProfile extends Profile {
     }
 
     public void check() {
-        int[] buf = new int[1];
         int[] rb = new int[1];
         for (Iterator<Frame> i = waiting.iterator(); i.hasNext(); ) {
             Frame f = i.next();

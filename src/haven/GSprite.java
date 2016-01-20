@@ -102,7 +102,7 @@ public abstract class GSprite implements Drawn {
     }
 
     public String getname() {
-        Class cl = this.getClass();
+        Class<? extends GSprite> cl = this.getClass();
         try {
             Field name = cl.getDeclaredField("name");
             return (String)name.get(this);

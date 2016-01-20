@@ -21,9 +21,12 @@ public class AreaMine implements Runnable {
     }
 
     public void run() {
-        MCache map = mv.ui.sess.glob.map;
+        MCache map = mv.glob.map;
 
-        MCache.Overlay ol = mv.glob.map.new Overlay(a, b, 1 << 18);
+        MCache.Overlay ol;
+        synchronized (map.grids) {
+            ol = mv.glob.map.new Overlay(a, b, 1 << 18);
+        }
         mv.enol(18);
 
         Coord pc = mv.player().rc.div(11);
@@ -101,12 +104,21 @@ public class AreaMine implements Runnable {
                 break mine;
 
             // drink
-            GameUI gui = HavenPanel.lui.root.findchild(GameUI.class);
+            @SuppressWarnings("deprecation")
+			GameUI gui = HavenPanel.lui.root.findchild(GameUI.class);
             if (gui.maininv != null) {
-                if (gui.maininv.drink(80)) {
+                if (gui.maininv.drink(70)) {
                     try {
-                        Thread.sleep(1000);
-                        do Thread.sleep(300); while (gui.prog >= 0);
+                        Thread.sleep(500);
+                        do {
+                            IMeter.Meter stam = gui.getmeter("stam", 0);
+                            if (stam.a >= 84)
+                                break;
+                            Thread.sleep(10);
+                            stam = gui.getmeter("stam", 0);
+                            if (stam.a >= 84)
+                                break;
+                        } while (gui.prog >= 0);
                     } catch (InterruptedException e) {
                         break mine;
                     }
@@ -167,7 +179,9 @@ public class AreaMine implements Runnable {
         }
 
         mv.disol(18);
-        ol.destroy();
+        synchronized (map.grids) {
+            ol.destroy();
+        }
     }
 
     public void terminate() {

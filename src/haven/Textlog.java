@@ -119,7 +119,6 @@ public class Textlog extends Widget {
         if (button != 1)
             return (false);
         int fx = sz.x - sflarp.sz().x;
-        int cx = fx + (sflarp.sz().x / 2) - (schain.sz().x / 2);
         if ((maxy > sz.y) && (c.x >= fx)) {
             sdrag = ui.grabmouse(this);
             mousemove(c);

@@ -81,10 +81,6 @@ public class Material extends GLState {
             this.shine = shine;
         }
 
-        private static float[] colmul(float[] c1, float[] c2) {
-            return (new float[]{c1[0] * c2[0], c1[1] * c2[1], c1[2] * c2[2], c1[3] * c2[3]});
-        }
-
         private static float[] colblend(float[] in, float[] bl) {
             float f1 = bl[3], f2 = 1.0f - f1;
             return (new float[]{(in[0] * f2) + (bl[0] * f1),
@@ -235,7 +231,9 @@ public class Material extends GLState {
 	return(res.layer(Material.Res.class).get());
     }
 
-    public static class Res extends Resource.Layer implements Resource.IDLayer<Integer> {
+
+	@SuppressWarnings("serial")
+	public static class Res extends Resource.Layer implements Resource.IDLayer<Integer> {
         public final int id;
         private transient List<GLState> states = new LinkedList<GLState>();
         private transient List<Resolver> left = new LinkedList<Resolver>();
@@ -269,7 +267,8 @@ public class Material extends GLState {
             }
         }
 
-        public void init() {
+        @SuppressWarnings("deprecation")
+		public void init() {
             for (Resource.Image img : getres().layers(Resource.imgc)) {
                 TexGL tex = (TexGL) img.tex();
                 if (mipmap)

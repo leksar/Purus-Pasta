@@ -39,8 +39,8 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import javax.media.opengl.*;
 import javax.media.opengl.awt.*;
-import javax.media.opengl.glu.GLU;
 
+@SuppressWarnings({ "deprecation", "serial" })
 public class HavenPanel extends GLCanvas implements Runnable, Console.Directory {
     UI ui;
     public static UI lui;
@@ -59,7 +59,7 @@ public class HavenPanel extends GLCanvas implements Runnable, Console.Directory 
     public GPUProfile gprof = new GPUProfile(300);
     public static final GLState.Slot<GLState> global = new GLState.Slot<GLState>(GLState.Slot.Type.SYS, GLState.class);
     public static final GLState.Slot<GLState> proj2d = new GLState.Slot<GLState>(GLState.Slot.Type.SYS, GLState.class, global);
-    private GLState gstate, rtstate, ostate;
+    private GLState gstate, ostate;
     private Throwable uncaught = null;
     private GLState.Applier state = null;
     private GLConfig glconf = null;
@@ -80,7 +80,7 @@ public class HavenPanel extends GLCanvas implements Runnable, Console.Directory 
 
     public HavenPanel(int w, int h, GLCapabilitiesChooser cc) {
         super(stdcaps(), cc, null, null);
-        setSize(this.w = w, this.h = h);
+        setSize(HavenPanel.w = w, HavenPanel.h = h);
         newui(null);
         initgl();
         if (Toolkit.getDefaultToolkit().getMaximumCursorColors() >= 256 || Config.hwcursor)
@@ -93,11 +93,8 @@ public class HavenPanel extends GLCanvas implements Runnable, Console.Directory 
     }
 
     private void initgl() {
-        final Thread caller = Thread.currentThread();
         final haven.error.ErrorHandler h = haven.error.ErrorHandler.find();
         addGLEventListener(new GLEventListener() {
-            Debug.DumpGL dump = null;
-
             public void takescreenshot(int width, int height) {
                 try {
                     String curtimestamp = new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss.SSS").format(new Date());
@@ -136,10 +133,10 @@ public class HavenPanel extends GLCanvas implements Runnable, Console.Directory 
                     glconf.pref = GLSettings.load(glconf, true);
                     ui.cons.add(glconf);
                     if (h != null) {
-                        h.lsetprop("gl.vendor", gl.glGetString(gl.GL_VENDOR));
-                        h.lsetprop("gl.version", gl.glGetString(gl.GL_VERSION));
-                        h.lsetprop("gl.renderer", gl.glGetString(gl.GL_RENDERER));
-                        h.lsetprop("gl.exts", Arrays.asList(gl.glGetString(gl.GL_EXTENSIONS).split(" ")));
+                        h.lsetprop("gl.vendor", gl.glGetString(GL.GL_VENDOR));
+                        h.lsetprop("gl.version", gl.glGetString(GL.GL_VERSION));
+                        h.lsetprop("gl.renderer", gl.glGetString(GL.GL_RENDERER));
+                        h.lsetprop("gl.exts", Arrays.asList(gl.glGetString(GL.GL_EXTENSIONS).split(" ")));
                         h.lsetprop("gl.caps", d.getChosenGLCapabilities().toString());
                         h.lsetprop("gl.conf", glconf);
                     }
@@ -179,7 +176,7 @@ public class HavenPanel extends GLCanvas implements Runnable, Console.Directory 
 
             public void reshape(GLAutoDrawable d, final int x, final int y, final int w, final int h) {
                 ostate = OrthoState.fixed(new Coord(w, h));
-                rtstate = new GLState() {
+                new GLState() {
                     public void apply(GOut g) {
                         g.st.proj = Projection.makeortho(new Matrix4f(), 0, w, 0, h, -1, 1);
                     }
@@ -191,11 +188,8 @@ public class HavenPanel extends GLCanvas implements Runnable, Console.Directory 
                         buf.put(proj2d, this);
                     }
                 };
-                HavenPanel.this.w = w;
-                HavenPanel.this.h = h;
-            }
-
-            public void displayChanged(GLAutoDrawable d, boolean cp1, boolean cp2) {
+                HavenPanel.w = w;
+                HavenPanel.h = h;
             }
 
             public void dispose(GLAutoDrawable d) {
@@ -332,7 +326,12 @@ public class HavenPanel extends GLCanvas implements Runnable, Console.Directory 
         }
 
         if (Config.showfps) {
-            FastText.aprintf(g, new Coord(HavenPanel.w - 50, 15), 0, 1, "FPS: %d", fps);
+            FastText.aprint(g, new Coord(HavenPanel.w - 50, 15), 0, 1, "FPS: " + fps);
+        }
+
+        if (Config.showservertime) {
+            if (ui.sess != null && ui.sess.glob != null && ui.sess.glob.servertime != null)
+                FastText.aprint(g, new Coord(HavenPanel.w/2, 15), 1, 1, ui.sess.glob.servertime);
         }
 
         if (Config.dbtext) {
@@ -600,7 +599,7 @@ public class HavenPanel extends GLCanvas implements Runnable, Console.Directory 
                         curf.tick("aux");
 
                     now = System.currentTimeMillis();
-                    long fd = bgmode ? this.bgfd : this.fd;
+                    long fd = bgmode ? HavenPanel.bgfd : this.fd;
                     if (now - then < fd) {
                         synchronized (events) {
                             events.wait(fd - (now - then));

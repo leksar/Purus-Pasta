@@ -46,7 +46,8 @@ public class StreamMessage extends Message implements Closeable, Flushable {
         this(null, out);
     }
 
-    public static class IOError extends BinError {
+    @SuppressWarnings("serial")
+	public static class IOError extends BinError {
         public IOError(Throwable cause) {
             super(cause);
         }

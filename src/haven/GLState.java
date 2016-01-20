@@ -93,7 +93,8 @@ public abstract class GLState {
         public Instancer<T> instanced;
         private int depid = -1;
         private final Slot<?>[] dep, rdep;
-        private Slot[] grdep;
+        @SuppressWarnings("rawtypes")
+		private Slot[] grdep;
 
         public static enum Type {
             SYS, GEOM, DRAW
@@ -129,7 +130,7 @@ public abstract class GLState {
             }
         }
 
-        public Slot(Type type, Class<T> scl, Slot... dep) {
+        public Slot(Type type, Class<T> scl, @SuppressWarnings("rawtypes") Slot... dep) {
             this(type, scl, dep, null);
         }
 
@@ -174,7 +175,8 @@ public abstract class GLState {
                 if (err)
                     throw (new RuntimeException("Cycle encountered while compiling state slot dependencies"));
             }
-            Comparator<Slot> cmp = new Comparator<Slot>() {
+            @SuppressWarnings("rawtypes")
+			Comparator<Slot> cmp = new Comparator<Slot>() {
                 public int compare(Slot a, Slot b) {
                     return (order.get(a) - order.get(b));
                 }
@@ -189,7 +191,7 @@ public abstract class GLState {
                     if (dirty) {
                         makedeps(all);
                         deplist = new Slot<?>[all.size()];
-                        for (Slot s : all)
+                        for (Slot<?> s : all)
                             deplist[s.depid] = s;
                         dirty = false;
                     }
@@ -350,7 +352,7 @@ public abstract class GLState {
                             repl[i] = true;
                     }
                 }
-                for (Slot ds : idlist[i].grdep) {
+                for (Slot<?> ds : idlist[i].grdep) {
                     int id = ds.id;
                     if (repl[id])
                         continue;
@@ -397,7 +399,7 @@ public abstract class GLState {
         private Buffer old, cur, next;
         public final CurrentGL cgl;
         public final GLConfig cfg;
-        private boolean[] trans = new boolean[0], repl = new boolean[0], adirty = new boolean[0];
+        private boolean[] trans = new boolean[0], repl = new boolean[0];
         private ShaderMacro[][] shaders = new ShaderMacro[0][], nshaders = new ShaderMacro[0][];
         private int proghash = 0, nproghash = 0;
         public ShaderMacro.Program prog;
@@ -633,7 +635,8 @@ public abstract class GLState {
                 prog.autoinst[i].unbindiarr(g, prog.curinst[i]);
         }
 
-        public static class ApplyException extends RuntimeException {
+        @SuppressWarnings("serial")
+		public static class ApplyException extends RuntimeException {
             public final transient GLState st;
             public final String func;
 

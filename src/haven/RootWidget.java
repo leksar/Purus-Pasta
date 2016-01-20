@@ -44,7 +44,8 @@ public class RootWidget extends ConsoleHost {
     public boolean globtype(char key, KeyEvent ev) {
         if (!super.globtype(key, ev)) {
             if (key == '`') {
-                GameUI gi = findchild(GameUI.class);
+                @SuppressWarnings("deprecation")
+				GameUI gi = findchild(GameUI.class);
                 if (Config.profile) {
                     add(new Profwnd(guprof, "UI profile"), new Coord(100, 100));
                     add(new Profwnd(grprof, "GL profile"), new Coord(450, 100));
@@ -63,7 +64,8 @@ public class RootWidget extends ConsoleHost {
             } else if (ev.isControlDown() && ev.getKeyCode() == KeyEvent.VK_X) {
                 Config.tilecenter = !Config.tilecenter;
                 Utils.setprefb("tilecenter", Config.tilecenter);
-                GameUI gi = findchild(GameUI.class);
+                @SuppressWarnings("deprecation")
+				GameUI gi = findchild(GameUI.class);
                 gi.info("Tile centering is " + (Config.tilecenter ? "ON" : "OFF"), Color.WHITE);
             } else if (key == ':') {
                 entercmd();

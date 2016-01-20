@@ -26,7 +26,6 @@
 
 package haven;
 
-import java.util.Comparator;
 import java.util.List;
 import javax.media.opengl.*;
 
@@ -41,7 +40,8 @@ public interface Rendered extends Drawn {
         public int compare(T a, T b, GLState.Buffer sa, GLState.Buffer sb);
     }
 
-    public static final GLState.Slot<Order> order = new GLState.Slot<Order>(GLState.Slot.Type.GEOM, Order.class, HavenPanel.global);
+    @SuppressWarnings("rawtypes")
+	public static final GLState.Slot<Order> order = new GLState.Slot<Order>(GLState.Slot.Type.GEOM, Order.class, HavenPanel.global);
 
     public static abstract class Order<T extends Rendered> extends GLState {
         public abstract int mainz();
@@ -81,11 +81,11 @@ public interface Rendered extends Drawn {
         }
     }
 
-    public final static Order deflt = new Order.Default(0);
-    public final static Order first = new Order.Default(Integer.MIN_VALUE);
-    public final static Order last = new Order.Default(Integer.MAX_VALUE);
-    public final static Order postfx = new Order.Default(5000);
-    public final static Order postpfx = new Order.Default(5500);
+    public final static Order<?> deflt = new Order.Default(0);
+    public final static Order<?> first = new Order.Default(Integer.MIN_VALUE);
+    public final static Order<?> last = new Order.Default(Integer.MAX_VALUE);
+    public final static Order<?> postfx = new Order.Default(5000);
+    public final static Order<?> postpfx = new Order.Default(5500);
 
     public static class EyeOrder extends Order.Default {
         public EyeOrder(int z) {
@@ -118,8 +118,8 @@ public interface Rendered extends Drawn {
         }
     }
 
-    public final static Order eyesort = new EyeOrder(10000);
-    public final static Order eeyesort = new EyeOrder(4500);
+    public final static Order<?> eyesort = new EyeOrder(10000);
+    public final static Order<?> eeyesort = new EyeOrder(4500);
 
     public final static GLState.StandAlone skip = new GLState.StandAlone(GLState.Slot.Type.GEOM, HavenPanel.global) {
         public void apply(GOut g) {

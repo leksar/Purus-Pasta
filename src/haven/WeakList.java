@@ -36,7 +36,7 @@ public class WeakList<T> extends AbstractCollection<T> {
     private void clean() {
         Reference<? extends T> ref;
         while ((ref = cleanq.poll()) != null) {
-            Entry e = (Entry) ref;
+            Entry<?> e = (Entry<?>) ref;
 	    if (e.l != null)
 	        e.unlink();
         }
@@ -93,7 +93,7 @@ public class WeakList<T> extends AbstractCollection<T> {
 
     public int size() {
         int ret = 0;
-        for (T e : this)
+        for (@SuppressWarnings("unused") T e : this)
             ret++;
         return (ret);
     }

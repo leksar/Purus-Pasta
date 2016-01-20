@@ -207,6 +207,18 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
     public Coord3f getrc() {
         return (new Coord3f(rc.x, rc.y, glob.map.getcz(rc)));
     }
+    
+    public int getStage() {
+        //
+        Resource res = getres();
+        if (res != null && res.name.startsWith("gfx/terobjs/plants") && !res.name.endsWith("trellis")) {
+    	GAttrib rd = getattr(ResDrawable.class);
+    	final int stage = ((ResDrawable) rd).sdt.peekrbuf(0);
+        return stage;
+        } else
+        return 404;
+        //
+    }
 
     private Class<? extends GAttrib> attrclass(Class<? extends GAttrib> cl) {
         while (true) {
@@ -291,34 +303,71 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
         Drawable d = getattr(Drawable.class);
         if (d != null) {
             boolean hide = false;
-            if (Config.hidegobs) {
+            if (Config.hideall) {
+            	 try {
+                Resource res = getres();
+                if (res != null) {
+                    Resource.Neg neg = res.layer(Resource.Neg.class);
+                    hide = true;
+                    if (neg != null)
+                        rl.add(new Overlay(new CustomHitbox(this, neg.ac, neg.bc, true)), null);
+                }
+            } catch (Loading le) {
+            }
+            } else if (Config.hidegobs) {
                 try {
                     Resource res = getres();
                     if (Config.hidetrees && res != null) {
                         if (res != null && res.name.startsWith("gfx/terobjs/trees")
                                 && !res.name.endsWith("log") && !res.name.endsWith("oldtrunk")) {
+                            Resource.Neg neg  = res.layer(Resource.Neg.class);
                             hide = true;
-                            rl.add(new Overlay(new CustomHitbox(this, 12)), null);
+                            if (neg != null)
+                            rl.add(new Overlay(new CustomHitbox(this, neg.ac, neg.bc, true)), null);
                         }
-                    }
+                    } 
                     if (Config.hidecrops && res != null) {
                         if (res.name.startsWith("gfx/terobjs/plants") && !res.name.equals("gfx/terobjs/plants/trellis")) {
-                            hide = true;
-                            rl.add(new Overlay(new CustomHitbox(this, 10)), null);
+                            Resource.Neg neg  = res.layer(Resource.Neg.class);
+                        	hide = true;
+                            if (neg != null)
+                            rl.add(new Overlay(new CustomHitbox(this, neg.ac, neg.bc, true)), null);
+                            else
+                                rl.add(new Overlay(new CustomHitbox(this, new Coord(-5, -5), new Coord(5, 5), true)), null);
                         }
                     }
                     if (Config.hidewalls && res != null) {
                     	 if (res.name.startsWith("gfx/terobjs/arch/pali") &&  !res.name.equals("gfx/terobjs/arch/palisadegate") || res.name.startsWith("gfx/terobjs/arch/brick") && !res.name.equals("gfx/terobjs/arch/brickwallgate") || res.name.startsWith("gfx/terobjs/arch/pole") && !res.name.equals("gfx/terobjs/arch/polegate")) {
-                             hide = true;
-                             rl.add(new Overlay(new CustomHitbox(this, 10)), null);
+                             Resource.Neg neg  = res.layer(Resource.Neg.class);
+                    		 hide = true;
+                             if (neg != null)
+                             rl.add(new Overlay(new CustomHitbox(this, neg.ac, neg.bc, true)), null);
                          }
                     }
                     if (Config.hidewagons && res != null) {
                    	 if (res.name.startsWith("gfx/terobjs/vehicle/wagon")) {
+                         Resource.Neg neg  = res.layer(Resource.Neg.class);
                             hide = true;
-                            rl.add(new Overlay(new CustomHitbox(this, 10)), null);
+                            if (neg != null)
+                            rl.add(new Overlay(new CustomHitbox(this, neg.ac, neg.bc, true)), null);
                         }
                    }
+                    if (Config.hidehouses && res != null) {
+                      	 if ((res.name.equals("gfx/terobjs/arch/stonemansion") || res.name.equals("gfx/terobjs/arch/logcabin") || res.name.equals("gfx/terobjs/arch/greathall") || res.name.equals("gfx/terobjs/arch/stonestead") || res.name.equals("gfx/terobjs/arch/timberhouse") || res.name.equals("gfx/terobjs/arch/stonetower"))) {
+                             Resource.Neg neg  = res.layer(Resource.Neg.class);  
+                      		 hide = true;
+                               if (neg != null)
+                               rl.add(new Overlay(new CustomHitbox(this, neg.ac, neg.bc, true)), null);
+                           }
+                      }
+                    if (Config.hidebushes && res != null) {
+                     	 if ((res.name.startsWith("gfx/terobjs/bushes"))) {
+                            Resource.Neg neg  = res.layer(Resource.Neg.class);  
+                     		 hide = true;
+                              if (neg != null)
+                              rl.add(new Overlay(new CustomHitbox(this, neg.ac, neg.bc, true)), null);
+                          }
+                     }
                 } catch (Loading le) {
                 }
             }
@@ -447,7 +496,6 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
     public class GobLocation extends GLState.Abstract {
         private Coord3f c = null;
         private double a = 0.0;
-        private Matrix4f update = null;
         private final Location xl = new Location(Matrix4f.id, "gobx"), rot = new Location(Matrix4f.id, "gob");
 
         public void tick() {

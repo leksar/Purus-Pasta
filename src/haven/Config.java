@@ -26,15 +26,24 @@ o *  This file is part of the Haven & Hearth game client.
 
 package haven;
 
-import haven.error.ErrorHandler;
+import static haven.Utils.getprop;
+
+import java.io.InputStream;
+import java.io.PrintStream;
+import java.io.PrintWriter;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.io.*;
-import java.net.URL;
-import java.util.*;
-
-import static haven.Utils.getprop;
+import haven.error.ErrorHandler;
 
 public class Config {
     public static final boolean iswindows = System.getProperty("os.name").startsWith("Windows");
@@ -102,7 +111,8 @@ public class Config {
     public static boolean showgobhp = Utils.getprefb("showgobhp", false);
     public static boolean showplantgrowstage = Utils.getprefb("showplantgrowstage", false);
     public static boolean notifykinonline = Utils.getprefb("notifykinonline", false);
-    public static boolean showterobjsrad = Utils.getprefb("showterobjsrad", false);
+    public static boolean showminerad = Utils.getprefb("showminerad", false);
+    public static boolean showfarmrad = Utils.getprefb("showfarmrad", false);
     public static boolean showweather = Utils.getprefb("showweather", true);
     public static boolean simplecrops = Utils.getprefb("simplecrops", false);
     public static boolean simpleforage = Utils.getprefb("simpleforage", false);
@@ -110,6 +120,9 @@ public class Config {
     public static boolean hidetrees = Utils.getprefb("hidetrees", false);
     public static boolean hidewalls = Utils.getprefb("hidewalls", false);
     public static boolean hidewagons = Utils.getprefb("hidewagons", false);
+    public static boolean hidehouses = Utils.getprefb("hidehouses", false);
+    public static boolean hidebushes = Utils.getprefb("hidebushes", false);
+    public static boolean hideall = Utils.getprefb("hideall", false);
     public static double hidered = Utils.getprefd("hidered", 155);
     public static double hidegreen = Utils.getprefd("hidegreen", 155);
     public static double hideblue = Utils.getprefd("hideblue", 155);
@@ -117,9 +130,11 @@ public class Config {
     public static boolean autohearth = Utils.getprefb("autohearth", false);
     public static boolean studywndlock = Utils.getprefb("studywndlock", true);
     public static boolean servertime = Utils.getprefb("servertime", false);
+    public static boolean servertimesyslog = Utils.getprefb("servertimesyslog", false);
     public static boolean showplayerpaths = Utils.getprefb("showplayerpaths", false);
     public static boolean showanimalpaths = Utils.getprefb("showanimalpaths", false);
     public static boolean showstudylefttime = Utils.getprefb("showstudylefttime", false);
+    public static boolean syslogonlogin = Utils.getprefb("syslogonlogin", false);
     public static boolean showinvonlogin = Utils.getprefb("showinvonlogin", false);
     public static boolean autopick = Utils.getprefb("autopick", false);
     public static boolean fastflower = Utils.getprefb("fastflower", false);
@@ -131,10 +146,11 @@ public class Config {
     public static boolean toggleuinot = Utils.getprefb("toggleuinot", false);
     public static boolean fepmeter = Utils.getprefb("fepmeter", false);
     public static boolean hungermeter = Utils.getprefb("hungermeter", false);
+    public static boolean autosplit = Utils.getprefb("autosplit", false);
     public static boolean autoeat = Utils.getprefb("autoeat", false);
     public static boolean runonlogin = Utils.getprefb("runonlogin", false);
     public static Coord chatsz = Utils.getprefc("chatsz", Coord.z);
-    public static boolean alternmapctrls = Utils.getprefb("alternmapctrls", false);
+    public static boolean alternmapctrls = Utils.getprefb("alternmapctrls", true);
     public static boolean autostudy = Utils.getprefb("autostudy", true);
     public static boolean limitbgfps = Utils.getprefb("limitbgfps", false);
     public static boolean showfillamount = Utils.getprefb("showfillamount", false);
@@ -152,7 +168,15 @@ public class Config {
     public static double ponyalarmvol = Utils.getprefd("ponyalarmvol", 1.0);
     public static boolean reversebadcamx = Utils.getprefb("reversebadcamx", false);
     public static boolean reversebadcamy = Utils.getprefb("reversebadcamy", false);
-    public static boolean hwcursor = false;
+    public static boolean showservertime = Utils.getprefb("showservertime", false);
+    public static boolean showtoggles = Utils.getprefb("showtoggles", false);
+    public static boolean enabletracking = Utils.getprefb("enabletracking", false);
+    public static boolean enablecrime = Utils.getprefb("enablecrime", false);
+    public static boolean nometallicsfx = Utils.getprefb("nometallicsfx", false);
+    public static boolean highlightParty = Utils.getprefb("highlightParty", false);
+    public static boolean resinfo = Utils.getprefb("resinfo", false);
+    public static boolean showanimalrad = Utils.getprefb("showanimalrad", false);
+    public static boolean hwcursor = Utils.getprefb("hwcursor", false);
     public static String playerposfile;
     public static byte[] authck = null;
     public static String prefspec = "hafen";
@@ -180,10 +204,12 @@ public class Config {
     public static String[] treessel = Utils.getprefsa("treessel", null);
 
     public final static String[] icons = new String[]{"dandelion", "chantrelle", "blueberry", "rat", "chicken", "chick",
-            "spindlytaproot", "stingingnettle", "dragonfly", "toad", "bram", "rowboat", "arrow", "boarspear"};
+            "spindlytaproot", "stingingnettle", "dragonfly", "toad", "bram", "rowboat", "arrow", "boarspear", "frog",
+            "wagon"};
     public static String[] iconssel = Utils.getprefsa("iconssel", null);
 
-    public final static Map<String, Tex> additonalicons = new HashMap<String, Tex>(8) {{
+    @SuppressWarnings("serial")
+    public final static Map<String, Tex> additonalicons = new HashMap<String, Tex>(10) {{
         put("gfx/terobjs/vehicle/bram", Resource.loadtex("gfx/icons/bram"));
         put("gfx/kritter/toad/toad", Resource.loadtex("gfx/icons/toad"));
         put("gfx/terobjs/vehicle/rowboat", Resource.loadtex("gfx/icons/rowboat"));
@@ -192,10 +218,13 @@ public class Config {
         put("gfx/kritter/rabbit/rabbit", Resource.loadtex("gfx/icons/deadrabbit"));
         put("gfx/terobjs/items/arrow", Resource.loadtex("gfx/icons/arrow"));
         put("gfx/terobjs/items/boarspear", Resource.loadtex("gfx/icons/arrow"));
+        put("gfx/kritter/frog/frog", Resource.loadtex("gfx/icons/frog"));
+        put("gfx/terobjs/vehicle/wagon", Resource.loadtex("gfx/icons/wagon"));
     }};
 
     public final static Set<String> dangerousgobres = new HashSet<String>(Arrays.asList(
-            "gfx/kritter/bat/bat", "gfx/kritter/bear/bear", "gfx/kritter/boar/boar", "gfx/kritter/lynx/lynx"));
+            "gfx/kritter/bat/bat", "gfx/kritter/bear/bear", "gfx/kritter/boar/boar", "gfx/kritter/lynx/lynx",
+            "gfx/kritter/badger/badger"));
     
     static {
         Arrays.sort(Config.boulders);
@@ -211,8 +240,7 @@ public class Config {
             InputStream in = ErrorHandler.class.getResourceAsStream("/version");
             try {
                 if (in != null) {
-                    java.util.Scanner s = new java.util.Scanner(in);
-                    version = s.next();
+                    version = new java.util.Scanner(in).next();
                 }
             } finally {
                 in.close();
@@ -280,7 +308,6 @@ public class Config {
         out.println("  -d                 Display debug text");
         out.println("  -P                 Enable profiling");
         out.println("  -G                 Enable GPU profiling");
-        out.println("  -c                 Force hardware cursor");
         out.println("  -p FILE            Write player position to a memory mapped file");
         out.println("  -U URL             Use specified external resource URL");
         out.println("  -r DIR             Use specified resource directory (or HAVEN_RESDIR)");
@@ -290,7 +317,7 @@ public class Config {
     }
 
     public static void cmdline(String[] args) {
-        PosixArgs opt = PosixArgs.getopt(args, "hdPGcp:U:r:A:u:C:");
+        PosixArgs opt = PosixArgs.getopt(args, "hdPGp:U:r:A:u:C:");
         if (opt == null) {
             usage(System.err);
             System.exit(1);
@@ -335,9 +362,6 @@ public class Config {
                     break;
                 case 'C':
                     authck = Utils.hex2byte(opt.arg);
-                    break;
-                case 'c':
-                    hwcursor = true;
                     break;
                 case 'p':
                     playerposfile = opt.arg;

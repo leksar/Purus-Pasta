@@ -29,27 +29,13 @@ package haven;
 import java.util.*;
 import javax.media.opengl.*;
 
-import haven.GLShader.VertexShader;
-import haven.GLShader.FragmentShader;
-
+@SuppressWarnings("serial")
 public class GLProgram implements java.io.Serializable {
     public final Collection<GLShader> shaders;
     private transient ProgOb glp;
 
     public GLProgram(Collection<GLShader> shaders) {
         this.shaders = new ArrayList<GLShader>(shaders);
-    }
-
-    /* Meaningful function is meaningful. :-P */
-    private static Collection<GLShader> collapse(GLShader[][] shaders) {
-        Collection<GLShader> sc = new ArrayList<GLShader>();
-        for (int i = 0; i < shaders.length; i++) {
-            if (shaders[i] == null)
-                continue;
-            for (int o = 0; o < shaders[i].length; o++)
-                sc.add(shaders[i][o]);
-        }
-        return (sc);
     }
 
     public static class ProgramException extends RuntimeException {

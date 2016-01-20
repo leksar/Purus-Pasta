@@ -1,5 +1,31 @@
 ## Changelog
 
+### 2.9.0
+	- Added Carrot Farmer script [WIP]
+	- Added bouquet to curio config
+	- Merged stuff from main client
+	- Option to hide bushes
+	- Updated mussel tooltip
+	- Fixed option to show animal radiuses
+	- Added Lp/exp to curio tooltips
+	- Various Bugfixes
+### 2.8.0
+	- Merged important changes from the vanilla client regarding quests
+	-> Update your client to avoid crashes on quests
+### 2.7.0
+	- Hiding objects with ctrl+h has been improved with better hitboxes and few new things
+	- Mussel picker, picks all mussels nearby, doesnt work very well yet Xtended -> Mussel
+	- Latest Amber changes
+	- Fixes to options menu layouting
+### 2.6.0
+	- Craft window shows 4 latest recipes
+	- Green highlight around party members
+	- Added odd tuber to curio.config
+	- Added total armor class to equipment windows
+	- Fixed a lot of meaningless errors, that dont affect much at all if any
+### 2.5.0
+	- Ctrl + P shows max stage of crop
+	-  Latest Amber changes
 ### 2.4.6
 	- Fixes for latest server update
 ### 2.4.5

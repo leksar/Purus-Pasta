@@ -32,6 +32,7 @@ import haven.Sprite.Factory;
 import haven.Sprite.Owner;
 import haven.Resource.Tileset;
 
+@SuppressWarnings("serial")
 @Resource.LayerName("slink")
 public class SpriteLink extends Resource.Layer {
     public final Factory f;

@@ -31,7 +31,8 @@ import java.util.*;
 public class Surface {
     private List<Vertex> v = new ArrayList<Vertex>();
     private Collection<Face> f = new ArrayList<Face>();
-    private Map<DataID, Object> data = new HashMap<DataID, Object>();
+    @SuppressWarnings("rawtypes")
+	private Map<DataID, Object> data = new HashMap<DataID, Object>();
     public Vertex[] vl, fv, tv;
 
     /* XXX: I'm starting to lose track of how many times I've

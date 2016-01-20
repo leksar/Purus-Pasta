@@ -31,13 +31,14 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.event.*;
 
+@SuppressWarnings("serial")
 public abstract class ErrorGui extends JDialog implements ErrorStatus {
     private JLabel status;
     private JEditorPane info;
     private JPanel details;
     private JButton closebtn, detbtn;
     private JTextArea exbox;
-    private JScrollPane infoc, exboxc;
+    private JScrollPane infoc;
     private Thread reporter;
     private boolean done;
 
@@ -103,7 +104,7 @@ public abstract class ErrorGui extends JDialog implements ErrorStatus {
                 setLayout(new BorderLayout());
                 setAlignmentX(0);
                 setVisible(false);
-                add(exboxc = new JScrollPane(exbox = new JTextArea(15, 80) {{
+                add(new JScrollPane(exbox = new JTextArea(15, 80) {{
                     setEditable(false);
                 }}) {{
                     setVisible(true);

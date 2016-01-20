@@ -62,8 +62,8 @@ public class Glob {
     public static TimersThread timersThread;
     public GameUI gui;
     private long lasttime;
-    private static final long SEC_DAY = 60*60*24;
     private static final Color timeclr = new Color(177, 144, 173);
+    public String servertime;
 
     static {
         timersThread = new TimersThread();
@@ -110,7 +110,8 @@ public class Glob {
         }
     }
 
-    public static class Pagina implements java.io.Serializable {
+    @SuppressWarnings("serial")
+	public static class Pagina implements java.io.Serializable {
         public final Indir<Resource> res;
         public State st;
         public int meter, dtime;
@@ -225,10 +226,6 @@ public class Glob {
         lastctick = now;
     }
 
-    private static double defix(int i) {
-        return (((double) i) / 1e9);
-    }
-
     private long lastrep = 0;
     private long rgtime = 0;
 
@@ -247,6 +244,20 @@ public class Glob {
         return (rgtime);
     }
 
+    private static final long secinday = 60 * 60 * 24;
+    private static final long dewyladysmantletimemin = 4 * 60 * 60 + 45 * 60;
+    private static final long dewyladysmantletimemax = 7 * 60 * 60 + 15 * 60;
+    private void servertimecalc() {
+        long secs = globtime() / 1000;
+        long day = secs / secinday;
+        long secintoday = secs % secinday;
+        long hours = secintoday / 3600;
+        long mins = (secintoday % 3600) / 60;
+        servertime = String.format("Day %d, %02d:%02d", day, hours, mins);
+        if (secintoday >= dewyladysmantletimemin && secintoday <= dewyladysmantletimemax)
+            servertime += " (Dewy Lady's Mantle)";
+    }
+
     public void blob(Message msg) {
         boolean inc = msg.uint8() != 0;
         while (!msg.eom()) {
@@ -258,15 +269,12 @@ public class Glob {
                     if (!inc)
                         lastrep = 0;
                     timersThread.tick(time, epoch);
-                    if (Config.servertime && gui != null && gui.syslog != null) {
+                    servertimecalc();
+                    if (Config.servertimesyslog && gui != null && gui.syslog != null) {
                         long tm = globtime() / 1000;
                         if (tm - lasttime > 3 * 60 * 20) {
                             lasttime = tm;
-                            long day = tm / SEC_DAY;
-                            long secintoday = tm % SEC_DAY;
-                            long mm = (secintoday % 3600) / 60;
-                            long h = secintoday / 3600;
-                            gui.syslog.append(String.format("Server Time: Day %d, %02d:%02d.", day, h, mm), timeclr);
+                            gui.syslog.append(servertime, timeclr);
                         }
                     }
                     break;

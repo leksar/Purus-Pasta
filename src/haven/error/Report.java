@@ -28,6 +28,7 @@ package haven.error;
 
 import java.util.*;
 
+@SuppressWarnings("serial")
 public class Report implements java.io.Serializable {
     private boolean reported = false;
     public final Throwable t;

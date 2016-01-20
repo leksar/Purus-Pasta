@@ -46,7 +46,8 @@ public class GBuffer {
         private CurrentGL curgl;
         private GLState.Applier state;
 
-        public Context() {
+        @SuppressWarnings("deprecation")
+		public Context() {
             this.prof = GLProfile.getDefault();
             GLDrawableFactory df = GLDrawableFactory.getFactory(prof);
             gstate = new GLState() {
@@ -196,7 +197,7 @@ public class GBuffer {
                         }
                     }
                 });
-                g.checkerr(g.gl);
+                GOut.checkerr(g.gl);
             }
         });
 

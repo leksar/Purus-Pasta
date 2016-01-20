@@ -28,6 +28,7 @@ package haven.error;
 
 import java.io.*;
 
+@SuppressWarnings("serial")
 public class ReportException extends IOException {
     public ReportException(String message) {
         super(message);

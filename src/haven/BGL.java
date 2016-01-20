@@ -100,6 +100,7 @@ public class BGL {
         list[n++] = cmd;
     }
 
+    @SuppressWarnings("serial")
     public static class BGLException extends RuntimeException {
         public final Dump dump;
 
@@ -110,7 +111,6 @@ public class BGL {
     }
 
     public void bglCheckErr() {
-        final Throwable place = null;
         add(new Command() {
             public void run(GL2 gl) {
                 GOut.checkerr(gl);
@@ -1113,7 +1113,8 @@ public class BGL {
         });
     }
 
-    public static class Dump implements Serializable {
+    @SuppressWarnings("serial")
+	public static class Dump implements Serializable {
         public final List<DCmd> list;
         public final DCmd mark;
         private final transient Map<Object, Dummy> dummies = new IdentityHashMap<Object, Dummy>();

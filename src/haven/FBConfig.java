@@ -213,7 +213,7 @@ public class FBConfig {
                 return (p);
         }
         int i;
-        for (i = 0; i < tgts.length; i++) {
+        for (i = 0; i < tgts.length;) {
             if (tgts[i] == null)
                 tgts[i] = tgt;
             return (tgt);

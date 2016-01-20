@@ -30,7 +30,6 @@ import java.util.*;
 import java.lang.reflect.*;
 import java.lang.annotation.*;
 
-import haven.Resource.Tile;
 import haven.Surface.Vertex;
 import haven.Surface.MeshVertex;
 
@@ -197,7 +196,7 @@ public abstract class Tiler {
     }
 
     public static void flatmodel(MapMesh m, Coord lc) {
-        MapMesh.MapSurface s = m.data(m.gnd);
+        MapMesh.MapSurface s = m.data(MapMesh.gnd);
         if (s.split[s.ts.o(lc)]) {
             s.new Face(s.surf[s.vs.o(lc.x, lc.y)],
                     s.surf[s.vs.o(lc.x, lc.y + 1)],
@@ -220,7 +219,7 @@ public abstract class Tiler {
     }
 
     public void lay(MapMesh m, Coord lc, Coord gc, MCons cons, boolean cover) {
-        MapMesh.MapSurface s = m.data(m.gnd);
+        MapMesh.MapSurface s = m.data(MapMesh.gnd);
         cons.faces(m, MPart.splitquad(lc, gc, s.fortilea(lc), s.split[s.ts.o(lc)]));
     }
 

@@ -30,6 +30,7 @@ import java.util.*;
 import java.util.regex.*;
 import javax.media.opengl.*;
 
+@SuppressWarnings("serial")
 public class GLConfig implements java.io.Serializable, Console.Directory {
     private static final Pattern slvp = Pattern.compile("^(\\d+)\\.(\\d+)");
     public int glslver, glmajver, glminver;

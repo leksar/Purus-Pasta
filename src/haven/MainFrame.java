@@ -33,6 +33,7 @@ import java.util.*;
 import java.lang.reflect.*;
 
 
+@SuppressWarnings("serial")
 public class MainFrame extends java.awt.Frame implements Runnable, Console.Directory {
     HavenPanel p;
     private final ThreadGroup g;
@@ -151,7 +152,8 @@ public class MainFrame extends java.awt.Frame implements Runnable, Console.Direc
                             }
                         };
                     }
-                    getToolkit().getSystemEventQueue().invokeLater(r);
+                    getToolkit().getSystemEventQueue();
+					EventQueue.invokeLater(r);
                 }
             }
         });
@@ -383,7 +385,7 @@ public class MainFrame extends java.awt.Frame implements Runnable, Console.Direc
                 public void run() {
                     StudyTimes.updatestudytimes();
                 }
-            }).start();
+            }, "Curio times fetcher").start();
 
         Config.cmdline(args);
 

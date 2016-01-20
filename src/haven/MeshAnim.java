@@ -254,7 +254,8 @@ public class MeshAnim {
         }
     }
 
-    @Resource.LayerName("manim")
+    @SuppressWarnings("serial")
+	@Resource.LayerName("manim")
     public static class Res extends Resource.Layer {
         public final int id;
         public final MeshAnim a;
