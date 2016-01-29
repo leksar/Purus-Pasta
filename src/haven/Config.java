@@ -101,7 +101,9 @@ public class Config {
     public static boolean quickslots = Utils.getprefb("quickslots", false);
     public static boolean statuswdgvisible = Utils.getprefb("statuswdgvisible", false);
     public static boolean chatalarm = Utils.getprefb("chatalarm", false);
+    public static boolean partychatalarm = Utils.getprefb("partychatalarm", false);
     public static double chatalarmvol = Utils.getprefd("chatalarmvol", 0.8);
+    public static double partychatalarmvol = Utils.getprefd("partychatalarmvol", 0.8);
     public static boolean studyalarm = Utils.getprefb("studyalarm", false);
     public static double studyalarmvol = Utils.getprefd("studyalarmvol", 0.8);
     public static double sfxchipvol = Utils.getprefd("sfxchipvol", 1.0);
@@ -177,6 +179,7 @@ public class Config {
     public static boolean resinfo = Utils.getprefb("resinfo", false);
     public static boolean showanimalrad = Utils.getprefb("showanimalrad", false);
     public static boolean hwcursor = Utils.getprefb("hwcursor", false);
+    public static boolean showboundingboxes = Utils.getprefb("showboundingboxes", false);
     public static String playerposfile;
     public static byte[] authck = null;
     public static String prefspec = "hafen";

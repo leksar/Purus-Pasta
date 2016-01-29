@@ -31,8 +31,6 @@ public static boolean MusselsNearby;
 		BotUtils = new BotUtils(ui, w, i);
 	}
 	
-	// Whole script  is example of bad coding, you cant stop it and it will probably leave thread just running in background
-	
 	public void Run () {
 	t.start();	
 	}
