@@ -45,6 +45,7 @@ import haven.Glob.Pagina;
 import haven.Resource.AButton;
 import haven.util.ObservableCollection;
 import purus.CarrotFarmer;
+import purus.BeetrootFarmer;
 import purus.MusselPicker;
 
 public class MenuGrid extends Widget {
@@ -138,6 +139,7 @@ public class MenuGrid extends Widget {
     	p.add(glob.paginafor(Resource.local().load("paginae/custom/study")));
     	p.add(glob.paginafor(Resource.local().load("paginae/custom/mussel")));
     	p.add(glob.paginafor(Resource.local().load("paginae/custom/carrotfarm")));
+        p.add(glob.paginafor(Resource.local().load("paginae/custom/beetrootfarm")));
     }
     private static Comparator<Pagina> sorter = new Comparator<Pagina>() {
         public int compare(Pagina a, Pagina b) {
@@ -360,6 +362,8 @@ public class MenuGrid extends Widget {
         	new MusselPicker(ui, w, i).Run(); 
         } else if (ad[1].equals("carrotfarmer")) {
         	new CarrotFarmer(ui, w, i).Run();
+        } else if (ad[1].equals("beetrootfarmer")) {
+            new BeetrootFarmer(ui, w, i).Run();
         }
     }
 

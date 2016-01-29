@@ -1,22 +1,12 @@
 package purus;
 
-import java.awt.Color;
-
 import haven.Button;
-import haven.Coord;
-import haven.FlowerMenu;
-import haven.GItem;
-import haven.GameUI;
-import haven.Gob;
-import haven.HavenPanel;
-import haven.IMeter;
-import haven.Inventory;
-import haven.UI;
-import haven.WItem;
-import haven.Widget;
+import haven.*;
 import haven.Window;
 
-public class CarrotFarmer {
+import java.awt.*;
+
+public class BeetrootFarmer {
 	/* This script harvests and replants carrots.
 	 *  Doesn't pathfind around objects.
 	 *  Does this for all stage 4 carrots in sight.
@@ -25,17 +15,17 @@ public class CarrotFarmer {
 	public static boolean CarrotsNearby;
 
 	private final UI ui;
-    private haven.Widget w;
+    private Widget w;
     private Inventory i;
-    private Widget window;  
-    
-    private String Seed = "gfx/invobjs/carrot";
-    private String Plant = "gfx/terobjs/plants/carrot";
-    private int Stage = 4;
-    
+    private Widget window;
+
+    private String Seed = "gfx/invobjs/beet";
+    private String Plant = "gfx/terobjs/plants/beet";
+    private int Stage = 3;
+
 	BotUtils BotUtils;
 
-	public CarrotFarmer (UI ui, Widget w, Inventory i) {
+	public BeetrootFarmer(UI ui, Widget w, Inventory i) {
 		this.ui = ui;
 		this.w = w;
 		this.i = i;
@@ -47,7 +37,7 @@ public class CarrotFarmer {
 		}
 		Thread t = new Thread(new Runnable() {
 		public void run()  {
-			BotUtils.sysMsg("Carrot Farmer Started", Color.WHITE);
+			BotUtils.sysMsg("Beetroot Farmer Started", Color.WHITE);
 			window = BotUtils.gui().add(new StatusWindow(), 300, 200);
 			Gob gob = BotUtils.findNearestStageCrop(500, Stage, Plant);
 			if(gob != null)
@@ -127,7 +117,7 @@ public class CarrotFarmer {
 	                 }
 	            } else if(!isCarrot(item)) {
 	            	BotUtils.sysMsg("Item in hand is not seed", Color.WHITE);
-	            	BotUtils.sysMsg("Carrot Farmer Cancelled", Color.WHITE);
+	            	BotUtils.sysMsg("Beetroot Farmer Cancelled", Color.WHITE);
 	                t.stop();
 	                return;
 	            }
@@ -135,7 +125,7 @@ public class CarrotFarmer {
 	                BotUtils.takeItem(item);
 	            } else {
 	            	BotUtils.sysMsg("Couldnt find any seeds", Color.WHITE);
-	            	BotUtils.sysMsg("Carrot Farmer Cancelled", Color.WHITE);
+	            	BotUtils.sysMsg("Beetroot Farmer Cancelled", Color.WHITE);
 	                t.stop();
 	                return;
 	            }
@@ -172,13 +162,13 @@ public class CarrotFarmer {
 		// This thingy makes that stupid window with cancel button, TODO: make it better
 		private class StatusWindow extends Window {
 	        public StatusWindow() {
-	            super(Coord.z, "Carrot Farmer");
+	            super(Coord.z, "Beetroot Farmer");
 	            setLocal(true);
 	            add(new Button(120, "Cancel") {
 	                public void click() {
 	                    window.destroy();
 	                    if(t != null) {
-	                    	gameui().info("Carrot Farmer Cancelled", Color.WHITE);
+	                    	gameui().info("Beetroot Farmer Cancelled", Color.WHITE);
 	                    	t.stop();
 	                    }
 	                }
