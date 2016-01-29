@@ -1,5 +1,9 @@
 ## Changelog
 
+### 2.9.1
+	- Fixed sling bug
+	- Added display for quality cap to crafting window
+	- Fixed some bugs and merged latest amber stuff
 ### 2.9.0
 	- Added Carrot Farmer script [WIP]
 	- Added bouquet to curio config

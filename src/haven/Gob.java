@@ -236,7 +236,7 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
         if (Config.showplayerpaths || Config.showanimalpaths) {
             try {
                 Resource res = getres();
-                if (res != null && a.getClass() == LinMove.class) {
+                if (res != null && a.getClass() == LinMove.class && !res.name.startsWith("gfx/terobjs")) {
                     boolean isplayer = "body".equals(res.basename());
                     if (isplayer && Config.showplayerpaths || !isplayer && Config.showanimalpaths) {
                         if (gobpath == null) {
@@ -344,6 +344,14 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
                              rl.add(new Overlay(new CustomHitbox(this, neg.ac, neg.bc, true)), null);
                          }
                     }
+                    if (res != null && res.name.startsWith("gfx/terobjs/trees")
+                            && !res.name.endsWith("log") && !res.name.endsWith("oldtrunk")) {
+                        hide = true;
+                        GobHitbox.BBox bbox = GobHitbox.getBBox(this);
+                        if (bbox != null) {
+                            rl.add(new Overlay(new GobHitbox(this, bbox.a, bbox.b, true)), null);
+                        }
+                    }
                     if (Config.hidewagons && res != null) {
                    	 if (res.name.startsWith("gfx/terobjs/vehicle/wagon")) {
                          Resource.Neg neg  = res.layer(Resource.Neg.class);
@@ -370,6 +378,12 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
                      }
                 } catch (Loading le) {
                 }
+            }
+
+            if (Config.showboundingboxes && !hide) {
+                GobHitbox.BBox bbox = GobHitbox.getBBox(this);
+                if (bbox != null)
+                    rl.add(new Overlay(new GobHitbox(this, bbox.a, bbox.b, false)), null);
             }
 
             if (!hide)
