@@ -666,12 +666,12 @@ public class HavenPanel extends GLCanvas implements Runnable, Console.Directory 
     {
         cmdmap.put("hz", new Console.Command() {
             public void run(Console cons, String[] args) {
-                fd = 1000 / Integer.parseInt(args[1]);
+                fd = (long) (1000 / Double.parseDouble((args[1])));
             }
         });
         cmdmap.put("bghz", new Console.Command() {
             public void run(Console cons, String[] args) {
-                bgfd = 1000 / Integer.parseInt(args[1]);
+                bgfd = (long) (1000 / Double.parseDouble((args[1])));
                 Utils.setprefi("bghz", (int) bgfd);
             }
         });
