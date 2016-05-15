@@ -964,7 +964,7 @@ public class GameUI extends ConsoleHost implements Console.Directory {
         if (key == ':') {
             entercmd();
             return (true);
-        } else if (key == ' ') {
+        } else if (ev.isShiftDown() && ev.getKeyCode() == KeyEvent.VK_DELETE) {
             toggleui();
             return (true);
         } else if (key == 3) {
@@ -1079,8 +1079,23 @@ public class GameUI extends ConsoleHost implements Console.Directory {
         return (super.mousedown(c, button));
     }
 
-    private int uimode = 1;
+    private boolean uishowing = true;
 
+    // TODO: toggle chat, betls, and minimap visibility as well
+    public void toggleui() {
+        Hidepanel[] panels = {brpanel, ulpanel, umpanel, urpanel, menupanel};
+        uishowing = !uishowing;
+        if (uishowing) {
+            for (Hidepanel p : panels)
+                p.mshow(true);
+        } else {
+            for (Hidepanel p : panels)
+                p.mshow(false);
+        }
+    }
+   
+    private int uimode = 1;
+    
     public void toggleui(int mode) {
     	if(Config.toggleuinot){
     		mode = 0;
@@ -1106,11 +1121,7 @@ public class GameUI extends ConsoleHost implements Console.Directory {
         Hidepanel[] panels = {brpanel, ulpanel, umpanel, urpanel, menupanel};
         for (Hidepanel p : panels)
             p.cshow(p.tvis);
-        uimode = 1;
-    }
-
-    public void toggleui() {
-        toggleui((uimode + 1) % 3);
+        uishowing = true;
     }
 
     public void resize(Coord sz) {

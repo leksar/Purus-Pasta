@@ -75,6 +75,7 @@ public class LocalMiniMap extends Widget {
     private final static Tex treeicn = Text.renderstroked("\u25B2", Color.CYAN, Color.BLACK, bushf).tex();
     private Map<Color, Tex> xmap = new HashMap<Color, Tex>(6);
     public static Coord plcrel = null;
+    public final static double partymembersize = 14;
 
     private static class MapTile {
         public MCache.Grid grid;
@@ -305,11 +306,9 @@ public class LocalMiniMap extends Widget {
                     if (res == null)
                         continue;
 
-                    if ("body".equals(res.basename()) && gob.id != mv.player().id) {
-                        boolean ispartymember = false;
-                        synchronized (ui.sess.glob.party.memb) {
-                            ispartymember = ui.sess.glob.party.memb.containsKey(gob.id);
-                        }
+                    if (res.name.endsWith("/body") && gob.id != mv.player().id) {
+                        if (ui.sess.glob.party.memb.containsKey(gob.id))
+                            continue;
 
                                     if ((Config.alarmunknown || Config.autohearth) && kininfo == null) {
                                         if (!sgobs.contains(gob.id)) {
@@ -325,84 +324,86 @@ public class LocalMiniMap extends Widget {
                                     }
                                   }
                         Coord pc = p2c(gob.rc).add(delta);
-                        if (!ispartymember) {
-                            if (pc.x >= 0 && pc.x <= sz.x && pc.y >= 0 && pc.y < sz.y) {
-                                g.chcolor(Color.BLACK);
-                                g.fellipse(pc, new Coord(5, 5));
-                                g.chcolor(kininfo != null ? BuddyWnd.gc[kininfo.group] : Color.WHITE);
-                                g.fellipse(pc, new Coord(4, 4));
-                                g.chcolor();
-                            }
 
-                            if ((Config.alarmunknown || Config.autohearth) && kininfo == null) {
-                                if (!sgobs.contains(gob.id)) {
-                                    sgobs.add(gob.id);
-                                    Audio.play(alarmplayersfx, Config.alarmunknownvol);
-                                    if (Config.autohearth)
-                                        gameui().menu.wdgmsg("act", new Object[]{"travel", "hearth"});
-                                }
-                            } else if (Config.alarmred && kininfo != null && kininfo.group == 2) {
-                                if (!sgobs.contains(gob.id)) {
-                                    sgobs.add(gob.id);
-                                    Audio.play(alarmplayersfx, Config.alarmredvol);
-                                }
-                            }
+                        kininfo = gob.getattr(KinInfo.class);
+                        if (pc.x >= 0 && pc.x <= sz.x && pc.y >= 0 && pc.y < sz.y) {
+                            g.chcolor(Color.BLACK);
+                            g.fellipse(pc, new Coord(5, 5));
+                            g.chcolor(kininfo != null ? BuddyWnd.gc[kininfo.group] : Color.WHITE);
+                            g.fellipse(pc, new Coord(4, 4));
+                            g.chcolor();
                         }
-                    } else if (Config.foragables.contains(res.name)) {
-                        if (Config.alarmonforagables && !sgobs.contains(gob.id)) {
+
+                        boolean enemy = false;
+                        if (Config.alarmunknown && kininfo == null) {
                             sgobs.add(gob.id);
-                            Audio.play(foragablesfx, Config.alarmonforagablesvol);
+                            Audio.play(alarmplayersfx, Config.alarmunknownvol);
+                            enemy = true;
+                        } else if (Config.alarmred && kininfo != null && kininfo.group == 2) {
+                            sgobs.add(gob.id);
+                            Audio.play(alarmplayersfx, Config.alarmredvol);
+                            enemy = true;
                         }
-                    } else if (res.name.equals("gfx/kritter/lynx/lynx") || res.name.equals("gfx/kritter/bear/bear")) {
-                        if (Config.alarmbears && !sgobs.contains(gob.id)) {
-                            sgobs.add(gob.id);
-                            GAttrib drw = gob.getattr(Drawable.class);
-                            if (drw != null && drw instanceof Composite) {
-                                Composite cpst = (Composite) drw;
-                                if (cpst.nposes != null && cpst.nposes.size() > 0) {
-                                    for (ResData resdata : cpst.nposes) {
-                                        Resource posres = resdata.res.get();
-                                        if (posres == null || !posres.name.endsWith("/knock")) {
-                                            Audio.play(bearsfx, Config.alarmbearsvol);
-                                            break;
-                                        }
+
+                        if (Config.autologout && enemy) {
+                            gameui().act("lo");
+                        } else if (Config.autohearth && enemy) {
+                            gameui().menu.wdgmsg("act", new Object[]{"travel", "hearth"});
+                        }
+
+                        continue;
+                    }
+
+                    if (sgobs.contains(gob.id))
+                        continue;
+
+                    if (Config.alarmonforagables && Config.foragables.contains(res.name)) {
+                        sgobs.add(gob.id);
+                        Audio.play(foragablesfx, Config.alarmonforagablesvol);
+                    } else if (Config.alarmbears && (res.name.equals("gfx/kritter/lynx/lynx") || res.name.equals("gfx/kritter/bear/bear"))) {
+                        sgobs.add(gob.id);
+                        GAttrib drw = gob.getattr(Drawable.class);
+                        if (drw != null && drw instanceof Composite) {
+                            Composite cpst = (Composite) drw;
+                            if (cpst.nposes != null && cpst.nposes.size() > 0) {
+                                for (ResData resdata : cpst.nposes) {
+                                    Resource posres = resdata.res.get();
+                                    if (posres == null || !posres.name.endsWith("/knock")) {
+                                        Audio.play(bearsfx, Config.alarmbearsvol);
+                                        break;
                                     }
-                                } else {
-                                    Audio.play(bearsfx, Config.alarmbearsvol);
                                 }
+                            } else {
+                                Audio.play(bearsfx, Config.alarmbearsvol);
                             }
                         }
                     } else if (res.name.equals("gfx/kritter/troll/troll")) {
                         if (mv.areamine != null)
                             mv.areamine.terminate();
-                        if (Config.alarmtroll && !sgobs.contains(gob.id)) {
+                        if (Config.alarmtroll) {
                             sgobs.add(gob.id);
                             Audio.play(trollsfx, Config.alarmtrollvol);
                         }
-                    } else if (res.name.equals("gfx/kritter/mammoth/mammoth")) {
-                        if (Config.alarmmammoth && !sgobs.contains(gob.id)) {
-                            sgobs.add(gob.id);
-                            GAttrib drw = gob.getattr(Drawable.class);
-                            if (drw != null && drw instanceof Composite) {
-                                Composite cpst = (Composite) drw;
-                                if (cpst.nposes != null && cpst.nposes.size() > 0) {
-                                    for (ResData resdata : cpst.nposes) {
-                                        Resource posres = resdata.res.get();
-                                        if (posres == null || !posres.name.endsWith("/knock")) {
-                                            Audio.play(mammothsfx, Config.alarmmammothvol);
-                                            break;
-                                        }
+                    } else if (Config.alarmmammoth && res.name.equals("gfx/kritter/mammoth/mammoth")) {
+                        sgobs.add(gob.id);
+                        GAttrib drw = gob.getattr(Drawable.class);
+                        if (drw != null && drw instanceof Composite) {
+                            Composite cpst = (Composite) drw;
+                            if (cpst.nposes != null && cpst.nposes.size() > 0) {
+                                for (ResData resdata : cpst.nposes) {
+                                    Resource posres = resdata.res.get();
+                                    if (posres == null || !posres.name.endsWith("/knock")) {
+                                        Audio.play(mammothsfx, Config.alarmmammothvol);
+                                        break;
                                     }
-                                } else {
-                                    Audio.play(mammothsfx, Config.alarmmammothvol);
                                 }
+                            } else {
+                                Audio.play(mammothsfx, Config.alarmmammothvol);
                             }
                         }
-                    } else if (res.name.equals("gfx/terobjs/vehicle/bram") || res.name.equals("gfx/terobjs/vehicle/catapult")) {
-                        if (Config.alarmbram && !sgobs.contains(gob.id)) {
-                            sgobs.add(gob.id);
-                            Audio.play(doomedsfx, Config.alarmbramvol);
-                        }
+                    } else if (Config.alarmbram && (res.name.equals("gfx/terobjs/vehicle/bram") || res.name.equals("gfx/terobjs/vehicle/catapult"))) {
+                        sgobs.add(gob.id);
+                        Audio.play(doomedsfx, Config.alarmbramvol);
                     }
                     if (Config.alarmram) {
                     	 try {
@@ -582,41 +583,69 @@ public class LocalMiniMap extends Widget {
                     g.image(gridblue, p2c(player.rc).add(delta).sub(44, 44));
             }*/
 
-            try {
-                synchronized (ui.sess.glob.party.memb) {
-                    Collection<Party.Member> members = ui.sess.glob.party.memb.values();
-                    for (Party.Member m : members) {
-                        Coord mc;
-                        try {
-                            mc = m.getc();
-                        } catch (MCache.LoadingMap e) {
-                            mc = null;
-                        }
-                        if(mc == null)
-            			    continue;
-                            Coord ptc = p2c(mc);
-                            Tex tex = xmap.get(m.col);
-                            if (tex == null) {
-                                tex = Text.renderstroked("\u2716",  m.col, Color.BLACK, partyf).tex();
-                                xmap.put(m.col, tex);
-                            }
-                            g.image(tex, ptc.add(delta).sub(6, 6));
-                        if (Config.mapshowviewdist && m.gobid == MapView.plgob) {
-                            // view radius is 9x9 "server" grids
-                            Coord rc = p2c(mc.div(MCache.sgridsz).sub(4, 4).mul(MCache.sgridsz)).sub(off);
-                            Coord rs = MCache.sgridsz.mul(9).div(tilesz);
-                            g.chcolor(255, 255, 255, 60);
-                            g.frect(rc, rs);
-                            g.chcolor(0, 0, 0, 128);
-                            g.rect(rc, rs);
-                            g.chcolor();
-                        }
-                    }
-                }
-            } catch (Loading l) {
-            }
         }
         drawicons(g);
+
+        synchronized (ui.sess.glob.party.memb) {
+            Collection<Party.Member> members = ui.sess.glob.party.memb.values();
+            for (Party.Member m : members) {
+            	Coord mc;
+                try {
+                    mc = m.getc();
+                } catch (MCache.LoadingMap e) {
+                    mc = null;
+                }
+                if(mc == null)
+    			    continue;
+                Coord ptc;
+                double angle;
+                try {
+                    ptc = m.getc();
+                    if (ptc == null) // chars are located in different worlds
+                        continue;
+
+                    ptc = p2c(ptc).add(delta);
+                    Gob gob = m.getgob();
+                    // draw 'x' if gob is outside of view range
+                    if (gob == null) {
+                        Tex tex = xmap.get(m.col);
+                        if (tex == null) {
+                            tex = Text.renderstroked("\u2716",  m.col, Color.BLACK, partyf).tex();
+                            xmap.put(m.col, tex);
+                        }
+                        g.image(tex, ptc.sub(6, 6));
+                        continue;
+                    }
+
+                    angle = gob.geta();
+                } catch (Loading e) {
+                    continue;
+                }
+
+                final Coord front = ptc.add(Coord.sc(0, partymembersize / 2).rotate(angle));
+                final Coord right = ptc.add(Coord.sc(Math.PI / 4, -partymembersize / 2).rotate(angle));
+                final Coord left = ptc.add(Coord.sc(-Math.PI / 4, -partymembersize / 2).rotate(angle));
+                g.chcolor(m.col);
+                g.poly(front, right, left);
+                g.chcolor(Color.BLACK);
+                g.line(front, right, 1);
+                g.line(right, left, 1);
+                g.line(left, front, 1);
+                g.chcolor();
+                if (Config.mapshowviewdist && m.gobid == MapView.plgob) {
+                    // view radius is 9x9 "server" grids
+                    Coord rc = p2c(mc.div(MCache.sgridsz).sub(4, 4).mul(MCache.sgridsz)).sub(off);
+                    Coord rs = MCache.sgridsz.mul(9).div(tilesz);
+                    g.chcolor(255, 255, 255, 60);
+                    g.frect(rc, rs);
+                    g.chcolor(0, 0, 0, 128);
+                    g.rect(rc, rs);
+                    g.chcolor();
+                }
+            }
+            
+        }
+        
     }
 
     public void center() {

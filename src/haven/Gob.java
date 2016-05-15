@@ -297,6 +297,10 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
         //
     }
 
+    public double geta() {
+        return a;
+    }
+
     private Class<? extends GAttrib> attrclass(Class<? extends GAttrib> cl) {
         while (true) {
             Class<?> p = cl.getSuperclass();
