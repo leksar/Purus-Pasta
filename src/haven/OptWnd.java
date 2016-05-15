@@ -263,6 +263,7 @@ public class OptWnd extends Window {
                 		Config.limitbgfps = val;
                 		a = val;
                 		HavenPanel.bgfd = val ? 1000 : 200;
+                		Utils.setprefi("bghz", val ? 1000 : 200);
                 	}
                 }, new Coord(0, y));
                 y = 0; //2nd column
