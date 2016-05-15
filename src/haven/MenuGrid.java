@@ -53,7 +53,10 @@ import haven.automation.SteelRefueler;
 import haven.util.ObservableCollection;
 import purus.CarrotFarmer;
 import purus.DragonflyCollector;
+import purus.Forager;
+import purus.KoordMaker;
 import purus.MusselPicker;
+import purus.OvenFueler;
 
 
 public class MenuGrid extends Widget {
@@ -158,9 +161,11 @@ public class MenuGrid extends Widget {
     	p.add(glob.paginafor(Resource.local().load("paginae/custom/mussel")));
     	p.add(glob.paginafor(Resource.local().load("paginae/custom/carrotfarm")));
     	p.add(glob.paginafor(Resource.local().load("paginae/custom/flycollect")));
+    	p.add(glob.paginafor(Resource.local().load("paginae/custom/koord")));
+    	p.add(glob.paginafor(Resource.local().load("paginae/custom/forager")));
+    	// work in progress p.add(glob.paginafor(Resource.local().load("paginae/custom/oven")));
     	// Disable this for now because amber has one
     	//p.add(glob.paginafor(Resource.local().load("paginae/custom/fillsmelter")));
-    	//p.add(glob.paginafor(Resource.local().load("paginae/custom/oven")));
     }
 
 
@@ -421,6 +426,7 @@ public class MenuGrid extends Widget {
     }
 
     public void usecustom(String[] ad) {
+        GameUI gui = gameui();
         if(ad[1].equals("timer")) {
         	GameUI.AvaaTimer();
         } else if (ad[1].equals("study")) {
@@ -433,6 +439,12 @@ public class MenuGrid extends Widget {
         	new CarrotFarmer(ui, w, i).Run();
         } else if (ad[1].equals("flycollect")) {
         	new DragonflyCollector(ui, w, i).Run();
+        } else if (ad[1].equals("koord")) {
+        	new KoordMaker(ui, w, i).start();
+        } else if (ad[1].equals("forage")) {
+        	new Forager(ui,w,i).Run();
+        } else if (ad[1].equals("oven")) {
+        	new OvenFueler(ui,w,i).Run();
         }
     }
 
