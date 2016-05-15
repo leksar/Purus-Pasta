@@ -1,10 +1,14 @@
 package purus;
 
 import java.awt.Color;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
+import haven.Button;
+import haven.Charlist;
 import haven.Coord;
 import haven.FlowerMenu;
 import haven.FlowerMenu.Petal;
@@ -13,14 +17,16 @@ import haven.GItem;
 import haven.GameUI;
 import haven.Gob;
 import haven.HavenPanel;
+import haven.IMeter;
 import haven.Inventory;
 import haven.ItemInfo;
 import haven.Loading;
-import haven.Moving;
 import haven.Resource;
 import haven.UI;
+import haven.VMeter;
 import haven.WItem;
 import haven.Widget;
+import haven.Window;
 
 public class BotUtils {
 
@@ -43,6 +49,105 @@ public class BotUtils {
     public GameUI gui() {
     	return ui.gui;
     }
+    
+    // Returns amount of fuel ticks
+    public int getFuelMeter(Window window) {
+    	return window.getchild(VMeter.class).amount;
+    }
+    
+    // Transfers item
+    public void transferItem(WItem item) {
+    	item.item.wdgmsg("transfer", Coord.z);
+    }
+    
+    // Waits for window to appear
+    public void waitForWindow(String windowName) {
+    	while(gui().getwnd(windowName)==null) {
+    		sleep(100);
+    	}
+    }
+    
+    // Returns witems with specific names from inventory
+    public List<WItem> getInventoryItems(Inventory invwdg, List<String> items) {
+    	List<WItem> witems = new ArrayList<WItem>();
+    	for(WItem wi : getInventoryContents(invwdg)) {
+			String resname = wi.item.resname();
+    		for(String s : items) {
+    			if(resname.equals(s))
+    				witems.add(wi);
+    		}
+    	}
+		return witems;
+    }
+    
+    // Returns all items that inventory contains
+    public List<WItem> getInventoryContents(Inventory invwdg) {
+        List<WItem> witems = new ArrayList<WItem>();
+        for (Widget witm = invwdg.lchild; witm != null; witm = witm.prev) {
+            if (witm instanceof WItem) {
+                witems.add((WItem) witm);
+            }
+        }
+        return witems;
+    }
+    
+    // Logout to char selection
+    public void logoutChar() {
+        gui().act("lo", "cs");
+    }
+    
+    // Chooses character from char selection
+    public void chooseChar(String name)  {
+        Charlist.choose_player(name);
+        sleep(1000);
+        if(gui().getwnd("Restart")!=null) {
+        	Window wnd = gui().getwnd("Restart");
+        	System.out.println("Found it");
+        	for (Widget i = wnd.child; i != null; i = i.next) {
+    			if (i instanceof Button) {
+    				Button b = (Button) i;
+    				System.out.println(b.text);
+    				if (b.text.text.equals("Yes")) {
+    					b.click();
+    					break;
+    				}
+    			}
+    		}
+        }
+    }
+    
+    // Logs off
+    public void logout() {
+    	gui().act("lo");
+    }
+    
+    // Teleports to hearth fire
+    public void tpHF() {
+    	gui().menu.wdgmsg("act", new Object[]{"travel", "hearth"});
+		sleep(4000);
+        while(gui().prog >= 0) {
+        	sleep(100);
+        }
+    }
+    
+    // Returns energy (0-100%)
+    public int getEnergy() {
+        IMeter.Meter nrj = gui().getmeter("nrj", 0);
+        if (nrj == null) {
+            return -1;
+        }
+        return nrj.a;
+    }
+    
+    // Clicks gob with pf rightclick (pathfinds near it and then rightclicks it)
+    public void pfRightClick(Gob gob) {
+    	gui().map.pfRightClick(gob, -1, 3, 1, null);
+    }
+    
+	// Move to coords with pathfinder, 2nd argument for modifier (null to just move)
+	public void pfLeftClick(Coord c, String mod) {
+		gui().map.pfLeftClick(c, mod);
+	}
     
     // Drinks water/tea from containers in inventory
     public void drink() {
@@ -119,11 +224,10 @@ public class BotUtils {
 	
 	// true if player moving
 	public boolean isMoving() {
-		Moving m = player().getattr(Moving.class);
-		if (m == null)
+		if (player().getv()==0)
 			return false;
 		else
-			return true;
+		return true;
 	}
 	
 	// Chooses option from flower menu
@@ -172,9 +276,28 @@ public class BotUtils {
 		        }
 		        return nearest;
 		    }
-	//
 		 
-	// Finds nearest objects
+	// Finds objects by name, returns list of them
+	public List<Gob> findObjectsByNames(int radius, String... names) {
+		 Coord plc = player().rc;
+	        double min = radius;
+	        List<Gob> gobs = new ArrayList<Gob>();
+	        synchronized (ui.sess.glob.oc) {
+	            for (Gob gob : ui.sess.glob.oc) {
+	                double dist = gob.rc.dist(plc);
+	                if (dist < min) {
+	                	for(String s : names) {
+	                	if(isObjectName(gob, s)) {
+	                		gobs.add(gob);
+	                	}
+	                	}
+	                }
+	            }
+	        }
+	        return gobs;
+	}
+		 
+	// Finds nearest objects and returns closest one
 	 public Gob findObjectByNames(int radius, String... names) {
 	        Coord plc = player().rc;
 	        double min = radius;
@@ -200,6 +323,7 @@ public class BotUtils {
 	        return nearest;
 	    }
 	
+	 // Returns players gob
     public Gob player() {
         return ui.gui.map.player();
     }
@@ -250,7 +374,7 @@ public class BotUtils {
         return null;
     }
     
-	private void sleep(int t){
+	public void sleep(int t){
 		try {
 			Thread.sleep(t);
 		} catch (InterruptedException ie) {
