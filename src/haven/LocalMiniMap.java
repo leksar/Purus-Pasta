@@ -340,11 +340,11 @@ public class LocalMiniMap extends Widget {
                         boolean enemy = false;
                         if (Config.alarmunknown && kininfo == null) {
                             sgobs.add(gob.id);
-                            Audio.play(alarmplayersfx, Config.alarmunknownvol);
+                            Audio.play(playeralarmWhite, Config.alarmunknownvol);
                             enemy = true;
                         } else if (Config.alarmred && kininfo != null && kininfo.group == 2) {
                             sgobs.add(gob.id);
-                            Audio.play(alarmplayersfx, Config.alarmredvol);
+                            Audio.play(playeralarmRed, Config.alarmredvol);
                             enemy = true;
                         }
 
