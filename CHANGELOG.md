@@ -1,5 +1,14 @@
 ## Changelog
 
+### 2.16.0
+	- Added Oven Fueler [WIP]
+	- Added koordmaker [WIP]
+	- Added Forager [WIP]
+	- Added info for carrot farmer
+	- Added some curios to curio.config
+	- Fixed player circle lag
+	- Latest merges from Amber
+	- Minor bugfixes
 ### 2.15.1
 	- White circles around non party members
 	- Latest amber merges
