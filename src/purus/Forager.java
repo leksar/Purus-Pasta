@@ -8,14 +8,14 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.sun.prism.paint.Stop;
-
 import haven.Audio;
 import haven.Button;
+import haven.CheckBox;
 import haven.Coord;
 import haven.FlowerMenu;
 import haven.Gob;
 import haven.Inventory;
+import haven.MapView;
 import haven.TextEntry;
 import haven.UI;
 import haven.WItem;
@@ -32,10 +32,14 @@ public class Forager  {
     private String coordfilename;
     private String configname;
     private String charname;
-    
     private ArrayList<Coord> route = new ArrayList<Coord>();
     private String[] forageables;
     
+    //Does something to avoid getting KO when animals are nearby
+    private boolean animalcheck = true;
+    private String[] dangerousanimals = {"gfx/kritter/badger", "gfx/kritter/boar", 
+    		"gfx/kritter/bear", "gfx/kritter/bat", "gfx/kritter/lynx"};
+   
     private boolean start = false;
     
 	public Forager(UI ui, Widget w, Inventory i) {
@@ -72,6 +76,7 @@ public class Forager  {
             Audio.volume = 0;
             // TODO: This loop is evil
             boolean running = true;
+            runloop:
             while(running) {
             // Check if character is starving to avoid unwanted starvation deaths
             if(BotUtils.getEnergy() <= 20) {
@@ -85,8 +90,11 @@ public class Forager  {
 					int y = startCoord.y - route.get(i).y;
 					System.out.println("Forager: Moving to: " + x + ", " + y);
 					BotUtils.pfLeftClick(new Coord(x, y), null);
+                	BotUtils.sleep(2000);
 					int retry = 0;
 	                    while(BotUtils.player().rc.x!=x||BotUtils.player().rc.y!=y) {
+	                        if(checkAnimals())
+	                        	continue runloop;
 	                    	// Horrible workaround, probably
 	                    	if(!BotUtils.isMoving()) {
 	                    		retry++;
@@ -106,6 +114,8 @@ public class Forager  {
 	    					BotUtils.pfLeftClick(new Coord(x, y), null);
 	    					retry = 0;
 		                    while(BotUtils.player().rc.x!=x||BotUtils.player().rc.y!=y) {
+		                        if(checkAnimals())
+		                        	continue runloop;
 		                    	// Horrible workaround, probably
 		                    	if(!BotUtils.isMoving()) {
 		                    		retry++;
@@ -128,6 +138,8 @@ public class Forager  {
 	                	boolean shallcontinue = true;
 	                	retry = 0;
 	                    while(BotUtils.player().rc.x!=gobs.get(0).rc.x||BotUtils.player().rc.y!=gobs.get(0).rc.y) {
+	                        if(checkAnimals())
+	                        	continue runloop;
 	                    	// Probably terrible way to do this again
 	                    	if(!BotUtils.isMoving()) {
 	                    		retry++;
@@ -155,6 +167,8 @@ public class Forager  {
     					retry = 0;
     					BotUtils.pfLeftClick(new Coord(x, y), null);
 	                    while(BotUtils.player().rc.x!=x||BotUtils.player().rc.y!=y) {
+	                        if(checkAnimals())
+	                        	continue runloop;
 	                    	// Horrible workaround, probably
 	                    	if(!BotUtils.isMoving()) {
 	                    		retry++;
@@ -176,6 +190,7 @@ public class Forager  {
 	            
 	            // Stores picked forageables in nearest chest
 	            // TODO: If chest is full check if theres other chests nearby + add more containers
+        		System.out.println("Emptying inventory to nearby small chests with space in them");
             	ArrayList<Gob> gobs = new ArrayList<Gob>(BotUtils.findObjectsByNames(5000, "gfx/terobjs/chest"));
             	Boolean repeat = true;
             	while(repeat) {
@@ -279,6 +294,28 @@ public class Forager  {
 	public int getY() {
 		return (int)BotUtils.player().rc.y;
 	}
+	
+	public boolean checkAnimals() {
+		// Return true if foraging code must start looping from the beginning, false if it can just continue
+		if (!animalcheck)
+			return false;
+		if(BotUtils.findObjectByNames(150, dangerousanimals)!=null){
+			BotUtils.gui().map.canceltasks();
+			System.out.println("Detected an dangeous animal. It may attack at any time. So we must deal with it. (logging out)");
+			BotUtils.logoutChar();
+			BotUtils.sleep(1000);
+            while(BotUtils.gui().prog >= 0) {
+            	BotUtils.sleep(100);
+            }
+			BotUtils.sleep(600000);
+			BotUtils.chooseChar(charname);
+			BotUtils.sleep(5000);
+			BotUtils.tpHF();
+			BotUtils.sleep(5000);
+			return true;
+		} else
+			return false;
+	}
 		});
 		
 	private class StatusWindow extends Window {
@@ -313,6 +350,17 @@ public class Forager  {
                 	gameui().msg("Cancelled foraging bot", Color.WHITE);
                 	window.destroy();
                 	t.stop();
+                }
+            }, new Coord(0, y));
+            y += 35;
+            add(new CheckBox("Avoid Animals (Logout)") {
+                {
+                    a = animalcheck;
+                }
+
+                public void set(boolean val) {
+                	animalcheck = val;
+                    a = val;
                 }
             }, new Coord(0, y));
             pack();
