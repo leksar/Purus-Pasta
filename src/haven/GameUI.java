@@ -28,15 +28,13 @@ package haven;
 
 import static haven.Inventory.invsq;
 
+import java.text.DecimalFormat;
+import java.util.*;
 import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.awt.image.WritableRaster;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import haven.automation.ErrorSysMsgCallback;
 
@@ -93,6 +91,8 @@ public class GameUI extends ConsoleHost implements Console.Directory {
     public FBelt fbelt;
     public CraftHistoryBelt histbelt;
     private ErrorSysMsgCallback errmsgcb;
+    private static final Pattern esvMsgPattern = Pattern.compile("Essence: ([0-9]+), Substance: ([0-9]+), Vitality: ([0-9]+)");
+    private static final DecimalFormat shortfmt = new DecimalFormat("#.#");
 
     public abstract class Belt extends Widget {
         public Belt(Coord sz) {
@@ -1177,6 +1177,14 @@ public class GameUI extends ConsoleHost implements Console.Directory {
     }
 
     public void msg(String msg) {
+        Matcher m = esvMsgPattern.matcher(msg);
+        if (m.find()) {
+            int e = Integer.parseInt(m.group(1));
+            int s = Integer.parseInt(m.group(2));
+            int v = Integer.parseInt(m.group(3));
+            double avg = Config.arithavg ? (e + s + v) / 3.0 : Math.sqrt((e * e + s * s + v * v) / 3.0);
+            msg += "  (Avg: " + shortfmt.format(avg) + ")";
+        }
         msg(msg, Color.WHITE, Color.WHITE);
     }
 
