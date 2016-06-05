@@ -296,6 +296,29 @@ public class BotUtils {
 	        }
 	        return gobs;
 	}
+	
+	// Finds nearest objects and returns closest one
+	 public Gob findNearestTree(int radius) {
+	        Coord plc = player().rc;
+	        double min = radius;
+	        Gob nearest = null;
+	        synchronized (ui.sess.glob.oc) {
+	            for (Gob gob : ui.sess.glob.oc) {
+	                double dist = gob.rc.dist(plc);
+	                if (dist < min) {
+	                    boolean matches = false;
+	                        if (isObjectName(gob, "gfx/terobjs/tree") && !gob.getres().name.contains("stump") && !gob.getres().name.contains("log")) {
+	                            matches = true;
+	                        }
+	                    if (matches) {
+	                        min = dist;
+	                        nearest = gob;
+	                    }
+	                }
+	            }
+	        }
+	        return nearest;
+	    }
 		 
 	// Finds nearest objects and returns closest one
 	 public Gob findObjectByNames(int radius, String... names) {

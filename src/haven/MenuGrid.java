@@ -57,6 +57,7 @@ import purus.Forager;
 import purus.KoordMaker;
 import purus.MusselPicker;
 import purus.OvenFueler;
+import purus.TreeChop;
 
 
 public class MenuGrid extends Widget {
@@ -163,6 +164,7 @@ public class MenuGrid extends Widget {
     	p.add(glob.paginafor(Resource.local().load("paginae/custom/flycollect")));
     	p.add(glob.paginafor(Resource.local().load("paginae/custom/koord")));
     	p.add(glob.paginafor(Resource.local().load("paginae/custom/forager")));
+    	p.add(glob.paginafor(Resource.local().load("paginae/custom/treechop")));
     	// work in progress p.add(glob.paginafor(Resource.local().load("paginae/custom/oven")));
     	// Disable this for now because amber has one
     	//p.add(glob.paginafor(Resource.local().load("paginae/custom/fillsmelter")));
@@ -445,6 +447,8 @@ public class MenuGrid extends Widget {
         	new Forager(ui,w,i).Run();
         } else if (ad[1].equals("oven")) {
         	new OvenFueler(ui,w,i).Run();
+        } else if (ad[1].equals("treechop")) {
+        	new TreeChop(ui,w,i).Run();
         }
     }
 
