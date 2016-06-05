@@ -7,7 +7,7 @@ public class HungerWnd extends Window {
     public HungerWnd() {
         super(Coord.z, "You are hungry!");  
         add(new Label("You hear your stomach rumbling, gnawing pain in your guts reminding that you haven't had anything to eat for a while."), new Coord(20,10));
-        add(new Label("Burning through energy when it’s below 1000% will result in starvation damage to your health, eventually death."), new Coord(20,30));
+        add(new Label("Burning through energy when it’s below 2000% will result in starvation damage to your health, eventually death."), new Coord(20,30));
         add(new Button(60, "Close") {
             @Override
             public void click() {
