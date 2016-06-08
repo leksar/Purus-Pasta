@@ -53,6 +53,7 @@ import haven.automation.SteelRefueler;
 import haven.util.ObservableCollection;
 import purus.CarrotFarmer;
 import purus.DragonflyCollector;
+import purus.Drinker;
 import purus.Forager;
 import purus.KoordMaker;
 import purus.MusselPicker;
@@ -165,6 +166,7 @@ public class MenuGrid extends Widget {
     	p.add(glob.paginafor(Resource.local().load("paginae/custom/koord")));
     	p.add(glob.paginafor(Resource.local().load("paginae/custom/forager")));
     	p.add(glob.paginafor(Resource.local().load("paginae/custom/treechop")));
+    	p.add(glob.paginafor(Resource.local().load("paginae/custom/drink")));
     	// work in progress p.add(glob.paginafor(Resource.local().load("paginae/custom/oven")));
     	// Disable this for now because amber has one
     	//p.add(glob.paginafor(Resource.local().load("paginae/custom/fillsmelter")));
@@ -449,6 +451,8 @@ public class MenuGrid extends Widget {
         	new OvenFueler(ui,w,i).Run();
         } else if (ad[1].equals("treechop")) {
         	new TreeChop(ui,w,i).Run();
+        } else if (ad[1].equals("drink")) {
+        	new Drinker(ui,w,i).Run();
         }
     }
 
