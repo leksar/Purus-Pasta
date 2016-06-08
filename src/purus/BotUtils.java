@@ -163,9 +163,10 @@ public class BotUtils {
 		                    if (opt.name.equals("Drink")) {
 		                        menu.choose(opt);
 		                        menu.destroy();
-		                        while(gui.getmeter("stam", 0).a <= 90) {
-		                        	sleep(100);
-		                        }
+		                        sleep(500);
+		        	            while(gui.prog >= 0) {
+		        	            	sleep(100);
+		        	            }
 		                    }
 		                }
 		            }
