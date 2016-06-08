@@ -39,6 +39,10 @@ import java.util.Set;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
+import static haven.GItem.Quality.AVG_MODE_ARITHMETIC;
+import static haven.GItem.Quality.AVG_MODE_GEOMETRIC;
+import static haven.GItem.Quality.AVG_MODE_QUADRATIC;
+
 public class OptWnd extends Window {
     public final Panel main, video, audio, display, map, general, combat, hide, control, uis, quality;
     public Panel current;
@@ -1117,18 +1121,6 @@ public class OptWnd extends Window {
 
         // -------------------------------------------- map
         y = 0;
-        map.add(new CheckBox("Show players on minimap") {
-            {
-                a = Config.showplayersmmap;
-            }
-
-            public void set(boolean val) {
-                Utils.setprefb("showplayersmmap", val);
-                Config.showplayersmmap = val;
-                a = val;
-            }
-        }, new Coord(0, y));
-        y += 35;
         map.add(new CheckBox("Save map tiles to disk") {
             {
                 a = Config.savemmap;
@@ -1490,6 +1482,18 @@ public class OptWnd extends Window {
                 a = val;
             }
         }, new Coord(0, y));
+        y += 35;
+        combat.add(new CheckBox("Disallow aggroing of partied/village members/non-red kins") {
+            {
+                a = Config.donotaggrofriends;
+            }
+
+            public void set(boolean val) {
+                Utils.setprefb("donotaggrofriends", val);
+                Config.donotaggrofriends = val;
+                a = val;
+            }
+        }, new Coord(0, y));
 
         combat.add(new PButton(200, "Back", 27, main), new Coord(270, 360));
         combat.pack();
@@ -1802,8 +1806,9 @@ public class OptWnd extends Window {
         // -------------------------------------------- uis
 
         y = 0;
-        uis.add(new Label("Language (req. restart):"), new Coord(0, y));
-        uis.add(langDropdown(), new Coord(120, y));
+        Label langlbl = new Label("Language (req. restart):");
+        uis.add(langlbl, new Coord(0, y));
+        uis.add(langDropdown(), new Coord(langlbl.sz.x + 10, y));
 
         y += 35;
         uis.add(new CheckBox("Show quick hand slots") {
@@ -1875,8 +1880,9 @@ public class OptWnd extends Window {
             }
         }, new Coord(0, y));
         y += 35;
-        uis.add(new Label("Chat font size (req. restart):"), new Coord(0, y + 1));
-        uis.add(chatFntSzDropdown(), new Coord(180, y));
+        Label chatszlbl = new Label("Chat font size (req. restart):");
+        uis.add(chatszlbl, new Coord(0, y + 1));
+        uis.add(chatFntSzDropdown(), new Coord(chatszlbl.sz.x + 10, y));
         y += 35;
         uis.add(new CheckBox("Hide quests panel") {
             {
@@ -2000,17 +2006,9 @@ public class OptWnd extends Window {
             }
         }, new Coord(0, y));
         y += 35;
-        quality.add(new CheckBox("Use arithmetic average") {
-            {
-                a = Config.arithavg;
-            }
-
-            public void set(boolean val) {
-                Utils.setprefb("arithavg", val);
-                Config.arithavg = val;
-                a = val;
-            }
-        }, new Coord(0, y));
+        Label avglbl = new Label("Calculate Avg as (req. logout):");
+        quality.add(avglbl, new Coord(0, y));
+        quality.add(avgQModeDropdown(), new Coord(avglbl.sz.x + 10, y));
         y += 35;
         quality.add(new CheckBox("Round item quality to a whole number") {
             {
@@ -2134,6 +2132,42 @@ public class OptWnd extends Window {
 
         return new ArrayList<Locale>(languages);
     }
+
+    private static final Pair[] avgQModes = new Pair[]{
+            new Pair<>(Resource.getLocString(Resource.l10nLabel, "Quadratic"), AVG_MODE_QUADRATIC),
+            new Pair<>(Resource.getLocString(Resource.l10nLabel, "Geometric"), AVG_MODE_GEOMETRIC),
+            new Pair<>(Resource.getLocString(Resource.l10nLabel, "Arithmetic"), AVG_MODE_ARITHMETIC)
+    };
+
+    @SuppressWarnings("unchecked")
+    private Dropbox<Pair<String, Integer>> avgQModeDropdown() {
+        Dropbox<Pair<String, Integer>> modes = new Dropbox<Pair<String, Integer>>(95, 3, 16) {
+            @Override
+            protected Pair<String, Integer> listitem(int i) {
+                return avgQModes[i];
+            }
+
+            @Override
+            protected int listitems() {
+                return avgQModes.length;
+            }
+
+            @Override
+            protected void drawitem(GOut g, Pair<String, Integer> item, int i) {
+                g.text(item.a, Coord.z);
+            }
+
+            @Override
+            public void change(Pair<String, Integer> item) {
+                super.change(item);
+                Config.avgmode = item.b;
+                Utils.setprefi("avgmode", item.b);
+            }
+        };
+        modes.change(avgQModes[Config.avgmode]);
+        return modes;
+    }
+
 
     public OptWnd() {
         this(true);

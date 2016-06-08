@@ -1182,7 +1182,6 @@ public class GameUI extends ConsoleHost implements Console.Directory {
             int e = Integer.parseInt(m.group(1));
             int s = Integer.parseInt(m.group(2));
             int v = Integer.parseInt(m.group(3));
-            double avg = Config.arithavg ? (e + s + v) / 3.0 : Math.sqrt((e * e + s * s + v * v) / 3.0);
             msg += "  (Avg: " + shortfmt.format(avg) + ")";
         }
         msg(msg, Color.WHITE, Color.WHITE);

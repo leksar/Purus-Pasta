@@ -68,7 +68,6 @@ public class Config {
     public static boolean hideflovisual = Utils.getprefb("hideflovisual", false);
     public static boolean daylight = Utils.getprefb("daylight", false);
     public static boolean showkinnames = Utils.getprefb("showkinnames", false);
-    public static boolean showplayersmmap = Utils.getprefb("showplayersmmap", false);
     public static boolean savemmap = Utils.getprefb("savemmap", true);
     public static boolean studylock = Utils.getprefb("studylock", false);
     public static boolean camfree = Utils.getprefb("camfree", false);
@@ -83,7 +82,6 @@ public class Config {
     public static boolean showquality = Utils.getprefb("showquality", false);
     public static boolean nohidebox = Utils.getprefb("nohidebox", false);
     public static int showqualitymode = Utils.getprefi("showqualitymode", 0);
-    public static boolean arithavg = Utils.getprefb("arithavg", false);
     public static boolean qualitywhole = Utils.getprefb("qualitywhole", true);
     public static boolean hideum = Utils.getprefb("hideum", false);
     public static boolean showlpgainmult = Utils.getprefb("showlpgainmult", false);
@@ -213,6 +211,8 @@ public class Config {
     public static boolean showcddelta =  Utils.getprefb("showcddelta", false);
     public static boolean disabledrinkhotkey =  Utils.getprefb("disabledrinkhotkey", false);
     public static boolean autologout =  Utils.getprefb("autologout", false);
+    public static boolean donotaggrofriends =  Utils.getprefb("donotaggrofriends", false);
+    public static int avgmode = Utils.getprefi("avgmode", 0);
     public static boolean pf = false;
     public static String playerposfile;
     public static byte[] authck = null;
