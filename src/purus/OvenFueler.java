@@ -44,7 +44,7 @@ public class OvenFueler {
 			List<Gob> ovens = BotUtils.findObjectsByNames(2000, "gfx/terobjs/oven");
 			Coord startCoord = new Coord((int)BotUtils.player().rc.x, (int)BotUtils.player().rc.y);
 			for(Gob gob : ovens) {
-				BotUtils.pfRightClick(gob);
+				BotUtils.pfRightClick(gob, 1);
 				BotUtils.waitForWindow("Oven");
 				Boolean keepfueling = true;
 				while(keepfueling) {
