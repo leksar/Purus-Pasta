@@ -1,6 +1,7 @@
 package purus;
 
 import java.awt.Color;
+import java.util.ArrayList;
 
 import haven.Button;
 import haven.Coord;
@@ -26,18 +27,21 @@ public class CarrotFarmer {
 	private final UI ui;
     private haven.Widget w;
     private Inventory i;
-    private Widget window;  
+    private Widget window;
+    private boolean running = true;
     
+    private ArrayList<Gob> gobs;
     private String Seed = "gfx/invobjs/carrot";
     private String Plant = "gfx/terobjs/plants/carrot";
     private int Stage = 4;
     
 	BotUtils BotUtils;
 
-	public CarrotFarmer (UI ui, Widget w, Inventory i) {
+	public CarrotFarmer (UI ui, Widget w, Inventory i, ArrayList<Gob> gobs) {
 		this.ui = ui;
 		this.w = w;
 		this.i = i;
+		this.gobs = gobs;
 		BotUtils = new BotUtils(ui, w, i);
 	}
 	
@@ -46,17 +50,20 @@ public class CarrotFarmer {
 		}
 		Thread t = new Thread(new Runnable() {
 		public void run()  {
+			stop:
+			while(running) {
 			BotUtils.sysMsg("Carrot Farmer Started", Color.WHITE);
 			window = BotUtils.gui().add(new StatusWindow(), 300, 200);
-			while(BotUtils.findNearestStageCrop(500, Stage, Plant) != null) {
-				Gob gob = BotUtils.findNearestStageCrop(500, Stage, Plant);
+			for (Gob gob : gobs) {
 				GameUI gui = HavenPanel.lui.root.findchild(GameUI.class);
 				 IMeter.Meter stam = gui.getmeter("stam", 0);
 				 if (stam.a <= 30) {
 					 BotUtils.drink();
 				 }
-			BotUtils.doClick(gob, 3, 0);
-			sleep(250);
+			BotUtils.pfRightClick(gob, 0);
+			while(ui.root.findchild(FlowerMenu.class)==null) {
+				sleep(100);
+			}
 			@SuppressWarnings("deprecation")
 			FlowerMenu menu = ui.root.findchild(FlowerMenu.class);
 	            if (menu != null) {
@@ -67,7 +74,7 @@ public class CarrotFarmer {
 	                    }
 	                }
 	            }
-	            while(gui.prog >= 0) {
+	            while(BotUtils.findObjectById(gob.id)!=null) {
 	            	sleep(100);
 	            }
 	            // Some better method should be implemented, but now it just waits a bit for items to appear on inventory and stuff
@@ -81,33 +88,21 @@ public class CarrotFarmer {
 	                         break;
 	                     	}
 	                 }
-	            } else if(!isCarrot(item)) {
-	            	BotUtils.sysMsg("Item in hand is not seed", Color.WHITE);
-	            	BotUtils.sysMsg("Carrot Farmer Cancelled", Color.WHITE);
-	                t.stop();
-	                return;
-	            }
-	            if (item != null) {
-	                BotUtils.takeItem(item);
-	            } else {
-	            	BotUtils.sysMsg("Couldnt find any seeds", Color.WHITE);
-	            	BotUtils.sysMsg("Carrot Farmer Cancelled", Color.WHITE);
-	                t.stop();
-	                return;
+		                BotUtils.takeItem(item);
 	            }
 	            // Planttaa, siemen käteen tähän vaiheeseen mennessä
-			BotUtils.mapInteractClick(1); 
+			BotUtils.mapInteractClick(1);
+			while(BotUtils.findNearestStageCrop(5, 0, "gfx/terobjs/plants/carrot")==null) {
+				sleep(100);
+			}
 			//  TODO Droppaa kaikki siemenet tms. invistä + kädestä = saa toimimaan kaikkiin siemeniin joku hieno
 			//	juttu jolla saa valittua mitä kasvia farmaa jne. 
 		}
+            running = false;
+			}
             window.destroy();
-            if(t != null) {
-            	BotUtils.sysMsg("Carrot Farmer Cancelled", Color.WHITE);
-            	t.stop();
-            }
-			return;
 		}
-
+		
     	final String[] carrot = {Seed};
         protected boolean isCarrot(final GItem item) {
 	        String resName = item.resname();
@@ -146,11 +141,10 @@ public class CarrotFarmer {
 	        }
 	        public void wdgmsg(Widget sender, String msg, Object... args) {
 	            if (sender == this && msg.equals("close")) {
-	                t.stop();
+                	t.stop();
 	            }
 	            super.wdgmsg(sender, msg, args);
 	        }
 	        
 		}
-		//
 }

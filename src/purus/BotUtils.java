@@ -140,8 +140,8 @@ public class BotUtils {
     }
     
     // Clicks gob with pf rightclick (pathfinds near it and then rightclicks it)
-    public void pfRightClick(Gob gob) {
-    	gui().map.pfRightClick(gob, -1, 3, 1, null);
+    public void pfRightClick(Gob gob, int mod) {
+    	gui().map.pfRightClick(gob, -1, 3, mod, null);
     }
     
 	// Move to coords with pathfinder, 2nd argument for modifier (null to just move)

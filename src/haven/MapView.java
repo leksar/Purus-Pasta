@@ -53,6 +53,7 @@ import haven.automation.SteelRefueler;
 import haven.pathfinder.PFListener;
 import haven.pathfinder.Pathfinder;
 import haven.resutil.BPRadSprite;
+import purus.CarrotFarmer;
 
 
 public class MapView extends PView implements DTarget, Console.Directory, PFListener {
@@ -90,6 +91,9 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
     public Thread pfthread;
     public SteelRefueler steelrefueler;
     public AutoLeveler autoleveler;
+    public boolean carrotSelect;
+    private haven.Widget w;
+    private haven.Inventory i;
 
     public interface Delayed {
         public void run(GOut g);
@@ -1826,6 +1830,13 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
                         selection.destroy();
                         selection = null;
                     }
+                } else if (carrotSelect) {
+                    if (ui.modshift && selection == null) {
+                        selection = new Selector(this);
+                    } else if (selection != null) {
+                        selection.destroy();
+                        selection = null;
+                    }
                 }
             }
         }
@@ -2067,6 +2078,8 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
         int modflags;
         Text tt;
         MapView mv;
+        Coord rc1;
+        Coord rc2;
         final GrabXL xl = new GrabXL(this) {
             public boolean mmousedown(Coord cc, int button) {
                 if (button != 1)
@@ -2099,6 +2112,7 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
                     ol.destroy();
                     mgrab.remove();
                 }
+                rc1 = (mc.div(tilesz).mul(tilesz).add(tilesz.div(2)));
                 sc = mc.div(tilesz);
                 modflags = ui.modflags();
                 xl.mv = true;
@@ -2113,12 +2127,36 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
         public boolean mmouseup(Coord mc, int button) {
             synchronized (MapView.this) {
                 if (sc != null) {
+                    rc2 = (mc.div(tilesz).mul(tilesz).add(tilesz.div(2)));
                     Coord ec = mc.div(tilesz);
                     xl.mv = false;
                     tt = null;
                     ol.destroy();
                     mgrab.remove();
-                    if (mv != null) {
+                    if(carrotSelect) {
+                    	// Not efficient way to do it probably, but it works
+                    	ArrayList<Gob> gobs = new ArrayList<Gob>();
+	            		double bigX = rc1.x>rc2.x?rc1.x:rc2.x;
+	            		double smallX = rc1.x<rc2.x?rc1.x:rc2.x;
+	            		double bigY = rc1.y>rc2.y?rc1.y:rc2.y;
+	            		double smallY = rc1.y<rc2.y?rc1.y:rc2.y;
+            	        synchronized (ui.sess.glob.oc) {
+            	            for (Gob gob : ui.sess.glob.oc) {
+            	            	if(gob.rc.x<=bigX && gob.rc.x>=smallX &&
+            	            			gob.rc.y<=bigY && gob.rc.y>=smallY && 
+            	            			gob.getres().name.contains("gfx/terobjs/plants/carrot") && 
+            	            			gob.getStage() == 4) {
+            	            		gobs.add(gob);
+            	            	}
+            	            }
+    	                	new CarrotFarmer(ui, w, i, gobs).Run();
+                            if (selection != null) {
+                                selection.destroy();
+                                selection = null;
+                            }
+            	        }
+            	        carrotSelect = false;
+                    } else if (mv != null) {
                         areamine = new AreaMine(ol.getc1(), ol.getc2(), mv);
                         new Thread(areamine, "Area miner").start();
                         if (selection != null) {

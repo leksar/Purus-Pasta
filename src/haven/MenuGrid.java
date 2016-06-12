@@ -440,7 +440,10 @@ public class MenuGrid extends Widget {
         } else if (ad[1].equals("mussel")) {
         	new MusselPicker(ui, w, i).Run(); 
         } else if (ad[1].equals("carrotfarmer")) {
-        	new CarrotFarmer(ui, w, i).Run();
+        	ui.root.findchild(GameUI.class).msg("Started carrot farmer", Color.WHITE);
+        	ui.root.findchild(GameUI.class).msg("Please shift + drag to select area to farm carrots", Color.GREEN);
+        	ui.gui.map.carrotSelect = true;
+        	//new CarrotFarmer(ui,  w, i).Run();
         } else if (ad[1].equals("flycollect")) {
         	new DragonflyCollector(ui, w, i).Run();
         } else if (ad[1].equals("koord")) {
