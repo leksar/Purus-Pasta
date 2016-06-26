@@ -46,6 +46,19 @@ public class BotUtils {
 		liquidPattern = Pattern.compile(pattern, Pattern.CASE_INSENSITIVE);
 	}
 	
+	public void pushButton(String btnName, String wndName) {	
+		Window wnd = gui().getwnd(wndName);
+		for (Widget i = wnd.child; i != null; i = i.next) {
+            if (i instanceof Button) {
+                Button b = (Button) i;
+                if (b.text.text.equals(btnName)) {
+                    b.click();
+                    break;
+                }
+            }
+}
+        }
+	
     public GameUI gui() {
     	return ui.gui;
     }

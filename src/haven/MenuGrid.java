@@ -51,6 +51,7 @@ import haven.automation.GobSelectCallback;
 import haven.automation.LightWithTorch;
 import haven.automation.SteelRefueler;
 import haven.util.ObservableCollection;
+import purus.Builder;
 import purus.CarrotFarmer;
 import purus.DragonflyCollector;
 import purus.Drinker;
@@ -167,6 +168,7 @@ public class MenuGrid extends Widget {
     	p.add(glob.paginafor(Resource.local().load("paginae/custom/forager")));
     	p.add(glob.paginafor(Resource.local().load("paginae/custom/treechop")));
     	p.add(glob.paginafor(Resource.local().load("paginae/custom/drink")));
+    	p.add(glob.paginafor(Resource.local().load("paginae/custom/build")));
     	// work in progress p.add(glob.paginafor(Resource.local().load("paginae/custom/oven")));
     	// Disable this for now because amber has one
     	//p.add(glob.paginafor(Resource.local().load("paginae/custom/fillsmelter")));
@@ -456,6 +458,8 @@ public class MenuGrid extends Widget {
         	new TreeChop(ui,w,i).Run();
         } else if (ad[1].equals("drink")) {
         	new Drinker(ui,w,i).Run();
+        } else if (ad[1].equals("autobuild")) {
+        	new Builder(ui,w,i).Run();
         }
     }
 
