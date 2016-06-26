@@ -63,7 +63,7 @@ public class OvenFueler {
 		            while(BotUtils.getItemAtHand()!=null) {
 		            	BotUtils.sleep(100);
 		            }
-		            BotUtils.pfRightClick(gob);
+		            BotUtils.pfRightClick(gob, 1);
 					BotUtils.waitForWindow("Oven"); 
 		            if(BotUtils.getFuelMeter(BotUtils.gui().getwnd("Oven"))>=13)
 		            	keepfueling = false;
