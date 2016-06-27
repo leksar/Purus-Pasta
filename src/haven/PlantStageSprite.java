@@ -1,13 +1,14 @@
 package haven;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.util.HashMap;
 import java.util.Map;
 
 
 public class PlantStageSprite extends Sprite {
-    private static final Text.Foundry fndr = new Text.Foundry(Text.sansb, 12).aa(true);
-    private static final Text.Foundry fndrmax = new Text.Foundry(Text.sansb, 20).aa(true);
+    private static final Text.Foundry fndr = new Text.Foundry(Text.sans.deriveFont(Font.BOLD), 12).aa(true);
+    private static final Text.Foundry fndrmax = new Text.Foundry(Text.sans.deriveFont(Font.BOLD), 20).aa(true);
     private static final Color stagecolor = new Color(255, 227, 168);
     private static final Color stagemaxcolor = new Color(254, 100, 100);
     private static final Tex stgmaxtex = Text.renderstroked("\u2022", stagemaxcolor, Color.BLACK, fndrmax).tex();
@@ -22,7 +23,7 @@ public class PlantStageSprite extends Sprite {
     private Tex tex;
     GLState.Buffer buf;
     private static final Map<String, Tex> plantTex = new HashMap<>();
-    private static final Text.Foundry gobhpf = new Text.Foundry(Text.sansb, 14).aa(true);
+    private static final Text.Foundry gobhpf = new Text.Foundry(Text.sans, 14).aa(true);
     private static Matrix4f cam = new Matrix4f();
     private static Matrix4f wxf = new Matrix4f();
     private static Matrix4f mv = new Matrix4f();

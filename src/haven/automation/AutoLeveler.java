@@ -1,5 +1,6 @@
 package haven.automation;
 
+import java.awt.Font;
 import java.awt.event.KeyEvent;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -31,7 +32,7 @@ import haven.Window;
 
 public class AutoLeveler extends Window implements GobSelectCallback, ErrorSysMsgCallback {
     private static final Text.Foundry infof = new Text.Foundry(Text.sans, 10).aa(true);
-    private static final Text.Foundry countf = new Text.Foundry(Text.sansb, 12).aa(true);
+    private static final Text.Foundry countf = new Text.Foundry(Text.sans.deriveFont(Font.BOLD), 12).aa(true);
     private List<Gob> stockpiles = new ArrayList<>();
     private final Label lbls;
     public boolean terminate = false;
@@ -60,7 +61,7 @@ public class AutoLeveler extends Window implements GobSelectCallback, ErrorSysMs
         }, new Coord(10, 10).add(wbox.btloff()));
         Frame.around(this, Collections.singletonList(inf));
         inf.add(new RichTextBox(new Coord(245, 55),
-                Resource.getLocString(Resource.l10nLabel, "Alt + Click to select soil stockpiles for storing or taking the soil from, or leave empty to use all stockpiles in the area.\n\n" +
+                Resource.getLocString(Resource.BUNDLE_LABEL, "Alt + Click to select soil stockpiles for storing or taking the soil from, or leave empty to use all stockpiles in the area.\n\n" +
                         "Nearest survey flag will be used for leveling.\n\n" +
                         "Put flasks/waterskins in inventory for auto-drinking\n"), CharWnd.ifnd));
 

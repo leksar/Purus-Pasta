@@ -28,7 +28,6 @@ package haven;
 
 import java.awt.Color;
 import java.awt.event.KeyEvent;
-import java.awt.font.TextAttribute;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -48,6 +47,7 @@ import java.security.cert.CertificateFactory;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManagerFactory;
+
 
 public class LoginScreen extends Widget {
     Login cur;
@@ -203,9 +203,9 @@ public class LoginScreen extends Widget {
         }
     }
 
-    private class LoginList extends Widget {
+    private static class LoginList extends Widget {
         private static final int ITEM_HEIGHT = 20;
-        private final Object[] textSize = new Object[] {TextAttribute.SIZE, 14};
+        private static final Text.Foundry fnd = new Text.Foundry(Text.sans, 14);
         private LoginData curLD;
 
         public LoginList(Coord c, Coord sz, Widget parent) {
@@ -227,13 +227,8 @@ public class LoginScreen extends Widget {
                             g.frect(new Coord(0, i * ITEM_HEIGHT), new Coord(sz.x-30, ITEM_HEIGHT));
                             g.chcolor();
                         }
-
-                        RichText r = RichText.render(ld.name, sz.x, textSize);
-                        g.aimage(r.tex(), new Coord(10, i * ITEM_HEIGHT + 10), 0, 0.5);
-                        g.chcolor(Color.RED);
-                        r = RichText.render("\u2716", 20, textSize);
-                        g.aimage(r.tex(), new Coord(sz.x - 20, i * ITEM_HEIGHT + 10), 0, 0.5);
-                        g.chcolor();
+                        g.aimage(Text.render(ld.name, Color.WHITE, fnd).tex(), new Coord(10, i * ITEM_HEIGHT + 10), 0, 0.5);
+                        g.aimage(Text.render("\u2716", Color.RED, fnd).tex(), new Coord(sz.x - 20, i * ITEM_HEIGHT + 10), 0, 0.5);
                     }
                 }
             }

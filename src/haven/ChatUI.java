@@ -59,11 +59,7 @@ import java.util.regex.Pattern;
 
 public class ChatUI extends Widget {
     private static final Resource alarmsfx = Resource.local().loadwait("sfx/chatalarm");
-    public static final RichText.Foundry fndsml = new RichText.Foundry(new ChatParser(TextAttribute.FONT, Text.dfont.deriveFont(10f), TextAttribute.FOREGROUND, Color.BLACK));
-    public static final RichText.Foundry fndmed = new RichText.Foundry(new ChatParser(TextAttribute.FONT, Text.dfont.deriveFont(12f), TextAttribute.FOREGROUND, Color.BLACK));
-    public static final RichText.Foundry fndlrg = new RichText.Foundry(new ChatParser(TextAttribute.FONT, Text.dfont.deriveFont(14f), TextAttribute.FOREGROUND, Color.BLACK));
-    public static final RichText.Foundry fndxlr = new RichText.Foundry(new ChatParser(TextAttribute.FONT, Text.dfont.deriveFont(16f), TextAttribute.FOREGROUND, Color.BLACK));
-    public static final RichText.Foundry fnd;
+    public static final RichText.Foundry fnd = new RichText.Foundry(new ChatParser(TextAttribute.FONT, Text.dfont.deriveFont((float)Config.fontsizechat)));
     public static final Text.Foundry qfnd = new Text.Foundry(Text.dfont, 12, new java.awt.Color(192, 255, 192));
     public static final int selw = 130;
     private static final int brpw = 142, beltw = 410;
@@ -90,24 +86,6 @@ public class ChatUI extends Widget {
         setcanfocus(true);
         if (h < 1)
             hide();
-    }
-
-    static {
-        switch (Config.chatfontsize) {
-            default:
-            case 0:
-                fnd = fndsml;
-                break;
-            case 1:
-                fnd = fndmed;
-                break;
-            case 2:
-                fnd = fndlrg;
-                break;
-            case 3:
-                fnd = fndxlr;
-                break;
-        }
     }
 
     protected void added() {
@@ -822,7 +800,7 @@ public class ChatUI extends Widget {
                 Integer from = (Integer) args[0];
                 String line = (String) args[1];
 
-                if (name.equals("Area Chat") && line.startsWith(CMD_PREFIX_HLIGHT)) {
+                if (name.equals(Resource.getLocString(Resource.BUNDLE_LABEL, "Area Chat")) && line.startsWith(CMD_PREFIX_HLIGHT)) {
                     try {
                         long gobid = Long.parseLong(line.substring(1));
                         OCache oc = gameui().map.glob.oc;
@@ -862,7 +840,7 @@ public class ChatUI extends Widget {
         private long lastmsg = 0;
 
         public PartyChat() {
-            super(false, "Party", 2);
+            super(false, Resource.getLocString(Resource.BUNDLE_LABEL, "Party"), 2);
         }
 
         public void uimsg(String msg, Object... args) {
@@ -888,8 +866,8 @@ public class ChatUI extends Widget {
                         notify(cmsg, urgency);
 
                     long time = System.currentTimeMillis();
-                    if (Config.partychatalarm && (lastmsg == 0 || (time - lastmsg) / 1000 / 60 > 3)) {
-                        Audio.play(alarmsfx, Config.partychatalarmvol);
+                    if (Config.chatalarm && (lastmsg == 0 || (time - lastmsg) / 1000 / 60 > 3)) {
+                        Audio.play(alarmsfx, Config.chatalarmvol);
                         lastmsg = time;
                     }
                 }
@@ -974,7 +952,7 @@ public class ChatUI extends Widget {
         public Widget create(Widget parent, Object[] args) {
             String name = (String) args[0];
             int urgency = (Integer) args[1];
-            return (new MultiChat(false, name, urgency));
+            return (new MultiChat(false, Resource.getLocString(Resource.BUNDLE_LABEL, name), urgency));
         }
     }
 

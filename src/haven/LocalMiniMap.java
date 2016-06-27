@@ -30,6 +30,7 @@ import static haven.MCache.cmaps;
 import static haven.MCache.tilesz;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -45,7 +46,7 @@ public class LocalMiniMap extends Widget {
     private static final Tex resize = Resource.loadtex("gfx/hud/wndmap/lg/resize");
     private static final Tex gridblue = Resource.loadtex("gfx/hud/mmap/gridblue");
     private static final Tex gridred = Resource.loadtex("gfx/hud/mmap/gridred");
-    public static final Text.Foundry bushf = new Text.Foundry(Text.sansb, 12);
+    public static final Text.Foundry bushf = new Text.Foundry(Text.sans.deriveFont(Font.BOLD), 12);
     private static final Text.Foundry partyf = bushf;
     public final MapView mv;
     private Coord cc = null;

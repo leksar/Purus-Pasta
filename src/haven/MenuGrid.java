@@ -67,7 +67,7 @@ public class MenuGrid extends Widget {
     public final static Coord bgsz = bg.sz().add(-1, -1);
     public final static Pagina next = new Glob.Pagina(Resource.local().loadwait("gfx/hud/sc-next").indir());
     public final static Pagina bk = new Glob.Pagina(Resource.local().loadwait("gfx/hud/sc-back").indir());
-    public final static RichText.Foundry ttfnd = new RichText.Foundry(TextAttribute.FAMILY, "SansSerif", TextAttribute.SIZE, 10);
+    public final static RichText.Foundry ttfnd = new RichText.Foundry(TextAttribute.FAMILY, "SansSerif", TextAttribute.SIZE, Config.fontsizeglobal);
     private static Coord gsz = new Coord(4, 4);
     private Pagina cur, pressed, dragging, layout[][] = new Pagina[gsz.x][gsz.y];
     private UI.Grab grab;
@@ -255,7 +255,7 @@ public class MenuGrid extends Widget {
                             m += (1 - m) * (double) (now - btn.gettime) / (double) btn.dtime;
                         m = Utils.clip(m, 0, 1);
                         g.chcolor(255, 255, 255, 128);
-                        g.fellipse(p.add(bgsz.div(2)), bgsz.div(2), 90, (int) (90 + (360 * m)));
+			g.fellipse(p.add(bgsz.div(2)), bgsz.div(2), Math.PI / 2, ((Math.PI / 2) + (Math.PI * 2 * m)));
                         g.chcolor();
                     }
                     if (btn.newp != 0) {

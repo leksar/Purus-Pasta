@@ -96,18 +96,14 @@ public class Config {
     public static boolean showprogressperc = Utils.getprefb("showprogressperc", false);
     public static boolean timersalarm = Utils.getprefb("timersalarm", false);
     public static double timersalarmvol = Utils.getprefd("timersalarmvol", 0.8);
-    public static int chatfontsize = Utils.getprefi("chatfontsize", 0);
     public static boolean quickslots = Utils.getprefb("quickslots", false);
     public static boolean statuswdgvisible = Utils.getprefb("statuswdgvisible", false);
     public static boolean smallicon = Utils.getprefb("smallicon", false);
     public static boolean chatalarm = Utils.getprefb("chatalarm", false);
-    public static boolean partychatalarm = Utils.getprefb("partychatalarm", false);
     public static double chatalarmvol = Utils.getprefd("chatalarmvol", 0.8);
-    public static double partychatalarmvol = Utils.getprefd("partychatalarmvol", 0.8);
     public static boolean studyalarm = Utils.getprefb("studyalarm", false);
     public static double studyalarmvol = Utils.getprefd("studyalarmvol", 0.8);
     public static double sfxchipvol = Utils.getprefd("sfxchipvol", 1.0);
-    public static double sfxsqueakvol = Utils.getprefd("sfxsqueakvol", 1.0);
     public static double sfxquernvol = Utils.getprefd("sfxquernvol", 1.0);
     public static double sfxfirevol = Utils.getprefd("sfxfirevol", 1.0);
     public static boolean showcraftcap = Utils.getprefb("showcraftcap", false);
@@ -175,7 +171,6 @@ public class Config {
     public static boolean reversebadcamx = Utils.getprefb("reversebadcamx", false);
     public static boolean reversebadcamy = Utils.getprefb("reversebadcamy", false);
     public static boolean showservertime = Utils.getprefb("showservertime", false);
-    public static boolean showtoggles = Utils.getprefb("showtoggles", false);
     public static boolean enabletracking = Utils.getprefb("enabletracking", false);
     public static boolean enablecrime = Utils.getprefb("enablecrime", false);
     public static boolean nometallicsfx = Utils.getprefb("nometallicsfx", false);
@@ -213,12 +208,34 @@ public class Config {
     public static boolean autologout =  Utils.getprefb("autologout", false);
     public static boolean donotaggrofriends =  Utils.getprefb("donotaggrofriends", false);
     public static int avgmode = Utils.getprefi("avgmode", 0);
+    private final static Map<String, Integer> defFontSzGlobal =  new HashMap<String, Integer>(3) {{
+        put("zh", 16);
+        put("en", 11);
+        put("ru", 11);
+    }};
+    private final static Map<String, Integer> defFontSzButton =  new HashMap<String, Integer>(3) {{
+        put("zh", 14);
+        put("en", 12);
+        put("ru", 12);
+    }};
+    private final static Map<String, Integer> defFontSzAttr =  new HashMap<String, Integer>(3) {{
+        put("zh", 14);
+        put("en", 14);
+        put("ru", 13);
+    }};
+    public static int fontsizeglobal = Utils.getprefi("fontsizeglobal", defFontSzGlobal.get(Resource.language));
+    public static int fontsizebutton = Utils.getprefi("fontsizebutton", defFontSzButton.get(Resource.language));
+    public static int fontsizewndcap = Utils.getprefi("fontsizewndcap", 14);
+    public static int fontsizeattr = Utils.getprefi("fontsizeattr", defFontSzAttr.get(Resource.language));
+    public static int fontsizechat = Utils.getprefi("fontsizechat", 14);
     public static boolean pf = false;
     public static String playerposfile;
     public static byte[] authck = null;
     public static String prefspec = "hafen";
     public static String version;
     public static String gitrev;
+
+
 
     public final static String chatfile = "chatlog.txt";
     public static PrintWriter chatlog = null;
