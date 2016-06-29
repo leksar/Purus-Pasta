@@ -1436,6 +1436,22 @@ public class Utils {
             }
         });
     }
+    public static String timeLeft(long at) {
+		long t = at - System.currentTimeMillis();
+		if (t<0) return "Finishing...";
+		long hours = t / 3600000;
+		long mins = t / 60000 % 60;
+		long seconds = t / 1000 % 60;
+		return String.format("%02d:%02d:%02d",hours,mins,seconds);
+	}
+    public static String join(String separator, String[] array) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < array.length - 1; i++)
+            sb.append(array[i]).append(separator);
+        if (array.length > 0)
+            sb.append(array[array.length - 1]);
+        return sb.toString();
+    }
 
     // NOTE: following fmt*DecPlace methods will not work with values having large integer part
     static String fmt1DecPlace(double value) {

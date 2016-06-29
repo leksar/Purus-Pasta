@@ -323,9 +323,12 @@ public class CharWnd extends Window {
 
 
         public Object tooltip(Coord c, Widget prev) {
+        	String add = "";
+		if (finishedTime>System.currentTimeMillis())
+			add = "\nNext level: " + Utils.timeLeft(finishedTime);
             if (rtip == null) {
                 rtip = RichText.render(String.format(
-                        Resource.getLocString(Resource.BUNDLE_LABEL, "%s: %d%%\nFood efficacy: %d%%"), lbl, Math.round((lglut) * 100), Math.round(gmod * 100)), -1).tex();
+                        Resource.getLocString(Resource.BUNDLE_LABEL, "%s: %d%%\nFood efficacy: %d%%" + add), lbl, Math.round((lglut) * 100), Math.round(gmod * 100)), -1).tex();
             }
             return (rtip);
         }
