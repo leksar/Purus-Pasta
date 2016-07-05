@@ -45,6 +45,7 @@ public class TreeChop {
 		}
 		while(BotUtils.findObjectById(tree.id) != null) {
 			BotUtils.drink();
+			
 			BotUtils.doClick(tree, 3, 0);
 			BotUtils.sleep(250);
 			while(BotUtils.isMoving()) {
@@ -64,6 +65,7 @@ public class TreeChop {
 	    		BotUtils.doClick(tree, 3, 0);
 	    		BotUtils.sleep(250);
 	        }
+	        sleep(500);
             while(BotUtils.gui().prog >= 0) {
             	sleep(100);
             }
