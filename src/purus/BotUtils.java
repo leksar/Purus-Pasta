@@ -46,6 +46,20 @@ public class BotUtils {
 		liquidPattern = Pattern.compile(pattern, Pattern.CASE_INSENSITIVE);
 	}
 	
+	// Returns amount of free inventory slots
+	public int invFreeSlots() {
+		int takenSlots = 0;
+		for (Widget i = playerInventory().child; i != null; i = i.next) {
+			if (i instanceof WItem) {
+				WItem buf = (WItem) i;
+				takenSlots += buf.size().x * buf.size().y;
+			}
+		}
+		int allSlots = playerInventory().size().x * playerInventory().size().y;
+		return allSlots - takenSlots;
+	}
+	
+	// Pushes button in window
 	public void pushButton(String btnName, String wndName) {	
 		Window wnd = gui().getwnd(wndName);
 		for (Widget i = wnd.child; i != null; i = i.next) {
@@ -63,9 +77,12 @@ public class BotUtils {
     	return ui.gui;
     }
     
-    // Returns amount of fuel ticks
+    // Returns amount of fuel ticks from range 0-100
+    // Returns -1 if window could not be found
     public int getFuelMeter(Window window) {
+    	if(window.getchild(VMeter.class)!=null)
     	return window.getchild(VMeter.class).amount;
+    	else return -1;
     }
     
     // Transfers item
@@ -76,12 +93,12 @@ public class BotUtils {
     // Waits for window to appear
     public void waitForWindow(String windowName) {
     	while(gui().getwnd(windowName)==null) {
-    		sleep(100);
+    		sleep(10);
     	}
     }
     
     // Returns witems with specific names from inventory
-    public List<WItem> getInventoryItems(Inventory invwdg, List<String> items) {
+    public List<WItem> getInventoryItemsByNames(Inventory invwdg, List<String> items) {
     	List<WItem> witems = new ArrayList<WItem>();
     	for(WItem wi : getInventoryContents(invwdg)) {
 			String resname = wi.item.resname();
@@ -89,6 +106,17 @@ public class BotUtils {
     			if(resname.equals(s))
     				witems.add(wi);
     		}
+    	}
+		return witems;
+    }
+    
+    // Returns witems with specific name from inventory
+    public List<WItem> getInventoryItemsByName(Inventory invwdg, String item) {
+    	List<WItem> witems = new ArrayList<WItem>();
+    	for(WItem wi : getInventoryContents(invwdg)) {
+			String resname = wi.item.resname();
+    			if(resname.equals(item))
+    				witems.add(wi);
     	}
 		return witems;
     }

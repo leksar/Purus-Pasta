@@ -54,6 +54,7 @@ import haven.pathfinder.PFListener;
 import haven.pathfinder.Pathfinder;
 import haven.resutil.BPRadSprite;
 import purus.CarrotFarmer;
+import purus.TroughFiller;
 
 
 public class MapView extends PView implements DTarget, Console.Directory, PFListener {
@@ -91,6 +92,7 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
     public Thread pfthread;
     public SteelRefueler steelrefueler;
     public AutoLeveler autoleveler;
+    public TroughFiller troughfiller;
     public boolean carrotSelect;
     private haven.Widget w;
     private haven.Inventory i;

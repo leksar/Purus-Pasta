@@ -257,4 +257,8 @@ public class Inventory extends Widget implements DTarget {
 
         return false;
     }
+    
+    public Coord size() {
+    	return isz;
+    }
 }

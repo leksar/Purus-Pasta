@@ -52,7 +52,6 @@ import haven.automation.LightWithTorch;
 import haven.automation.SteelRefueler;
 import haven.util.ObservableCollection;
 import purus.Builder;
-import purus.CarrotFarmer;
 import purus.DragonflyCollector;
 import purus.Drinker;
 import purus.Forager;
@@ -60,6 +59,7 @@ import purus.KoordMaker;
 import purus.MusselPicker;
 import purus.OvenFueler;
 import purus.TreeChop;
+import purus.TroughFiller;
 
 
 public class MenuGrid extends Widget {
@@ -169,6 +169,7 @@ public class MenuGrid extends Widget {
     	p.add(glob.paginafor(Resource.local().load("paginae/custom/treechop")));
     	p.add(glob.paginafor(Resource.local().load("paginae/custom/drink")));
     	p.add(glob.paginafor(Resource.local().load("paginae/custom/build")));
+    	p.add(glob.paginafor(Resource.local().load("paginae/custom/troughfill")));
     	// work in progress p.add(glob.paginafor(Resource.local().load("paginae/custom/oven")));
     	// Disable this for now because amber has one
     	//p.add(glob.paginafor(Resource.local().load("paginae/custom/fillsmelter")));
@@ -460,6 +461,13 @@ public class MenuGrid extends Widget {
         	new Drinker(ui,w,i).Run();
         } else if (ad[1].equals("autobuild")) {
         	new Builder(ui,w,i).Run();
+        } else if (ad[1].equals("troughfill")) {
+            TroughFiller tf = new TroughFiller(ui,w,i);
+            gui.map.troughfiller = tf;
+            gui.add(tf, new Coord(gui.sz.x / 2 - tf.sz.x / 2, gui.sz.y / 2 - tf.sz.y / 2 - 200));
+            synchronized (GobSelectCallback.class) {
+                gui.map.registerGobSelect(tf);
+            }
         }
     }
 
