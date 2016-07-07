@@ -1951,7 +1951,7 @@ public class CharWnd extends Window {
         if (place == "study") {
             sattr.add(child, new Coord(255, 35).add(wbox.btloff()));
             Frame.around(sattr, Collections.singletonList(child));
-            StudyInfo AtnInf = sattr.add(new StudyInfo(new Coord(attrw - 150, child.sz.y), child), new Coord(260 + 150, child.c.y).add(wbox.btloff().x, 0));
+            StudyInfo AtnInf = new StudyInfo(new Coord(attrw - 150, child.sz.y), child);
       		ui.gui.addMeterAt(new AttnMeter(AtnInf), 3, 0);
             Widget inf = sattr.add(new StudyInfo(new Coord(attrw - 130, child.sz.y), child), new Coord(255 + 150, child.c.y).add(wbox.btloff().x, 0));
             sattr.add(new CheckBox("Lock") {
