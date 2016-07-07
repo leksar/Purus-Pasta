@@ -206,14 +206,14 @@ public class Forager  {
         		for(String s : forageables) {
         			forageableitems.add("gfx/invobjs/herbs/"+s.replaceFirst("gfx/terobjs/herbs/", ""));
         		}
-        		invitems = BotUtils.getInventoryItems(BotUtils.playerInventory(), forageableitems);
+        		invitems = BotUtils.getInventoryItemsByNames(BotUtils.playerInventory(), forageableitems);
         		for(WItem wi : invitems) {
         				BotUtils.transferItem(wi);
         				// We shall have some delay between moving items, just in case
         				BotUtils.sleep(10);
         			}
         		BotUtils.sleep(1000);
-        		if(!BotUtils.getInventoryItems(BotUtils.playerInventory(), forageableitems).isEmpty()) {
+        		if(!BotUtils.getInventoryItemsByNames(BotUtils.playerInventory(), forageableitems).isEmpty()) {
         			gobs.remove(0);
         		} else
         			repeat = false;
