@@ -113,7 +113,7 @@ public class SeedCropFarmer extends Window implements Runnable {
 			
 			BotUtils.sleep(100);
             GItem item = BotUtils.getItemAtHand();
-            if (item == null) {
+            while (item == null) {
             	 Inventory inv = BotUtils.playerInventory();
                  for (Widget w = inv.child; w != null; w = w.next) {
                      if (w instanceof GItem && ((GItem) w).resname().equals(seedName)) {
@@ -121,6 +121,7 @@ public class SeedCropFarmer extends Window implements Runnable {
                          break;
                      	}
                  }
+                 if(item!=null)
 	                BotUtils.takeItem(item);
             }
             
