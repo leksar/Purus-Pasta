@@ -24,6 +24,7 @@ public class Builder {
     
     private String wndName;
     private boolean start = false;
+    private boolean stop = false;
     
 	BotUtils BotUtils;
 
@@ -43,9 +44,20 @@ public class Builder {
 		BotUtils.sysMsg("Builder started, enter precise name of window to build.", Color.white);
 		while(!start) {
 			BotUtils.sleep(100);
+			if(stop)
+				return;
+		}
+		if(BotUtils.gui().getwnd("wndName")==null) {
+			BotUtils.sysMsg("Invalid window name, Builder stopped", Color.white);
+			window.destroy();
+			return;
 		}
 		while(BotUtils.gui().getwnd(wndName)!=null) {
+			if(stop)
+				return;
 			BotUtils.drink();
+			if(stop)
+				return;
 			Window wnd = BotUtils.gui().getwnd(wndName);
 			BotUtils.pushButton("Build", wndName);
 			sleep(1000);
@@ -99,11 +111,11 @@ public class Builder {
 		        }
 		        public void wdgmsg(Widget sender, String msg, Object... args) {
 		            if (sender == this && msg.equals("close")) {
-		                t.stop();
+		                reqdestroy();
+		                stop = true;
 		            }
 		            super.wdgmsg(sender, msg, args);
 		        }
 		        
 			}
-			//
 }
