@@ -137,7 +137,8 @@ public class SeedCropFarmer extends Window implements Runnable {
             for (Widget w = BotUtils.playerInventory().child; w != null; w = w.next) {
                 if (w instanceof GItem && ((GItem) w).resname().equals(seedName)) {
                     item = (GItem)w;
-                    item.wdgmsg("drop", Coord.z);
+                    if(item!=null)
+                    	item.wdgmsg("drop", Coord.z);
                 	}
             }
 			
