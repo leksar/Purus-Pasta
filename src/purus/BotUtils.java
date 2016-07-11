@@ -241,7 +241,7 @@ public class BotUtils {
     
 	//Drops thing from hand 
 	public void drop_item(int mod) {
-		ui.gui.map.wdgmsg("drop", mod);
+		ui.gui.map.wdgmsg("drop", Coord.z, gui().map.player().rc, mod);
 	}
 	
 	// Use item in hand to ground below player, for example, plant carrot

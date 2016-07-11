@@ -1,4 +1,4 @@
-package purus;
+package purus.farmer;
 
 import java.awt.Color;
 import java.util.ArrayList;
@@ -15,6 +15,7 @@ import haven.Inventory;
 import haven.UI;
 import haven.Widget;
 import haven.Window;
+import purus.BotUtils;
 
 public class CarrotFarmer {
 	/* This script harvests and replants carrots.
@@ -89,7 +90,7 @@ public class CarrotFarmer {
 	                     	}
 	                 }
 		                BotUtils.takeItem(item);
-	            }
+}
 	            // Planttaa, siemen käteen tähän vaiheeseen mennessä
 			BotUtils.mapInteractClick(1);
 			while(BotUtils.findNearestStageCrop(5, 0, "gfx/terobjs/plants/carrot")==null) {

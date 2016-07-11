@@ -53,8 +53,10 @@ import haven.automation.SteelRefueler;
 import haven.pathfinder.PFListener;
 import haven.pathfinder.Pathfinder;
 import haven.resutil.BPRadSprite;
-import purus.CarrotFarmer;
 import purus.TroughFiller;
+import purus.farmer.AreaSelect;
+import purus.farmer.CarrotFarmer;
+import purus.farmer.Farmer;
 
 
 public class MapView extends PView implements DTarget, Console.Directory, PFListener {
@@ -93,9 +95,14 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
     public SteelRefueler steelrefueler;
     public AutoLeveler autoleveler;
     public TroughFiller troughfiller;
+    public Farmer farmer;
     public boolean carrotSelect;
     private haven.Widget w;
     private haven.Inventory i;
+    private boolean AreaMineB;
+    
+    private AreaSelect areaSelect;
+    public boolean areaSelectB;
 
     public interface Delayed {
         public void run(GOut g);
@@ -1730,6 +1737,14 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
     public void unregisterGobSelect() {
         this.gobselcb = null;
     }
+    
+    public void registerAreaSelect(AreaSelect callback) {
+        this.areaSelect = callback;
+    }
+
+    public void unregisterareaSelect() {
+        this.areaSelect = null;
+    }
 
     public void pfLeftClick(Coord mc, String action) {
         Gob player = player();
@@ -1828,11 +1843,19 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
                 if (curs != null && curs.name.equals("gfx/hud/curs/mine")) {
                     if (ui.modshift && selection == null) {
                         selection = new Selector(this);
+                        AreaMineB = true;
                     } else if (selection != null) {
                         selection.destroy();
                         selection = null;
                     }
                 } else if (carrotSelect) {
+                    if (ui.modshift && selection == null) {
+                        selection = new Selector(this);
+                    } else if (selection != null) {
+                        selection.destroy();
+                        selection = null;
+                    }
+                } else if (areaSelectB){
                     if (ui.modshift && selection == null) {
                         selection = new Selector(this);
                     } else if (selection != null) {
@@ -2135,6 +2158,17 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
                     tt = null;
                     ol.destroy();
                     mgrab.remove();
+                    
+                    if(areaSelectB) {
+	                    areaSelect.areaSelect(rc1, rc2);
+	                	ui.root.findchild(GameUI.class).msg("Area selected", Color.white);
+	                    areaSelectB = false;
+	                    if (selection != null) {
+	                        selection.destroy();
+	                        selection = null;
+	                    }
+                    }
+
                     if(carrotSelect) {
                     	// Not efficient way to do it probably, but it works
                     	ArrayList<Gob> gobs = new ArrayList<Gob>();
@@ -2158,7 +2192,7 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
                             }
             	        }
             	        carrotSelect = false;
-                    } else if (mv != null) {
+                    } else if (mv != null && AreaMineB) {
                         areamine = new AreaMine(ol.getc1(), ol.getc2(), mv);
                         new Thread(areamine, "Area miner").start();
                         if (selection != null) {

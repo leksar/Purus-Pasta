@@ -60,6 +60,8 @@ import purus.MusselPicker;
 import purus.OvenFueler;
 import purus.TreeChop;
 import purus.TroughFiller;
+import purus.farmer.AreaSelect;
+import purus.farmer.Farmer;
 
 
 public class MenuGrid extends Widget {
@@ -162,7 +164,7 @@ public class MenuGrid extends Widget {
     	p.add(glob.paginafor(Resource.local().load("paginae/custom/timer")));
     	p.add(glob.paginafor(Resource.local().load("paginae/custom/study")));
     	p.add(glob.paginafor(Resource.local().load("paginae/custom/mussel")));
-    	p.add(glob.paginafor(Resource.local().load("paginae/custom/carrotfarm")));
+    	//p.add(glob.paginafor(Resource.local().load("paginae/custom/carrotfarm")));
     	p.add(glob.paginafor(Resource.local().load("paginae/custom/flycollect")));
     	p.add(glob.paginafor(Resource.local().load("paginae/custom/koord")));
     	p.add(glob.paginafor(Resource.local().load("paginae/custom/forager")));
@@ -170,6 +172,7 @@ public class MenuGrid extends Widget {
     	p.add(glob.paginafor(Resource.local().load("paginae/custom/drink")));
     	p.add(glob.paginafor(Resource.local().load("paginae/custom/build")));
     	p.add(glob.paginafor(Resource.local().load("paginae/custom/troughfill")));
+    	p.add(glob.paginafor(Resource.local().load("paginae/custom/farmer")));
     	// work in progress p.add(glob.paginafor(Resource.local().load("paginae/custom/oven")));
     	// Disable this for now because amber has one
     	//p.add(glob.paginafor(Resource.local().load("paginae/custom/fillsmelter")));
@@ -467,6 +470,13 @@ public class MenuGrid extends Widget {
             gui.add(tf, new Coord(gui.sz.x / 2 - tf.sz.x / 2, gui.sz.y / 2 - tf.sz.y / 2 - 200));
             synchronized (GobSelectCallback.class) {
                 gui.map.registerGobSelect(tf);
+            }
+        } else if (ad[1].equals("farmbot")) {
+        	Farmer f = new Farmer(ui, w, i);
+            gui.map.farmer = f;
+            gui.add(f, new Coord(gui.sz.x / 2 - f.sz.x / 2, gui.sz.y / 2 - f.sz.y / 2 - 200));
+            synchronized (AreaSelect.class) {
+                gui.map.registerAreaSelect(f);;
             }
         }
     }
