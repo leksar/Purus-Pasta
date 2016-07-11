@@ -1,5 +1,16 @@
 ## Changelog
 
+### 2.17.0
+	- Added Farming bot
+	- Added builder script
+	- Added trough filler
+	- Added drinking script
+	- Added tree chopping script
+	- Xtended menu stuff can be binded on ftoolbar
+	- Updated curio.config
+	- Latest merges from Amber
+	- Minor bugfixes
+
 ### 2.16.0
 	- Added Oven Fueler [WIP]
 	- Added koordmaker [WIP]
