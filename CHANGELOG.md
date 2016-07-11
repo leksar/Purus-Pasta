@@ -1,5 +1,7 @@
 ## Changelog
 
+### 2.17.1
+	- Fix farmer bot behaviour with high ping
 ### 2.17.0
 	- Added Farming bot
 	- Added builder script
@@ -30,7 +32,7 @@
 ### 2.14.1
 	- Changed error popup not to completely block client
 	- Fix mussel picker NPE
-	- Fix hunger bar not updating
+	- Fix hunger bar not updatingo
 	- Some other minor fixes
 	- Amber client merges
 ### 2.14.0
