@@ -46,7 +46,10 @@ public class TroughFiller extends Window implements GobSelectCallback {
 	private BotUtils BotUtils;
 	
 	private Window window;
-
+	
+	private String[] invobjs = {"gfx/invobjs/carrot","gfx/invobjs/beet","gfx/invobjs/beetleaves"};
+	private String[] terobjs = {"gfx/terobjs/items/carrot","gfx/terobjs/items/beet","gfx/terobjs/items/beetleaves"};
+	
 	public TroughFiller(UI ui, Widget w, Inventory i) {
         super(new Coord(270, 180), "Trough Filler");
         
@@ -147,14 +150,14 @@ public class TroughFiller extends Window implements GobSelectCallback {
 		public void run()  {
 			running = true;
 			while(!terminate) {
-				if(BotUtils.findObjectByNames(1000, "gfx/terobjs/items/carrot")==null)
+				if(BotUtils.findObjectByNames(1000, terobjs)==null)
 					terminate();
 				// Pick up carrots until carrots not found or no space left
-				while(BotUtils.invFreeSlots()>0 && BotUtils.findObjectByNames(1000, "gfx/terobjs/items/carrot")!=null) {
+				while(BotUtils.invFreeSlots()>0 && BotUtils.findObjectByNames(1000, terobjs)!=null) {
                     if (terminate)
                         return;
-					Gob gob = BotUtils.findObjectByNames(1000, "gfx/terobjs/items/carrot");
-					BotUtils.pfRightClick(gob, 3);
+					Gob gob = BotUtils.findObjectByNames(1000, terobjs);
+					BotUtils.pfRightClick(gob, 0);
 					while(BotUtils.findObjectById(gob.id)!=null) {
 						BotUtils.sleep(10);
 					}
@@ -170,7 +173,7 @@ public class TroughFiller extends Window implements GobSelectCallback {
                     if (terminate)
                         return;
 					Gob trough = BotUtils.findObjectById(troughs.get(0).id);
-					BotUtils.pfRightClick(trough, 3);
+					BotUtils.pfRightClick(trough, 0);
 					// If moving to another trough we must wait so current window closes and player starts moving towards another
 					if(wait) {
 					BotUtils.sleep(1000);
@@ -197,9 +200,12 @@ public class TroughFiller extends Window implements GobSelectCallback {
 					}
 					GItem i = null;
 	                for (Widget w = BotUtils.playerInventory().child; w != null; w = w.next) {
-	                    if (w instanceof GItem && ((GItem) w).resname().equals("gfx/invobjs/carrot")) {
-	                    	i = (GItem) w;
-	                        continue;
+	                    	for(String s : invobjs) {
+	    	                    if (w instanceof GItem && ((GItem) w).resname().equals(s)) {
+			                    	i = (GItem) w;
+			                    	System.out.println("ff");
+			                        break;
+	                    	}
 	                    }
 	                }
 	                if(i==null)

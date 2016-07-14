@@ -83,7 +83,11 @@ public class SeedCropFarmer extends Window implements Runnable {
 					return;
 				
 			 // Pathfind and right click the crop
-				BotUtils.pfRightClick(g, 0);
+				BotUtils.pfLeftClick(g.rc, null);
+				while(BotUtils.player().rc.x!=g.rc.x||BotUtils.player().rc.y!=g.rc.y) {
+					BotUtils.sleep(10);
+				}
+				BotUtils.doClick(g, 3, 0);
 			
 			 // Wait for harvest menu to appear and harvest the crop
 			
@@ -137,8 +141,11 @@ public class SeedCropFarmer extends Window implements Runnable {
             for (Widget w = BotUtils.playerInventory().child; w != null; w = w.next) {
                 if (w instanceof GItem && ((GItem) w).resname().equals(seedName)) {
                     item = (GItem)w;
-                    if(item!=null)
-                    	item.wdgmsg("drop", Coord.z);
+	                    try {
+	                    	item.wdgmsg("drop", Coord.z);
+	                    } catch(Exception e) {
+	                    	//Shouldnt matter
+	                    }
                 	}
             }
 			
