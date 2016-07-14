@@ -1,5 +1,7 @@
 ## Changelog
 
+### 2.17.2
+	- Fixes for trough and farming bots
 ### 2.17.1
 	- Fix farmer bot behaviour with high ping
 ### 2.17.0
