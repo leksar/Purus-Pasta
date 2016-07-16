@@ -53,6 +53,7 @@ public class LocalMiniMap extends Widget {
     private MapTile cur = null;
     private UI.Grab dragging;
     private static final Resource ramalarmsfx = Resource.local().loadwait("sfx/alarmram");
+    private static final Resource wreckingarmsfx = Resource.local().loadwait("sfx/alarmWBall");
     private static final Resource playeralarmWhite = Resource.local().loadwait("sfx/alarmWhite");
     private static final Resource playeralarmRed = Resource.local().loadwait("sfx/alarmRed");
     private Coord doff = Coord.z;
@@ -414,7 +415,12 @@ public class LocalMiniMap extends Widget {
                              if (res != null && "bram".equals(res.basename())) {
                                  if (!sgobs.contains(gob.id)) {
                                      sgobs.add(gob.id);
-                                     Audio.play(ramalarmsfx, Config.timersalarmvol);
+                                     Audio.play(ramalarmsfx, Config.alarmbramvol);
+                                 }
+                             } else if (res!=null && "wreckingball".equals(res.basename())) {
+                                 if (!sgobs.contains(gob.id)) {
+                                     sgobs.add(gob.id);
+                                     Audio.play(wreckingarmsfx, Config.alarmbramvol);
                                  }
                              }
                     } 
