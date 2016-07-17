@@ -20,6 +20,7 @@ public class TreeChop {
     private haven.Inventory i;
     public Petal[] opts;
     private Widget window; 
+    private boolean stop;
     
 	BotUtils BotUtils;
 
@@ -45,14 +46,13 @@ public class TreeChop {
 		}
 		while(BotUtils.findObjectById(tree.id) != null) {
 			BotUtils.drink();
-			
+			if(stop)
+				return;
 			BotUtils.doClick(tree, 3, 0);
-			BotUtils.sleep(250);
-			while(BotUtils.isMoving()) {
-				BotUtils.sleep(100);
-			}
-			BotUtils.sleep(250);
-			
+			while(ui.root.findchild(FlowerMenu.class)==null)
+				BotUtils.sleep(10);
+			if(stop)
+				return;
 			FlowerMenu menu = ui.root.findchild(FlowerMenu.class);
 	        if (menu != null) {
 	            for (FlowerMenu.Petal opt : menu.opts) {
@@ -61,14 +61,13 @@ public class TreeChop {
 	                    menu.destroy();
 	                }
 	            }
-	        } else {
-	    		BotUtils.doClick(tree, 3, 0);
-	    		BotUtils.sleep(250);
 	        }
-	        sleep(500);
+	        sleep(2000);
             while(BotUtils.gui().prog >= 0) {
-            	sleep(100);
+            	sleep(10);
             }
+			if(stop)
+				return;
 		}
 		
 		BotUtils.sysMsg("Tree succesfully chopped! Tree chopper finished.", Color.white);
@@ -94,19 +93,21 @@ public class TreeChop {
 		                    window.destroy();
 		                    if(t != null) {
 		                    	gameui().msg("Tree Chopper Cancelled", Color.WHITE);
-		                    	t.stop();
+		                    	stop = true;
 		                    }
 		                }
 		            });
 		            pack();
 		        }
+		        @Override
 		        public void wdgmsg(Widget sender, String msg, Object... args) {
-		            if (sender == this && msg.equals("close")) {
-		                t.stop();
+		            if (sender == cbtn) {
+		                stop = true;
+		                reqdestroy();
 		            }
-		            super.wdgmsg(sender, msg, args);
+		            else
+		                super.wdgmsg(sender, msg, args);
 		        }
 		        
 			}
-			//
 }

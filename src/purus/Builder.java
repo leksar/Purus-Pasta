@@ -103,18 +103,20 @@ public class Builder {
 		                    window.destroy();
 		                    if(t != null) {
 		                    	gameui().msg("Builder cancelled", Color.WHITE);
-		                    	t.stop();
+		                    	stop = true;
 		                    }
 		                }
 		            }, new Coord(0, y));
 		            pack();
 		        }
+		        @Override
 		        public void wdgmsg(Widget sender, String msg, Object... args) {
-		            if (sender == this && msg.equals("close")) {
-		                reqdestroy();
+		            if (sender == cbtn) {
 		                stop = true;
+		                reqdestroy();
 		            }
-		            super.wdgmsg(sender, msg, args);
+		            else
+		                super.wdgmsg(sender, msg, args);
 		        }
 		        
 			}

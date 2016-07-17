@@ -94,12 +94,15 @@ public class KoordMaker extends Thread {
             }, new Coord(0, y));
             pack();
         }
+        
+        @Override
         public void wdgmsg(Widget sender, String msg, Object... args) {
-            if (sender == this && msg.equals("close")) {
+            if (sender == cbtn) {
             	gameui().msg("Koord Maker cancelled", Color.WHITE);
-            	window.destroy();
+                reqdestroy();
             }
-            super.wdgmsg(sender, msg, args);
+            else
+                super.wdgmsg(sender, msg, args);
         }
 	}
 }

@@ -238,9 +238,10 @@ public class TroughFiller extends Window implements GobSelectCallback {
     
     @Override
     public void wdgmsg(Widget sender, String msg, Object... args) {
-        if (sender == cbtn)
+        if (sender == cbtn) {
+        	terminate();
             reqdestroy();
-        else
+        } else
             super.wdgmsg(sender, msg, args);
     }
     

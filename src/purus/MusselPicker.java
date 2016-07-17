@@ -22,6 +22,8 @@ public static boolean MusselsNearby;
     public Petal[] opts;
     private Widget window; 
     
+    private boolean stop;
+    
 	BotUtils BotUtils;
 
 	public MusselPicker (UI ui, Widget w, Inventory i) {
@@ -37,10 +39,14 @@ public static boolean MusselsNearby;
 	Thread t = new Thread(new Runnable() {
 	public void run()  {
 		window = BotUtils.gui().add(new StatusWindow(), 300, 200);
+		retry:
 		while(BotUtils.findObjectByNames(1000, "gfx/terobjs/herbs/mussels") != null) {
 			Gob gob = BotUtils.findObjectByNames(1000, "gfx/terobjs/herbs/mussels");
 			BotUtils.doClick(gob, 3, 0);
-			sleep(250);
+			while(ui.root.findchild(FlowerMenu.class)==null)
+					BotUtils.sleep(10);
+			if(stop)
+				return;
 			@SuppressWarnings("deprecation")
 			FlowerMenu menu = ui.root.findchild(FlowerMenu.class);
 	            if (menu != null) {
@@ -49,17 +55,17 @@ public static boolean MusselsNearby;
 	                        menu.choose(opt);
 	                        menu.destroy();
 	            			while(BotUtils.findObjectById(gob.id) != null) {
-	            				sleep(500);
+	            				sleep(10);
 	            			}
 	                    }
 	                }
-	            }
-         //   BotUtils.Choose(opts[1])
+	            } else
+	            	continue retry;
 		}
 		BotUtils.sysMsg("No mussels found, mussel picker finished.", Color.WHITE);
         window.destroy();
 				return;
-	}
+		}
 	});
 	
 	private void sleep(int t){
@@ -70,7 +76,6 @@ public static boolean MusselsNearby;
 		}
 	}
 	
-	// This thingy makes that stupid window with cancel button, todo: make it better
 			private class StatusWindow extends Window {
 		        public StatusWindow() {
 		            super(Coord.z, "Mussel Picker");
@@ -80,19 +85,21 @@ public static boolean MusselsNearby;
 		                    window.destroy();
 		                    if(t != null) {
 		                    	gameui().msg("Mussel Picker Cancelled", Color.WHITE);
-		                    	t.stop();
+		                    	stop = true;
 		                    }
 		                }
 		            });
 		            pack();
 		        }
+		        @Override
 		        public void wdgmsg(Widget sender, String msg, Object... args) {
-		            if (sender == this && msg.equals("close")) {
-		                t.stop();
+		            if (sender == cbtn) {
+		                stop = true;
+		                reqdestroy();
 		            }
-		            super.wdgmsg(sender, msg, args);
+		            else
+		                super.wdgmsg(sender, msg, args);
 		        }
 		        
 			}
-			//
 }
