@@ -1,5 +1,8 @@
 ## Changelog
 
+### 2.18.0
+	- Added alarm for wrecking ball
+	- Latest merges from default client
 ### 2.17.2
 	- Fixes for trough and farming bots
 ### 2.17.1
