@@ -51,8 +51,9 @@ import haven.PUtils.TexFurn;
 import haven.resutil.FoodInfo;
 public class CharWnd extends Window {
     public static final RichText.Foundry ifnd = new RichText.Foundry(Resource.remote(), java.awt.font.TextAttribute.FAMILY, "SansSerif", java.awt.font.TextAttribute.SIZE, Config.fontsizeglobal).aa(true);
-    public static final Text.Furnace catf = new BlurFurn(new TexFurn(new Text.Foundry(Text.sans, 20).aa(true), Window.ctex), 2, 2, new Color(96, 48, 0));
-    public static final Text.Foundry attrf = new Text.Foundry(Text.sans.deriveFont(Font.BOLD), Config.fontsizeattr).aa(true);
+    public static final Text.Furnace catf = new BlurFurn(new TexFurn(new Text.Foundry(Text.sans, 25).aa(true), Window.ctex), 3, 2, new Color(96, 48, 0));
+    public static final Text.Furnace failf = new BlurFurn(new TexFurn(new Text.Foundry(Text.sans, 25).aa(true), Resource.loadimg("gfx/hud/fontred")), 3, 2, new Color(96, 48, 0));
+    public static final Text.Foundry attrf = new Text.Foundry(Text.sans, 18).aa(true);
     public static final Text.Foundry numfnd = new Text.Foundry(Text.sans, 12);
     public static final Color debuff = new Color(255, 128, 128);
     public static final Color buff = new Color(128, 255, 128);
@@ -943,331 +944,335 @@ public class CharWnd extends Window {
     }
 
     public static class Quest {
-        public final int id;
-        public Indir<Resource> res;
-        public boolean done;
-        public int mtime;
-        private Tex small;
-        private final Text.UText<?> rnm = new Text.UText<String>(attrf) {
-            public String value() {
-                try {
-                    return (res.get().layer(Resource.tooltip).t);
-                } catch (Loading l) {
-                    return ("...");
-                }
-            }
-        };
+	public static final int QST_PEND = 0, QST_DONE = 1, QST_FAIL = 2;
+	public static final Color[] stcol = {
+	    new Color(255, 255, 64), new Color(64, 255, 64), new Color(255, 64, 64),
+	};
+	public final int id;
+	public Indir<Resource> res;
+	public String title;
+	public int done;
+	public int mtime;
+	private Tex small;
+	private final Text.UText<?> rnm = new Text.UText<String>(attrf) {
+	    public String value() {
+		try {
+		    return(title());
+		} catch(Loading l) {
+		    return("...");
+		}
+	    }
+	};
 
-        private Quest(int id, Indir<Resource> res, boolean done, int mtime) {
-            this.id = id;
-            this.res = res;
-            this.done = done;
-            this.mtime = mtime;
-        }
+	private Quest(int id, Indir<Resource> res, String title, int done, int mtime) {
+	    this.id = id;
+	    this.res = res;
+	    this.title = title;
+	    this.done = done;
+	    this.mtime = mtime;
+	}
 
-        public static class Condition {
-            public final String desc;
-            public boolean done;
-            public String status;
+	public String title() {
+	    if(title != null)
+		return(title);
+	    return(res.get().layer(Resource.tooltip).t);
+	}
 
-            public Condition(String desc, boolean done, String status) {
-                this.desc = Resource.getLocString(Resource.BUNDLE_LABEL, desc);
-                this.done = done;
-                this.status = Resource.getLocString(Resource.BUNDLE_LABEL, status);
-            }
-        }
+	public static class Condition {
+	    public final String desc;
+	    public int done;
+	    public String status;
 
-        private static final Tex qcmp = catf.render("Quest completed").tex();
+	    public Condition(String desc, int done, String status) {
+		this.desc = desc;
+		this.done = done;
+		this.status = status;
+	    }
+	}
 
-        public void done(GameUI parent) {
-            parent.add(new Widget() {
-                double a = 0.0;
-                Tex img, title;
+	private static final Tex qcmp = catf.render("Quest completed").tex();
+	private static final Tex qfail = failf.render("Quest failed").tex();
+	public void done(GameUI parent) {
+	    parent.add(new Widget() {
+		    double a = 0.0;
+		    Tex img, title, msg;
 
-                public void draw(GOut g) {
-                    if (img != null) {
-                        if (a < 0.2)
-                            g.chcolor(255, 255, 255, (int) (255 * Utils.smoothstep(a / 0.2)));
-                        else if (a > 0.8)
-                            g.chcolor(255, 255, 255, (int) (255 * Utils.smoothstep(1.0 - ((a - 0.8) / 0.2))));
-                /*
-                g.image(img, new Coord(0, (Math.max(img.sz().y, title.sz().y) - img.sz().y) / 2));
+		    public void draw(GOut g) {
+			if(img != null) {
+			    if(a < 0.2)
+				g.chcolor(255, 255, 255, (int)(255 * Utils.smoothstep(a / 0.2)));
+			    else if(a > 0.8)
+				g.chcolor(255, 255, 255, (int)(255 * Utils.smoothstep(1.0 - ((a - 0.8) / 0.2))));
+			    /*
+			    g.image(img, new Coord(0, (Math.max(img.sz().y, title.sz().y) - img.sz().y) / 2));
 			    g.image(title, new Coord(img.sz().x + 25, (Math.max(img.sz().y, title.sz().y) - title.sz().y) / 2));
-			    g.image(qcmp, new Coord((sz.x - qcmp.sz().x) / 2, Math.max(img.sz().y, title.sz().y) + 25));
+			    g.image(msg, new Coord((sz.x - msg.sz().x) / 2, Math.max(img.sz().y, title.sz().y) + 25));
 			    */
-                        int y = 0;
-                        g.image(img, new Coord((sz.x - img.sz().x) / 2, y));
-                        y += img.sz().y + 15;
-                        g.image(title, new Coord((sz.x - title.sz().x) / 2, y));
-                        y += title.sz().y + 15;
-                        g.image(qcmp, new Coord((sz.x - qcmp.sz().x) / 2, y));
-                    }
-                }
+			    int y = 0;
+			    g.image(img, new Coord((sz.x - img.sz().x) / 2, y)); y += img.sz().y + 15;
+			    g.image(title, new Coord((sz.x - title.sz().x) / 2, y)); y += title.sz().y + 15;
+			    g.image(msg, new Coord((sz.x - msg.sz().x) / 2, y));
+			}
+		    }
 
-                public void tick(double dt) {
-                    if (img == null) {
-                        try {
-                            title = catf.render(res.get().layer(Resource.tooltip).t).tex();
-                            img = res.get().layer(Resource.imgc).tex();
-                /*
-                resize(new Coord(Math.max(img.sz().x + 25 + title.sz().x, qcmp.sz().x),
-						 Math.max(img.sz().y, title.sz().y) + 25 + qcmp.sz().y));
+		    public void tick(double dt) {
+			if(img == null) {
+			    try {
+				title = (done == QST_DONE?catf:failf).render(title()).tex();
+				img = res.get().layer(Resource.imgc).tex();
+				msg = (done == QST_DONE)?qcmp:qfail;
+				/*
+				resize(new Coord(Math.max(img.sz().x + 25 + title.sz().x, msg.sz().x),
+						 Math.max(img.sz().y, title.sz().y) + 25 + msg.sz().y));
 				*/
-                            resize(new Coord(Math.max(Math.max(img.sz().x, title.sz().x), qcmp.sz().x),
-                                    img.sz().y + 15 + title.sz().y + 15 + qcmp.sz().y));
-                            presize();
-                        } catch (Loading l) {
-                            return;
-                        }
-                    }
-                    if ((a += (dt * 0.2)) > 1.0)
-                        destroy();
-                }
+				resize(new Coord(Math.max(Math.max(img.sz().x, title.sz().x), msg.sz().x),
+						 img.sz().y + 15 + title.sz().y + 15 + msg.sz().y));
+				presize();
+			    } catch(Loading l) {
+				return;
+			    }
+			}
+			if((a += (dt * 0.2)) > 1.0)
+			    destroy();
+		    }
 
-                public void presize() {
-                    c = parent.sz.sub(sz).div(2);
-                }
+		    public void presize() {
+			c = parent.sz.sub(sz).div(2);
+		    }
 
-                protected void added() {
-                    presize();
-                }
-            });
-        }
+		    protected void added() {
+			presize();
+		    }
+		});
+	}
 
-        public static class Box extends LoadingTextBox implements Info {
-            public final int id;
-            public final Indir<Resource> res;
-            public Condition[] cond = {};
-            private QView cqv;
+	public static class Box extends LoadingTextBox implements Info {
+	    public final int id;
+	    public final Indir<Resource> res;
+	    public Condition[] cond = {};
+	    public String title;
+	    private QView cqv;
 
-            public Box(int id, Indir<Resource> res) {
-                super(Coord.z, "", ifnd);
-                bg = null;
-                this.id = id;
-                this.res = res;
-                refresh();
-            }
+	    public Box(int id, Indir<Resource> res, String title) {
+		super(Coord.z, "", ifnd);
+		bg = null;
+		this.id = id;
+		this.res = res;
+		this.title = title;
+		refresh();
+	    }
 
-            protected void added() {
-                resize(parent.sz);
-            }
+	    protected void added() {
+		resize(parent.sz);
+	    }
 
-            public void refresh() {
-                settext(new Indir<String>() {
-                    public String get() {
-                        return (rendertext());
-                    }
-                });
-            }
+	    public String title() {
+		if(title != null)
+		    return(title);
+		return(res.get().layer(Resource.tooltip).t);
+	    }
 
-            public String rendertext() {
-                StringBuilder buf = new StringBuilder();
-                Resource res = this.res.get();
-                buf.append("$img[" + res.name + "]\n\n");
-                buf.append("$b{$font[serif,16]{" + res.layer(Resource.tooltip).t + "}}\n\n\n");
-                buf.append(res.layer(Resource.pagina).text);
-                buf.append("\n");
-                for (Condition cond : this.cond) {
-                    buf.append(cond.done ? "$col[64,255,64]{" : "$col[255,255,64]{");
-                    buf.append(" \u2022 ");
-                    buf.append(cond.desc);
-                    if (cond.status != null) {
-                        buf.append(' ');
-                        buf.append(cond.status);
-                    }
-                    buf.append("}\n");
-                }
-                return (buf.toString());
-            }
+	    public void refresh() {
+		settext(new Indir<String>() {public String get() {return(rendertext());}});
+	    }
 
-            public Condition findcond(String desc) {
-                for (Condition cond : this.cond) {
-                    if (cond.desc.equals(desc))
-                        return (cond);
-                }
-                return (null);
-            }
+	    public String rendertext() {
+		StringBuilder buf = new StringBuilder();
+		Resource res = this.res.get();
+		buf.append("$img[" + res.name + "]\n\n");
+		buf.append("$b{$font[serif,16]{" + title() + "}}\n\n\n");
+		buf.append(res.layer(Resource.pagina).text);
+		buf.append("\n");
+		for(Condition cond : this.cond) {
+		    buf.append(RichText.Parser.col2a(stcol[cond.done]));
+		    buf.append("{ \u2022 ");
+		    buf.append(cond.desc);
+		    if(cond.status != null) {
+			buf.append(' ');
+			buf.append(cond.status);
+		    }
+		    buf.append("}\n");
+		}
+		return(buf.toString());
+	    }
 
-            public void uimsg(String msg, Object... args) {
-                if (msg == "conds") {
-                    int a = 0;
-                    List<Condition> ncond = new ArrayList<Condition>(args.length);
-                    while (a < args.length) {
-                        String desc = (String) args[a++];
-                        int st = (Integer) args[a++];
-                        String status = (String) args[a++];
-                        boolean done = (st != 0);
-                        Condition cond = findcond(desc);
-                        if (cond != null) {
-                            boolean ch = false;
-                            if (done != cond.done) {
-                                cond.done = done;
-                                ch = true;
-                            }
-                            if (!Utils.eq(status, cond.status)) {
-                                cond.status = status;
-                                ch = true;
-                            }
-                            if (ch && (cqv != null))
-                                cqv.update(cond);
-                        } else {
-                            cond = new Condition(desc, done, status);
-                        }
-                        ncond.add(cond);
-                    }
-                    this.cond = ncond.toArray(new Condition[0]);
-                    refresh();
-                    if (cqv != null)
-                        cqv.update();
-                } else {
-                    super.uimsg(msg, args);
-                }
-            }
+	    public Condition findcond(String desc) {
+		for(Condition cond : this.cond) {
+		    if(cond.desc.equals(desc))
+			return(cond);
+		}
+		return(null);
+	    }
 
-            public void destroy() {
-                super.destroy();
-                if (cqv != null)
-                    cqv.reqdestroy();
-            }
+	    public void uimsg(String msg, Object... args) {
+		if(msg == "conds") {
+		    int a = 0;
+		    List<Condition> ncond = new ArrayList<Condition>(args.length);
+		    while(a < args.length) {
+			String desc = (String)args[a++];
+			int st = (Integer)args[a++];
+			String status = (String)args[a++];
+			Condition cond = findcond(desc);
+			if(cond != null) {
+			    boolean ch = false;
+			    if(st != cond.done) {cond.done = st; ch = true;}
+			    if(!Utils.eq(status, cond.status)) {cond.status = status; ch = true;}
+			    if(ch && (cqv != null))
+				cqv.update(cond);
+			} else {
+			    cond = new Condition(desc, st, status);
+			}
+			ncond.add(cond);
+		    }
+		    this.cond = ncond.toArray(new Condition[0]);
+		    refresh();
+		    if(cqv != null)
+			cqv.update();
+		} else {
+		    super.uimsg(msg, args);
+		}
+	    }
 
-            public int questid() {
-                return (id);
-            }
+	    public void destroy() {
+		super.destroy();
+		if(cqv != null)
+		    cqv.reqdestroy();
+	    }
 
-            static final Text.Furnace qtfnd = new BlurFurn(new Text.Foundry(Text.serif.deriveFont(java.awt.Font.BOLD, 16)).aa(true), 2, 1, Color.BLACK);
-            static final Text.Foundry qcfnd = new Text.Foundry(Text.sans, Config.fontsizeglobal * 14 / 11).aa(true);
+	    public int questid() {return(id);}
 
-            class QView extends Widget {
-                private Condition[] ccond;
-                private Tex[] rcond = {};
-                private Tex rtitle = null;
-                private Tex glow, glowon;
-                private double glowt = -1;
+	    static final Text.Furnace qtfnd = new BlurFurn(new Text.Foundry(Text.serif.deriveFont(java.awt.Font.BOLD, 16)).aa(true), 2, 1, Color.BLACK);
+	    static final Text.Foundry qcfnd = new Text.Foundry(Text.sans, 12).aa(true);
+	    class QView extends Widget {
+		private Condition[] ccond;
+		private Tex[] rcond = {};
+		private Tex rtitle = null;
+		private Tex glow, glowon;
+		private double glowt = -1;
 
-                private void resize() {
-                    Coord sz = new Coord(0, 0);
-                    if (rtitle != null) {
-                        sz.y += rtitle.sz().y + 5;
-                        sz.x = Math.max(sz.x, rtitle.sz().x);
-                    }
-                    for (Tex c : rcond) {
-                        sz.y += c.sz().y;
-                        sz.x = Math.max(sz.x, c.sz().x);
-                    }
-                    sz.x += 3;
-                    resize(sz);
-                }
+		private void resize() {
+		    Coord sz = new Coord(0, 0);
+		    if(rtitle != null) {
+			sz.y += rtitle.sz().y + 5;
+			sz.x = Math.max(sz.x, rtitle.sz().x);
+		    }
+		    for(Tex c : rcond) {
+			sz.y += c.sz().y;
+			sz.x = Math.max(sz.x, c.sz().x);
+		    }
+		    sz.x += 3;
+		    resize(sz);
+		}
 
-                public void draw(GOut g) {
-                    int y = 0;
-                    if (rtitle != null) {
-                        if (rootxlate(ui.mc).isect(Coord.z, rtitle.sz()))
-                            g.chcolor(192, 192, 255, 255);
-                        g.image(rtitle, new Coord(3, y));
-                        g.chcolor();
-                        y += rtitle.sz().y + 5;
-                    }
-                    for (Tex c : rcond) {
-                        g.image(c, new Coord(3, y));
-                        if (c == glowon) {
-                            double a = (1.0 - Math.pow(Math.cos(glowt * 2 * Math.PI), 2));
-                            g.chcolor(255, 255, 255, (int) (128 * a));
-                            g.image(glow, new Coord(0, y - 3));
-                            g.chcolor();
-                        }
-                        y += c.sz().y;
-                    }
-                }
+		public void draw(GOut g) {
+		    int y = 0;
+		    if(rtitle != null) {
+			if(rootxlate(ui.mc).isect(Coord.z, rtitle.sz()))
+			    g.chcolor(192, 192, 255, 255);
+			g.image(rtitle, new Coord(3, y));
+			g.chcolor();
+			y += rtitle.sz().y + 5;
+		    }
+		    for(Tex c : rcond) {
+			g.image(c, new Coord(3, y));
+			if(c == glowon) {
+			    double a = (1.0 - Math.pow(Math.cos(glowt * 2 * Math.PI), 2));
+			    g.chcolor(255, 255, 255, (int)(128 * a));
+			    g.image(glow, new Coord(0, y - 3));
+			    g.chcolor();
+			}
+			y += c.sz().y;
+		    }
+		}
 
-                public boolean mousedown(Coord c, int btn) {
-                    if ((rtitle != null) && c.isect(Coord.z, rtitle.sz())) {
-                        CharWnd cw = getparent(GameUI.class).chrwdg;
-                        cw.show();
-                        cw.raise();
-                        cw.parent.setfocus(cw);
-                        cw.questtab.showtab();
-                        return (true);
-                    }
-                    return (super.mousedown(c, btn));
-                }
+		public boolean mousedown(Coord c, int btn) {
+		    if((rtitle != null) && c.isect(Coord.z, rtitle.sz())) {
+			CharWnd cw = getparent(GameUI.class).chrwdg;
+			cw.show();
+			cw.raise();
+			cw.parent.setfocus(cw);
+			cw.questtab.showtab();
+			return(true);
+		    }
+		    return(super.mousedown(c, btn));
+		}
 
-                public void tick(double dt) {
-                    if (rtitle == null) {
-                        try {
-                            rtitle = qtfnd.render(res.get().layer(Resource.tooltip).t).tex();
-                            resize();
-                        } catch (Loading l) {
-                        }
-                    }
-                    if (glowt >= 0) {
-                        if ((glowt += (dt * 0.5)) > 1.0) {
-                            glowt = -1;
-                            glow = glowon = null;
-                        }
-                    }
-                }
+		public void tick(double dt) {
+		    if(rtitle == null) {
+			try {
+			    rtitle = qtfnd.render(title()).tex();
+			    resize();
+			} catch(Loading l) {
+			}
+		    }
+		    if(glowt >= 0) {
+			if((glowt += (dt * 0.5)) > 1.0) {
+			    glowt = -1;
+			    glow = glowon = null;
+			}
+		    }
+		}
 
-                private Text ct(Condition c) {
-                    return (qcfnd.render(" \u2022 " + c.desc + ((c.status != null) ? (" " + c.status) : ""), c.done ? new Color(64, 255, 64) : new Color(255, 255, 64)));
-                }
+		private Text ct(Condition c) {
+		    return(qcfnd.render(" \u2022 " + c.desc + ((c.status != null)?(" " + c.status):""), stcol[c.done]));
+		}
 
-                void update() {
-                    Condition[] cond = Box.this.cond;
-                    Tex[] rcond = new Tex[cond.length];
-                    for (int i = 0; i < cond.length; i++) {
-                        Condition c = cond[i];
-                        BufferedImage text = ct(c).img;
-                        rcond[i] = new TexI(rasterimg(blurmask2(text.getRaster(), 1, 1, Color.BLACK)));
-                    }
-                    if (glowon != null) {
-                        for (int i = 0; i < this.rcond.length; i++) {
-                            if (this.rcond[i] == glowon) {
-                                for (int o = 0; o < cond.length; o++) {
-                                    if (cond[o] == this.ccond[i]) {
-                                        glowon = rcond[o];
-                                        break;
-                                    }
-                                }
-                                break;
-                            }
-                        }
-                    }
-                    this.ccond = cond;
-                    this.rcond = rcond;
-                    resize();
-                }
+		void update() {
+		    Condition[] cond = Box.this.cond;
+		    Tex[] rcond = new Tex[cond.length];
+		    for(int i = 0; i < cond.length; i++) {
+			Condition c = cond[i];
+			BufferedImage text = ct(c).img;
+			rcond[i] = new TexI(rasterimg(blurmask2(text.getRaster(), 1, 1, Color.BLACK)));
+		    }
+		    if(glowon != null) {
+			for(int i = 0; i < this.rcond.length; i++) {
+			    if(this.rcond[i] == glowon) {
+				for(int o = 0; o < cond.length; o++) {
+				    if(cond[o] == this.ccond[i]) {
+					glowon = rcond[o];
+					break;
+				    }
+				}
+				break;
+			    }
+			}
+		    }
+		    this.ccond = cond;
+		    this.rcond = rcond;
+		    resize();
+		}
 
-                void update(Condition c) {
-                    glow = new TexI(rasterimg(blurmask2(ct(c).img.getRaster(), 3, 2, c.done ? new Color(64, 255, 64) : new Color(255, 255, 64))));
-                    for (int i = 0; i < ccond.length; i++) {
-                        if (ccond[i] == c) {
-                            glowon = rcond[i];
-                            break;
-                        }
-                    }
-                    glowt = 0.0;
-                }
-            }
+		void update(Condition c) {
+		    glow = new TexI(rasterimg(blurmask2(ct(c).img.getRaster(), 3, 2, stcol[c.done])));
+		    for(int i = 0; i < ccond.length; i++) {
+			if(ccond[i] == c) {
+			    glowon = rcond[i];
+			    break;
+			}
+		    }
+		    glowt = 0.0;
+		}
+	    }
 
-            public Widget qview() {
-                return (cqv = new QView());
-            }
-        }
+	    public Widget qview() {
+		return(cqv = new QView());
+	    }
+	}
 
-        @RName("quest")
-        public static class $quest implements Factory {
-            public Widget create(Widget parent, Object[] args) {
-                int id = (Integer) args[0];
-                Indir<Resource> res = parent.ui.sess.getres((Integer) args[1]);
-                return (new Box(id, res));
-            }
-        }
-
-        public interface Info {
-            public int questid();
-
-            public Widget qview();
-        }
+	@RName("quest")
+	public static class $quest implements Factory {
+	    public Widget create(Widget parent, Object[] args) {
+		int id = (Integer)args[0];
+		Indir<Resource> res = parent.ui.sess.getres((Integer)args[1]);
+		String title = (args.length > 2)?(String)args[2]:null;
+		return(new Box(id, res, title));
+	    }
+	}
+	public interface Info {
+	    public int questid();
+	    public Widget qview();
+	}
     }
 
     public class SkillList extends Listbox<Skill> {
@@ -2013,99 +2018,104 @@ public class CharWnd extends Window {
     }
 
     public void uimsg(String nm, Object... args) {
-        if (nm == "exp") {
-            exp = ((Number) args[0]).intValue();
-        } else if (nm == "enc") {
-            enc = ((Number) args[0]).intValue();
-        } else if (nm == "food") {
-            feps.update(args);
-        } else if (nm == "glut") {
-            glut.update(args);
-        } else if (nm == "glut") {
-        } else if (nm == "ftrig") {
-            feps.trig(ui.sess.getres((Integer) args[0]));
-        } else if (nm == "lvl") {
-            for (Attr aw : base) {
-                if (aw.nm.equals(args[0]))
-                    aw.lvlup();
-            }
-        } else if (nm == "const") {
-            int a = 0;
-            while (a < args.length) {
-                Indir<Resource> t = ui.sess.getres((Integer) args[a++]);
-                double m = ((Number) args[a++]).doubleValue();
-                cons.update(t, m);
-            }
-        } else if (nm == "csk") {
-        /* One *could* argue that rmessages should have some
-         * built-in fragmentation scheme. ^^ */
-            boolean rst = ((Integer) args[0]) != 0;
-            Collection<Skill> buf = rst ? new ArrayList<Skill>() : new ArrayList<Skill>(Arrays.asList(csk.skills));
-            decsklist(buf, args, 1);
-            csk.pop(buf);
-        } else if (nm == "nsk") {
-            boolean rst = ((Integer) args[0]) != 0;
-            Collection<Skill> buf = rst ? new ArrayList<Skill>() : new ArrayList<Skill>(Arrays.asList(nsk.skills));
-            decsklist(buf, args, 1);
-            nsk.pop(buf);
-        } else if (nm == "exps") {
-            boolean rst = ((Integer) args[0]) != 0;
-            Collection<Experience> buf = rst ? new ArrayList<Experience>() : new ArrayList<Experience>(Arrays.asList(exps.exps));
-            decexplist(buf, args, 1);
-            exps.pop(buf);
-        } else if (nm == "wounds") {
-            for (int i = 0; i < args.length; i += 3) {
-                int id = (Integer) args[i];
-                Indir<Resource> res = (args[i + 1] == null) ? null : ui.sess.getres((Integer) args[i + 1]);
-                Object qdata = args[i + 2];
-                if (res != null) {
-                    Wound w = wounds.get(id);
-                    if (w == null) {
-                        wounds.add(new Wound(id, res, qdata));
-                    } else {
-                        w.res = res;
-                        w.qdata = qdata;
-                    }
-                    wounds.loading = true;
-                } else {
-                    wounds.remove(id);
-                }
-            }
-        } else if (nm == "quests") {
-            for (int i = 0; i < args.length; i += 4) {
-                int id = (Integer) args[i];
-                Indir<Resource> res = (args[i + 1] == null) ? null : ui.sess.getres((Integer) args[i + 1]);
-                if (res != null) {
-                    boolean done = ((Integer) args[i + 2]) != 0;
-                    int mtime = (Integer) args[i + 3];
-                    QuestList cl = cqst;
-                    Quest q = cqst.get(id);
-                    if (q == null)
-                        q = (cl = dqst).get(id);
-                    if (q == null) {
-                        cl = null;
-                        q = new Quest(id, res, done, mtime);
-                    } else {
-                        boolean fdone = q.done;
-                        q.res = res;
-                        q.done = done;
-                        q.mtime = mtime;
-                        if (!fdone && done)
-                            q.done(getparent(GameUI.class));
-                    }
-                    QuestList nl = q.done ? dqst : cqst;
-                    if (nl != cl) {
-                        if (cl != null)
-                            cl.remove(q);
-                        nl.add(q);
-                    }
-                    nl.loading = true;
-                } else {
-                    wounds.remove(id);
-                }
-            }
-        } else {
-            super.uimsg(nm, args);
-        }
+	if(nm == "exp") {
+	    exp = ((Number)args[0]).intValue();
+	}else if(nm == "enc") {
+	    enc = ((Number)args[0]).intValue();
+	} else if(nm == "food") {
+	    feps.update(args);
+	} else if(nm == "glut") {
+	    glut.update(args);
+	} else if(nm == "glut") {
+	} else if(nm == "ftrig") {
+	    feps.trig(ui.sess.getres((Integer)args[0]));
+	} else if(nm == "lvl") {
+	    for(Attr aw : base) {
+		if(aw.nm.equals(args[0]))
+		    aw.lvlup();
+	    }
+	} else if(nm == "const") {
+	    int a = 0;
+	    while(a < args.length) {
+		Indir<Resource> t = ui.sess.getres((Integer)args[a++]);
+		double m = ((Number)args[a++]).doubleValue();
+		cons.update(t, m);
+	    }
+	} else if(nm == "csk") {
+	    /* One *could* argue that rmessages should have some
+	     * built-in fragmentation scheme. ^^ */
+	    boolean rst = ((Integer)args[0]) != 0;
+	    Collection<Skill> buf = rst?new ArrayList<Skill>():new ArrayList<Skill>(Arrays.asList(csk.skills));
+	    decsklist(buf, args, 1);
+	    csk.pop(buf);
+	} else if(nm == "nsk") {
+	    boolean rst = ((Integer)args[0]) != 0;
+	    Collection<Skill> buf = rst?new ArrayList<Skill>():new ArrayList<Skill>(Arrays.asList(nsk.skills));
+	    decsklist(buf, args, 1);
+	    nsk.pop(buf);
+	} else if(nm == "exps") {
+	    boolean rst = ((Integer)args[0]) != 0;
+	    Collection<Experience> buf = rst?new ArrayList<Experience>():new ArrayList<Experience>(Arrays.asList(exps.exps));
+	    decexplist(buf, args, 1);
+	    exps.pop(buf);
+	} else if(nm == "wounds") {
+	    for(int i = 0; i < args.length; i += 3) {
+		int id = (Integer)args[i];
+		Indir<Resource> res = (args[i + 1] == null)?null:ui.sess.getres((Integer)args[i + 1]);
+		Object qdata = args[i + 2];
+		if(res != null) {
+		    Wound w = wounds.get(id);
+		    if(w == null) {
+			wounds.add(new Wound(id, res, qdata));
+		    } else {
+			w.res = res;
+			w.qdata = qdata;
+		    }
+		    wounds.loading = true;
+		} else {
+		    wounds.remove(id);
+		}
+	    }
+	} else if(nm == "quests") {
+	    for(int i = 0; i < args.length;) {
+		int id = (Integer)args[i++];
+		Integer resid = (Integer)args[i++];
+		Indir<Resource> res = (resid == null)?null:ui.sess.getres(resid);
+		if(res != null) {
+		    int st = (Integer)args[i++];
+		    int mtime = (Integer)args[i++];
+		    String title = null;
+		    if((i < args.length) && (args[i] instanceof String))
+			title = (String)args[i++];
+		    QuestList cl = cqst;
+		    Quest q = cqst.get(id);
+		    if(q == null)
+			q = (cl = dqst).get(id);
+		    if(q == null) {
+			cl = null;
+			q = new Quest(id, res, title, st, mtime);
+		    } else {
+			int fst = q.done;
+			q.res = res;
+			q.done = st;
+			q.mtime = mtime;
+			if((fst == Quest.QST_PEND) && (st != Quest.QST_PEND))
+			    q.done(getparent(GameUI.class));
+		    }
+		    QuestList nl = (q.done == Quest.QST_PEND)?cqst:dqst;
+		    if(nl != cl) {
+			if(cl != null)
+			    cl.remove(q);
+			nl.add(q);
+		    }
+		    nl.loading = true;
+		} else {
+		    cqst.remove(id);
+		    dqst.remove(id);
+		}
+	    }
+	} else {
+	    super.uimsg(nm, args);
+	}
     }
 }
