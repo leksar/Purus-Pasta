@@ -369,207 +369,207 @@ public class RichText extends Text {
     }
 
     public static class Parser {
-	private final Map<? extends Attribute, ?> defattrs;
-	private final Resource.Pool respool;
-	
-	public Parser(Resource.Pool respool, Map<? extends Attribute, ?> defattrs) {
-	    this.respool = respool;
-	    this.defattrs = fixattrs(defattrs);
-	}
-	
-	public Parser(Map<? extends Attribute, ?> defattrs) {
-	    this(Resource.local(), defattrs);
-	}
-	
-	public Parser(Resource.Pool respool, Object... attrs) {
-	    this(respool, fillattrs2(std.defattrs, attrs));
-	}
-	
-	public Parser(Object... attrs) {
-	    this(Resource.local(), attrs);
-	}
-	
-	public static class PState {
-	    PeekReader in;
-	
-	    PState(PeekReader in) {
-		this.in = in;
-	    }
-	}
-    
-	private static boolean namechar(char c) {
-	    return((c == ':') || (c == '_') || (c == '$') || (c == '.') || (c == '-') || ((c >= '0') && (c <= '9')) || ((c >= 'A') && (c <= 'Z')) || ((c >= 'a') && (c <= 'z')));
-	}
+        private final Map<? extends Attribute, ?> defattrs;
+        private final Resource.Pool respool;
 
-	protected String name(PeekReader in) throws IOException {
-	    StringBuilder buf = new StringBuilder();
-	    while(true) {
-		int c = in.peek();
-		if(c < 0) {
-		    break;
-		} else if(namechar((char)c)) {
-		    buf.append((char)in.read());
-		} else {
-		    break;
-		}
-	    }
-	    if(buf.length() == 0)
-		throw(new FormatException("Expected name, got `" + (char)in.peek() + "'"));
-	    return(buf.toString());
-	}
-    
-	protected Color a2col(String[] args) {
-	    int r = Integer.parseInt(args[0]);
-	    int g = Integer.parseInt(args[1]);
-	    int b = Integer.parseInt(args[2]);
-	    int a = 255;
-	    if(args.length > 3)
-		a = Integer.parseInt(args[3]);
-	    return(new Color(r, g, b, a));
-	}
+        public Parser(Resource.Pool respool, Map<? extends Attribute, ?> defattrs) {
+            this.respool = respool;
+            this.defattrs = fixattrs(defattrs);
+        }
 
-	protected Part tag(PState s, String tn, String[] args, Map<? extends Attribute, ?> attrs) throws IOException {
-	    if(tn == "img") {
-		Resource res = respool.loadwait(args[0]);
-		int id = -1;
-		if(args.length > 1)
-		    id = Integer.parseInt(args[1]);
-		return(new Image(res, id));
-	    } else {
-		Map<Attribute, Object> na = new HashMap<Attribute, Object>(attrs);
-		if(tn == "font") {
-		    na.put(TextAttribute.FAMILY, args[0]);
-		    if(args.length > 1)
-			na.put(TextAttribute.SIZE, Float.parseFloat(args[1]));
-		} else if(tn == "size") {
-		    na.put(TextAttribute.SIZE, Float.parseFloat(args[0]));
-		} else if(tn == "b") {
-		    na.put(TextAttribute.WEIGHT, TextAttribute.WEIGHT_BOLD);
-		} else if(tn == "i") {
-		    na.put(TextAttribute.POSTURE, TextAttribute.POSTURE_OBLIQUE);
-		} else if(tn == "u") {
-		    na.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
-		} else if(tn == "col") {
-		    na.put(TextAttribute.FOREGROUND, a2col(args));
-		} else if(tn == "bg") {
-		    na.put(TextAttribute.BACKGROUND, a2col(args));
-		}
-		if(s.in.peek(true) != '{')
-		    throw(new FormatException("Expected `{', got `" + (char)s.in.peek() + "'"));
-		s.in.read();
-		return(text(s, na));
-	    }
-	}
+        public Parser(Map<? extends Attribute, ?> defattrs) {
+            this(Resource.local(), defattrs);
+        }
 
-	protected Part tag(PState s, Map<? extends Attribute, ?> attrs) throws IOException {
-	    s.in.peek(true);
-	    String tn = name(s.in).intern();
-	    String[] args;
-	    if(s.in.peek(true) == '[') {
-		s.in.read();
-		StringBuilder buf = new StringBuilder();
-		while(true) {
-		    int c = s.in.peek();
-		    if(c < 0) {
-			throw(new FormatException("Unexpected end-of-input when reading tag arguments"));
-		    } else if(c == ']') {
-			s.in.read();
-			break;
-		    } else {
-			buf.append((char)s.in.read());
-		    }
-		}
-		args = buf.toString().split(",");
-	    } else {
-		args = new String[0];
-	    }
-	    return(tag(s, tn, args, attrs));
-	}
-	
-	protected Part text(PState s, String text, Map<? extends Attribute, ?> attrs) throws IOException {
-	    return(new TextPart(text, attrs));
-	}
+        public Parser(Resource.Pool respool, Object... attrs) {
+            this(respool, fillattrs2(std.defattrs, attrs));
+        }
 
-	protected Part text(PState s, Map<? extends Attribute, ?> attrs) throws IOException {
-	    Part buf = new TextPart("");
-	    StringBuilder tbuf = new StringBuilder();
-	    while(true) {
-		int c = s.in.read();
-		if(c < 0) {
-		    buf.append(text(s, tbuf.toString(), attrs));
-		    break;
-		} else if(c == '\n') {
-		    buf.append(text(s, tbuf.toString(), attrs));
-		    tbuf = new StringBuilder();
-		    buf.append(new Newline(attrs));
-		} else if(c == '}') {
-		    buf.append(text(s, tbuf.toString(), attrs));
-		    break;
-		} else if(c == '$') {
-		    c = s.in.peek();
-		    if((c == '$') || (c == '{') || (c == '}')) {
-			s.in.read();
-			tbuf.append((char)c);
-		    } else {
-			buf.append(text(s, tbuf.toString(), attrs));
-			tbuf = new StringBuilder();
-			buf.append(tag(s, attrs));
-		    }
-		} else {
-		    tbuf.append((char)c);
-		}
-	    }
-	    return(buf);
-	}
+        public Parser(Object... attrs) {
+            this(Resource.local(), attrs);
+        }
 
-	protected Part parse(PState s, Map<? extends Attribute, ?> attrs) throws IOException {
-	    Part res = text(s, attrs);
-	    if(s.in.peek() >= 0)
-		throw(new FormatException("Junk left after the end of input: " + (char)s.in.peek()));
-	    return(res);
-	}
-	
-	public Part parse(Reader in, Map<? extends Attribute, ?> extra) throws IOException {
-	    PState s = new PState(new PeekReader(in));
-	    if(extra != null) {
-		Map<Attribute, Object> attrs = new HashMap<Attribute, Object>();
-		attrs.putAll(defattrs);
-		attrs.putAll(extra);
-		return(parse(s, attrs));
-	    } else {
-		return(parse(s, defattrs));
-	    }
-	}
+        public static class PState {
+            PeekReader in;
 
-	public Part parse(Reader in) throws IOException {
-	    return(parse(in, null));
-	}
-	
-	public Part parse(String text, Map<? extends Attribute, ?> extra) {
-	    try {
-		return(parse(new StringReader(text), extra));
-	    } catch(IOException e) {
-		throw(new Error(e));
-	    }
-	}
+            PState(PeekReader in) {
+                this.in = in;
+            }
+        }
 
-	public Part parse(String text) {
-	    return(parse(text, null));
-	}
-	
-	public static String quote(String in) {
-	    StringBuilder buf = new StringBuilder();
-	    for(int i = 0; i < in.length(); i++) {
-		char c = in.charAt(i);
-		if((c == '$') || (c == '{') || (c == '}')) {
-		    buf.append('$');
-		    buf.append(c);
-		} else {
-		    buf.append(c);
-		}
-	    }
-	    return(buf.toString());
-	}
+        private static boolean namechar(char c) {
+            return ((c == ':') || (c == '_') || (c == '$') || (c == '.') || (c == '-') || ((c >= '0') && (c <= '9')) || ((c >= 'A') && (c <= 'Z')) || ((c >= 'a') && (c <= 'z')));
+        }
+
+        protected String name(PeekReader in) throws IOException {
+            StringBuilder buf = new StringBuilder();
+            while (true) {
+                int c = in.peek();
+                if (c < 0) {
+                    break;
+                } else if (namechar((char) c)) {
+                    buf.append((char) in.read());
+                } else {
+                    break;
+                }
+            }
+            if (buf.length() == 0)
+                throw (new FormatException("Expected name, got `" + (char) in.peek() + "'"));
+            return (buf.toString());
+        }
+
+        protected Color a2col(String[] args) {
+            int r = Integer.parseInt(args[0]);
+            int g = Integer.parseInt(args[1]);
+            int b = Integer.parseInt(args[2]);
+            int a = 255;
+            if (args.length > 3)
+                a = Integer.parseInt(args[3]);
+            return (new Color(r, g, b, a));
+        }
+
+        protected Part tag(PState s, String tn, String[] args, Map<? extends Attribute, ?> attrs) throws IOException {
+            if (tn == "img") {
+                Resource res = respool.loadwait(args[0]);
+                int id = -1;
+                if (args.length > 1)
+                    id = Integer.parseInt(args[1]);
+                return (new Image(res, id));
+            } else {
+                Map<Attribute, Object> na = new HashMap<Attribute, Object>(attrs);
+                if (tn == "font") {
+                    na.put(TextAttribute.FAMILY, args[0]);
+                    if (args.length > 1)
+                        na.put(TextAttribute.SIZE, Float.parseFloat(args[1]));
+                } else if (tn == "size") {
+                    na.put(TextAttribute.SIZE, Float.parseFloat(args[0]));
+                } else if (tn == "b") {
+                    na.put(TextAttribute.WEIGHT, TextAttribute.WEIGHT_BOLD);
+                } else if (tn == "i") {
+                    na.put(TextAttribute.POSTURE, TextAttribute.POSTURE_OBLIQUE);
+                } else if (tn == "u") {
+                    na.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
+                } else if (tn == "col") {
+                    na.put(TextAttribute.FOREGROUND, a2col(args));
+                } else if (tn == "bg") {
+                    na.put(TextAttribute.BACKGROUND, a2col(args));
+                }
+                if (s.in.peek(true) != '{')
+                    throw (new FormatException("Expected `{', got `" + (char) s.in.peek() + "'"));
+                s.in.read();
+                return (text(s, na));
+            }
+        }
+
+        protected Part tag(PState s, Map<? extends Attribute, ?> attrs) throws IOException {
+            s.in.peek(true);
+            String tn = name(s.in).intern();
+            String[] args;
+            if (s.in.peek(true) == '[') {
+                s.in.read();
+                StringBuilder buf = new StringBuilder();
+                while (true) {
+                    int c = s.in.peek();
+                    if (c < 0) {
+                        throw (new FormatException("Unexpected end-of-input when reading tag arguments"));
+                    } else if (c == ']') {
+                        s.in.read();
+                        break;
+                    } else {
+                        buf.append((char) s.in.read());
+                    }
+                }
+                args = buf.toString().split(",");
+            } else {
+                args = new String[0];
+            }
+            return (tag(s, tn, args, attrs));
+        }
+
+        protected Part text(PState s, String text, Map<? extends Attribute, ?> attrs) throws IOException {
+            return (new TextPart(text, attrs));
+        }
+
+        protected Part text(PState s, Map<? extends Attribute, ?> attrs) throws IOException {
+            Part buf = new TextPart("");
+            StringBuilder tbuf = new StringBuilder();
+            while (true) {
+                int c = s.in.read();
+                if (c < 0) {
+                    buf.append(text(s, tbuf.toString(), attrs));
+                    break;
+                } else if (c == '\n') {
+                    buf.append(text(s, tbuf.toString(), attrs));
+                    tbuf = new StringBuilder();
+                    buf.append(new Newline(attrs));
+                } else if (c == '}') {
+                    buf.append(text(s, tbuf.toString(), attrs));
+                    break;
+                } else if (c == '$') {
+                    c = s.in.peek();
+                    if ((c == '$') || (c == '{') || (c == '}')) {
+                        s.in.read();
+                        tbuf.append((char) c);
+                    } else {
+                        buf.append(text(s, tbuf.toString(), attrs));
+                        tbuf = new StringBuilder();
+                        buf.append(tag(s, attrs));
+                    }
+                } else {
+                    tbuf.append((char) c);
+                }
+            }
+            return (buf);
+        }
+
+        protected Part parse(PState s, Map<? extends Attribute, ?> attrs) throws IOException {
+            Part res = text(s, attrs);
+            if (s.in.peek() >= 0)
+                throw (new FormatException("Junk left after the end of input: " + (char) s.in.peek()));
+            return (res);
+        }
+
+        public Part parse(Reader in, Map<? extends Attribute, ?> extra) throws IOException {
+            PState s = new PState(new PeekReader(in));
+            if (extra != null) {
+                Map<Attribute, Object> attrs = new HashMap<Attribute, Object>();
+                attrs.putAll(defattrs);
+                attrs.putAll(extra);
+                return (parse(s, attrs));
+            } else {
+                return (parse(s, defattrs));
+            }
+        }
+
+        public Part parse(Reader in) throws IOException {
+            return (parse(in, null));
+        }
+
+        public Part parse(String text, Map<? extends Attribute, ?> extra) {
+            try {
+                return (parse(new StringReader(text), extra));
+            } catch (IOException e) {
+                throw (new Error(e));
+            }
+        }
+
+        public Part parse(String text) {
+            return (parse(text, null));
+        }
+
+        public static String quote(String in) {
+            StringBuilder buf = new StringBuilder();
+            for (int i = 0; i < in.length(); i++) {
+                char c = in.charAt(i);
+                if ((c == '$') || (c == '{') || (c == '}')) {
+                    buf.append('$');
+                    buf.append(c);
+                } else {
+                    buf.append(c);
+                }
+            }
+            return (buf.toString());
+        }
 
 	public static String col2a(Color col) {
 	    StringBuilder buf = new StringBuilder();
