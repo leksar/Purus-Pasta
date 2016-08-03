@@ -183,7 +183,8 @@ public class GameUI extends ConsoleHost implements Console.Directory {
             }
         }, new Coord(10, 10));
         buffs = ulpanel.add(new Bufflist(), new Coord(95, 65));
-        umpanel.add(new Cal(), new Coord(0, 65));
+    	if(!Config.hideum)
+    		umpanel.add(new Cal(), new Coord(0, 65));
        /* add(new Widget(new Coord(300, 40)) {
             @Override
             public void draw(GOut g) {
