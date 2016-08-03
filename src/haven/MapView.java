@@ -100,6 +100,7 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
     private haven.Widget w;
     private haven.Inventory i;
     private boolean AreaMineB;
+    private static TexCube sky = new TexCube(Resource.loadimg("skycube"));
     
     private AreaSelect areaSelect;
     public boolean areaSelectB;
@@ -1006,6 +1007,32 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
             for (Rendered extra : extradraw)
                 rl.add(extra, null);
             extradraw.clear();
+        }
+        
+        // This solution is bad but currently no better avaible
+        if(!Config.hidesky) {
+	        boolean skyb = true;
+	        if(player()!=null) {
+		        Coord pltc = new Coord((int)player().getc().x / 11, (int)player().getc().y / 11);
+		        for (int x = -44; x < 44; x++) {
+		            for (int y = -44; y < 44; y++) {
+		                int t = glob.map.gettile(pltc.sub(x, y));
+		                Resource res = glob.map.tilesetr(t);
+		                if (res == null)
+		                    continue;
+		
+		                String name = res.name;
+		                if (name.equals("gfx/tiles/mine") ||
+		                		name.equals("gfx/tiles/boards")) {
+		                	skyb = false;
+		                	break;
+		                }
+		                
+		            }
+		        }
+	        }
+	        if(skyb)
+	        	rl.add(new DropSky(sky), Rendered.last);
         }
     }
 
