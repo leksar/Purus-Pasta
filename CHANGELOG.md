@@ -1,5 +1,10 @@
 ## Changelog
 
+### 2.19.0
+	- Added skybox
+	- Updated curio.config
+	- Fixed option to hide horizon meter
+	- Latest merges from Amber
 ### 2.18.0
 	- Added alarm for wrecking ball
 	- Latest merges from default client
