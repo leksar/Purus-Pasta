@@ -1030,8 +1030,13 @@ public class GameUI extends ConsoleHost implements Console.Directory {
         } else if (ev.isControlDown() && ev.getKeyCode() == KeyEvent.VK_H) {
             Config.hidegobs = !Config.hidegobs;
             Utils.setprefb("hidegobs", Config.hidegobs);
+            /*
             if (map != null)
                 map.refreshGobsHidable();
+            */
+            // Refresh all instead
+            if (map != null)
+            map.refreshGobsAll();
             return true;
         } else if (ev.getKeyCode() == KeyEvent.VK_TAB && Config.agroclosest) {
             if (map != null)
