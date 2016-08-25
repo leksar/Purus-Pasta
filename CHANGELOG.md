@@ -1,5 +1,9 @@
 ## Changelog
 
+### 2.20.0
+	- Fixed ctrl + h delay
+	- Added some curios to curio.config
+	- New merges from amber & default client
 ### 2.19.0
 	- Added skybox
 	- Updated curio.config
