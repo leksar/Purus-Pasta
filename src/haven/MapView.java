@@ -38,6 +38,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
@@ -525,7 +526,7 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
         this.cc = cc;
         this.plgob = plgob;
         this.gobs = new Gobs();
-        this.gridol = new TileOutline(glob.map, MCache.cutsz.mul(2 * (view + 1)));
+        this.gridol = new TileOutline(glob.map);
         this.partyHighlight = new PartyHighlight(glob.party, plgob);
         setcanfocus(true);
     }
@@ -618,6 +619,8 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
             mats[1] = olmat(0, 0, 255, 32);
             mats[2] = olmat(255, 0, 0, 32);
             mats[3] = olmat(128, 0, 255, 32);
+            mats[4] = olmat(255, 255, 255, 32);
+            mats[5] = olmat(0, 255, 128, 32);
             mats[16] = olmat(0, 255, 0, 32);
             mats[17] = olmat(255, 255, 0, 32);
             mats[18] = olmat(29, 196, 51, 60);
@@ -1317,29 +1320,46 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
         }
     }
 
-    private static final Text.Furnace polownertf = new PUtils.BlurFurn(new Text.Foundry(Text.serif, 30).aa(true), 3, 1, Color.BLACK);
-    private Text polownert = null;
-    private long polchtm = 0;
+    static class PolText {
+        Text text; long tm;
+        PolText(Text text, long tm) {this.text = text; this.tm = tm;}
+    }
 
-    public void setpoltext(String text) {
-        polownert = polownertf.render(text);
-        polchtm = System.currentTimeMillis();
+    private static final Text.Furnace polownertf = new PUtils.BlurFurn(new Text.Foundry(Text.serif, 30).aa(true), 3, 1, Color.BLACK);
+    private final Map<Integer, PolText> polowners = new HashMap<Integer, PolText>();
+
+
+    public void setpoltext(int id, String text) {
+        synchronized(polowners) {
+            polowners.put(id, new PolText(polownertf.render(text), System.currentTimeMillis()));
+        }
     }
 
     private void poldraw(GOut g) {
+        if(polowners.isEmpty())
+            return;
         long now = System.currentTimeMillis();
-        long poldt = now - polchtm;
-        if ((polownert != null) && (poldt < 6000)) {
-            int a;
-            if (poldt < 1000)
-                a = (int) ((255 * poldt) / 1000);
-            else if (poldt < 4000)
-                a = 255;
-            else
-                a = (int) ((255 * (2000 - (poldt - 4000))) / 2000);
-            g.chcolor(255, 255, 255, a);
-            g.aimage(polownert.tex(), sz.div(2), 0.5, 0.5);
-            g.chcolor();
+        synchronized(polowners) {
+            int y = (sz.y - polowners.values().stream().map(t -> t.text.sz().y).reduce(0, (a, b) -> a + b + 10)) / 2;
+            for(Iterator<PolText> i = polowners.values().iterator(); i.hasNext();) {
+                PolText t = i.next();
+                long poldt = now - t.tm;
+                if(poldt < 6000) {
+                    int a;
+                    if(poldt < 1000)
+                        a = (int)((255 * poldt) / 1000);
+                    else if(poldt < 4000)
+                        a = 255;
+                    else
+                        a = (int)((255 * (2000 - (poldt - 4000))) / 2000);
+                    g.chcolor(255, 255, 255, a);
+                    g.aimage(t.text.tex(), new Coord((sz.x - t.text.sz().x) / 2, y), 0.0, 0.0);
+                    y += t.text.sz().y + 10;
+                    g.chcolor();
+                } else {
+                    i.remove();
+                }
+            }
         }
     }
 
@@ -1436,12 +1456,13 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
                 // there seems to be a rare problem with fetching gridcuts when teleporting, not sure why...
                 // we ignore Defer.DeferredException to prevent the client for crashing
             }
-            // change grid overlay position when player moves by 20 tiles
+
             if (showgrid) {
-                Coord tc = cc.div(MCache.tilesz);
-                if (tc.manhattan2(lasttc) > 20) {
+                Coord tc = new Coord((cc.x / tilesz.x / MCache.cutsz.x - view) * MCache.cutsz.x,
+                        (cc.y / tilesz.y / MCache.cutsz.y - view) * MCache.cutsz.y);
+                if (!tc.equals(lasttc)) {
                     lasttc = tc;
-                    gridol.update(tc.sub(MCache.cutsz.mul(view + 1)));
+                    gridol.update(tc);
                 }
             }
         } catch (Loading e) {

@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import static haven.BuddyWnd.width;
 
 public class Polity extends Widget {
     public final String cap, name;
@@ -105,7 +106,7 @@ public class Polity extends Widget {
     public static final Text.Foundry membf = new Text.Foundry(Text.serif.deriveFont(Font.BOLD, 12)).aa(true);
 
     public Polity(String cap, String name) {
-        super(new Coord(200, 200));
+        super(new Coord(width, 200));
         this.cap = cap;
         this.name = name;
     }
@@ -121,7 +122,7 @@ public class Polity extends Widget {
         public void draw(GOut g) {
             synchronized (Polity.this) {
                 g.chcolor(0, 0, 0, 255);
-                g.frect(new Coord(0, 0), new Coord(200, 20));
+                g.frect(new Coord(0, 0), new Coord(sz.x, sz.y));
                 g.chcolor(128, 0, 0, 255);
                 g.frect(new Coord(1, 1), new Coord(((sz.x - 2) * auth) / acap, sz.y - 2));
                 g.chcolor();
