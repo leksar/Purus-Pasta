@@ -10,6 +10,7 @@ import java.util.regex.Pattern;
 import haven.Button;
 import haven.Charlist;
 import haven.Coord;
+import haven.Equipory;
 import haven.FlowerMenu;
 import haven.FlowerMenu.Petal;
 import haven.GAttrib;
@@ -194,6 +195,7 @@ public class BotUtils {
     public void drink() {
 		GameUI gui = HavenPanel.lui.root.findchild(GameUI.class);
 		 WItem item = findDrink(playerInventory());
+		 
 		 if (item != null) {
 			 item.item.wdgmsg("iact", Coord.z, 3);
 			 sleep(250);
@@ -415,6 +417,13 @@ public class BotUtils {
             if (canDrinkFrom(item))
                 return item;
         }
+        Equipory e = gui().getequipory();
+        WItem l = e.quickslots[6];
+        WItem r = e.quickslots[7];
+        if(canDrinkFrom(l))
+        	return l;
+        if(canDrinkFrom(r))
+			return r;
         return null;
     }
     public boolean canDrinkFrom(WItem item) {	
