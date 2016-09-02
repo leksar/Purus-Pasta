@@ -351,7 +351,7 @@ public class BotUtils {
 	                double dist = gob.rc.dist(plc);
 	                if (dist < min) {
 	                    boolean matches = false;
-	                        if (isObjectName(gob, "gfx/terobjs/tree") && !gob.getres().name.contains("stump") && !gob.getres().name.contains("log")) {
+	                        if (isObjectName(gob, "gfx/terobjs/tree") || isObjectName(gob, "gfx/terobjs/bushes") && !gob.getres().name.contains("stump") && !gob.getres().name.contains("log")) {
 	                            matches = true;
 	                        }
 	                    if (matches) {
