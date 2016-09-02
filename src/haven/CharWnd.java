@@ -1438,8 +1438,6 @@ public class CharWnd extends Window {
                     } catch (Loading l) {
                         exp.sortkey = "\uffff";
                         loading = true;
-                    } catch (Exception e) { // FIXME: temp fix. missing tooltip in one of the new lores?
-                        exp.sortkey = "\uffff";
                     }
                 }
                 Arrays.sort(exps, comp);

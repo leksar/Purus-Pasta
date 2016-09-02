@@ -601,8 +601,6 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
                             Overlay ol = findol(Sprite.GROWTH_STAGE_ID);
                             if (ol == null && (stage == cropstgmaxval || stage >= 0 && stage <= 5)) {
                                 addol(new Gob.Overlay(Sprite.GROWTH_STAGE_ID, new PlantStageSprite(stage, cropstgmaxval)));
-                            } else if (((PlantStageSprite)ol.spr).stg != stage) {
-                                ((PlantStageSprite)ol.spr).update(stage, cropstgmaxval);
                             }
                         } catch (ArrayIndexOutOfBoundsException e) { // ignored
                         }

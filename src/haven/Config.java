@@ -137,7 +137,6 @@ public class Config {
     public static boolean showplayerpaths = Utils.getprefb("showplayerpaths", false);
     public static boolean showanimalpaths = Utils.getprefb("showanimalpaths", false);
     public static boolean showstudylefttime = Utils.getprefb("showstudylefttime", false);
-    public static boolean syslogonlogin = Utils.getprefb("syslogonlogin", false);
     public static boolean showinvonlogin = Utils.getprefb("showinvonlogin", false);
     public static boolean autopick = Utils.getprefb("autopick", false);
     public static boolean fastflower = Utils.getprefb("fastflower", false);
@@ -262,7 +261,7 @@ public class Config {
 
     public final static String[] icons = new String[]{"dandelion", "chantrelle", "blueberry", "rat", "chicken", "chick",
             "spindlytaproot", "stingingnettle", "dragonfly", "toad", "bram", "rowboat", "arrow", "boarspear", "frog",
-            "wagon", "wheelbarrow", "cart", "wball"};
+            "wagon", "wheelbarrow", "cart", "wball", "windweed"};
     public static String[] iconssel = null;
 
     public final static Map<String, Tex> additonalicons = new HashMap<String, Tex>(13) {{
