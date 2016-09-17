@@ -220,10 +220,10 @@ public class GameUI extends ConsoleHost implements Console.Directory {
         makewnd.hide();
 
         if (!chrid.equals("")) {
-            Config.boulderssel = Utils.getprefsa("boulderssel_" + chrid, null);
-            Config.bushessel = Utils.getprefsa("bushessel_" + chrid, null);
-            Config.treessel = Utils.getprefsa("treessel_" + chrid, null);
-            Config.iconssel = Utils.getprefsa("iconssel_" + chrid, null);
+            Utils.loadprefchklist("boulderssel_" + chrid, Config.boulders);
+            Utils.loadprefchklist("bushessel_" + chrid, Config.bushes);
+            Utils.loadprefchklist("treessel_" + chrid, Config.trees);
+            Utils.loadprefchklist("iconssel_" + chrid, Config.icons);
             opts.setMapSettings();
         }
 
@@ -912,6 +912,10 @@ public class GameUI extends ConsoleHost implements Console.Directory {
         public boolean globtype(char key, KeyEvent ev) {
             if (Config.agroclosest && key == 9)
                 return super.globtype(key, ev);
+
+            // ctrl + tab is used to rotate opponents
+            if (key == 9 && ev.isControlDown())
+                return true;
 
             if (key == gkey) {
                 click();

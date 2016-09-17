@@ -1864,7 +1864,7 @@ public class Resource implements Serializable {
         if (Resource.L10N_DEBUG)
             Resource.saveStrings(bundle, key, key);
         String ll = map.get(key);
-        // labels which require special handling
+        // strings which require special handling
         if (ll == null && bundle == BUNDLE_LABEL) {
             // party invite
             final String partyInvite = " has invited you to join his party. Do you wish to do so?";
@@ -1873,6 +1873,15 @@ public class Resource implements Serializable {
                 ll = map.get("%s" + partyInvite);
                 if (ll != null)
                     ll = String.format(ll, name);
+            }
+        } else if (ll == null && bundle == BUNDLE_FLOWER) {
+            // gild
+            if (key.startsWith("Gild (")) {
+                final String flwGild = "Gild (%s%% chance)";
+                String val = key.substring(key.indexOf("(") + 1, key.indexOf("%"));
+                ll = map.get(flwGild);
+                if (ll != null)
+                    ll = String.format(ll, val);
             }
         }
         return ll != null ? ll : key;
@@ -1896,6 +1905,29 @@ public class Resource implements Serializable {
             Resource.saveStrings(bundle, key, key);
         String ll = map.get(key);
         return ll != null ? ll : null;
+    }
+
+    public static String getLocContent(String str) {
+        String loc;
+        if ((loc = Resource.locContent(str, " l of ")) != null)
+            return loc;
+        if ((loc = Resource.locContent(str, " kg of ")) != null)
+            return loc;
+        if ((loc = Resource.locContent(str, " seeds of ")) != null)
+            return loc;
+        return str;
+    }
+
+    private static String locContent(String str, String type) {
+        int i = str.indexOf(type);
+        if (i > 0) {
+            String contName = str.substring(i);
+            String locContName = Resource.getLocStringOrNull(Resource.BUNDLE_LABEL, contName);
+            if (locContName != null)
+                return str.substring(0, i) + locContName + " (" + str.substring(i + type.length()) + ")";
+            return str;
+        }
+        return null;
     }
 
     private static void saveStrings(String bundle, String key, String val) {
