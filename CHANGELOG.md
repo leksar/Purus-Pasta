@@ -1,5 +1,7 @@
 ## Changelog
 
+### 2.21.1
+	- Amber merges
 ### 2.21.0
 	- Updated curio.config
 	- Improved drinking and treechopping script
