@@ -26,6 +26,7 @@
 
 package haven;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -55,6 +56,7 @@ public class Fightview extends Widget {
     {
         buffs.hide();
     }
+    private static final Color combatLogClr = new Color(86, 153, 191);
 
     public class Relation {
         public final long gobid;
@@ -97,12 +99,37 @@ public class Fightview extends Widget {
         public void use(Indir<Resource> act) {
             lastact = act;
             lastuse = System.currentTimeMillis();
+            if (lastact != null && Config.logcombatactions) {
+                try {
+                    Resource res = lastact.get();
+                    Resource.Tooltip tt = res.layer(Resource.tooltip);
+                    if (tt == null) {
+                        gameui().syslog.append("Combat: WARNING! tooltip is missing for " + res.name + ". Notify Jorb/Loftar about this.", combatLogClr);
+                        return;
+                    }
+                    gameui().syslog.append(String.format("Combat: %d - %s, ip %d - %d", gobid, tt.t, ip, oip), combatLogClr);
+                } catch (Loading l) {
+                }
+            }
         }
     }
 
     public void use(Indir<Resource> act) {
         lastact = act;
         lastuse = System.currentTimeMillis();
+        if (lastact != null && Config.logcombatactions) {
+            try {
+                Resource res = lastact.get();
+                Resource.Tooltip tt = res.layer(Resource.tooltip);
+                if (tt == null) {
+                    gameui().syslog.append("Combat: WARNING! tooltip is missing for " + res.name + ". Notify Jorb/Loftar about this.", combatLogClr);
+                    return;
+                }
+                String cd = Utils.fmt1DecPlace(atkct - System.currentTimeMillis() / 1000.0);
+                gameui().syslog.append(String.format("Combat: me - %s, ip %d - %d, cd %ss", tt.t, current.ip, current.oip, cd), combatLogClr);
+            } catch (Loading l) {
+            }
+        }
     }
 
     @RName("frv")
@@ -203,34 +230,6 @@ public class Fightview extends Widget {
                 return (rel);
         }
         throw (new Notfound(gobid));
-    }
-
-    public void rotateopp() {
-        if (lsrel.size() <= 1)
-            return;
-
-        for (int i = 0; i < rotationlist.size(); i++) {
-            try {
-                if (rotationlist.get(i) == current.gobid) {
-                    long nxtid = rotationlist.get(i + 1 == rotationlist.size() ? 0 : i + 1);
-                    OCache oc = ui.sess.glob.oc;
-                    synchronized (oc) {
-                        for (Gob gob : oc) {
-                            if (gob.id == nxtid) {
-                                GameUI gui = gameui();
-                                gui.menu.wdgmsg("act", new Object[]{"aggro"});
-                                gui.map.wdgmsg("click", gob.sc, Coord.z, 1, 0, 0, (int) gob.id, gob.rc, 0, 0);
-                                Gob pl = gui.map.player();
-                                gui.map.wdgmsg("click", pl.sc, pl.rc, 3, 0);
-                                return;
-                            }
-                        }
-                    }
-                    return;
-                }
-            } catch (IndexOutOfBoundsException e) { // ignored
-            }
-        }
     }
 
     public void wdgmsg(Widget sender, String msg, Object... args) {

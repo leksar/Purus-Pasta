@@ -447,13 +447,13 @@ public class FightWnd extends Widget {
             saves[i] = unused;
 
         Widget p;
-        info = add(new CharWnd.LoadingTextBox(new Coord(223, 152), "", CharWnd.ifnd), new Coord(5, 35).add(wbox.btloff()));
+        info = add(new CharWnd.LoadingTextBox(new Coord(232, 152), "", CharWnd.ifnd), new Coord(0, 35).add(wbox.btloff()));
 
         info.bg = new Color(0, 0, 0, 128);
         Frame.around(this, Collections.singletonList(info));
 
         add(new Img(CharWnd.catf.render(Resource.getLocString(Resource.BUNDLE_LABEL,"Martial Arts & Combat Schools")).tex()), 0, 0);
-        actlist = add(new Actions(260, 8), new Coord(250, 35).add(wbox.btloff()));
+        actlist = add(new Actions(261, Config.iswindows ? 7 : 8), new Coord(250, 35).add(wbox.btloff()));
         Frame.around(this, Collections.singletonList(actlist));
         p = add(new BView(), 5, 200);
         count = add(new Label(""), p.c.add(p.sz.x + 10, 0));

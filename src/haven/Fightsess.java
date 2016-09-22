@@ -54,7 +54,6 @@ public class Fightsess extends Widget {
     public Coord pcc;
     public int pho;
     private final Fightview fv;
-    private static final DecimalFormat cdfmt = new DecimalFormat("#.#");
     private static final Map<Long, Tex> cdvalues = new HashMap<Long, Tex>(7);
 
     private static final Map<String, Integer> atkcds = new HashMap<String, Integer>(9){{
@@ -197,7 +196,7 @@ public class Fightsess extends Widget {
                 g.fellipse(cdc, new Coord(24, 24), Math.PI / 2 - (Math.PI * 2 * Math.min(1.0 - a, 1.0)), Math.PI / 2);
                 g.chcolor();
                 if (Config.showcooldown)
-                    g.atextstroked(cdfmt.format(cd), pcc.add(0, 27), 0.5, 0.5, Color.WHITE, Color.BLACK);
+                    g.atextstroked(Utils.fmt1DecPlace(cd), pcc.add(0, 27), 0.5, 0.5, Color.WHITE, Color.BLACK);
             }
             g.image(cdframe, cdc.sub(cdframe.sz().div(2)));
         }
@@ -378,30 +377,61 @@ public class Fightsess extends Widget {
     }
 
     public boolean globtype(char key, KeyEvent ev) {
-        if ((key == 0) && (ev.getModifiersEx() & (InputEvent.CTRL_DOWN_MASK | KeyEvent.META_DOWN_MASK | KeyEvent.ALT_DOWN_MASK)) == 0) {
-            int n = -1;
-            switch(ev.getKeyCode()) {
-                case KeyEvent.VK_1: n = 0; break;
-                case KeyEvent.VK_2: n = 1; break;
-                case KeyEvent.VK_3: n = 2; break;
-                case KeyEvent.VK_4: n = 3; break;
-                case KeyEvent.VK_5: n = 4; break;
-            }
-            if((n >= 0) && ((ev.getModifiersEx() & InputEvent.SHIFT_DOWN_MASK) != 0))
-                n += 5;
-            if((n >= 0) && (n < actions.length)) {
-                wdgmsg("use", n);
+        if (Config.combatkeys == 0) {
+            if ((key == 0) && (ev.getModifiersEx() & (InputEvent.CTRL_DOWN_MASK | KeyEvent.META_DOWN_MASK | KeyEvent.ALT_DOWN_MASK)) == 0) {
+                int n = -1;
+                switch(ev.getKeyCode()) {
+                    case KeyEvent.VK_1: n = 0; break;
+                    case KeyEvent.VK_2: n = 1; break;
+                    case KeyEvent.VK_3: n = 2; break;
+                    case KeyEvent.VK_4: n = 3; break;
+                    case KeyEvent.VK_5: n = 4; break;
+                }
+                if((n >= 0) && ((ev.getModifiersEx() & InputEvent.SHIFT_DOWN_MASK) != 0))
+                    n += 5;
+                if((n >= 0) && (n < actions.length)) {
+                    wdgmsg("use", n);
+                    return(true);
+                }
+            } else if((key == 9) && ((ev.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) != 0)) {
+                Fightview.Relation cur = fv.current;
+                if(cur != null) {
+                    fv.lsrel.remove(cur);
+                    fv.lsrel.addLast(cur);
+                }
+                fv.wdgmsg("bump", (int)fv.lsrel.get(0).gobid);
                 return(true);
             }
-        } else if((key == 9) && ((ev.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) != 0)) {
-            Fightview.Relation cur = fv.current;
-            if(cur != null) {
-                fv.lsrel.remove(cur);
-                fv.lsrel.addLast(cur);
+        } else { // F1-F5
+            if (key == 0) {
+                int n = -1;
+                switch(ev.getKeyCode()) {
+                    case KeyEvent.VK_1: n = 0; break;
+                    case KeyEvent.VK_2: n = 1; break;
+                    case KeyEvent.VK_3: n = 2; break;
+                    case KeyEvent.VK_4: n = 3; break;
+                    case KeyEvent.VK_5: n = 4; break;
+                    case KeyEvent.VK_F1: n = 5; break;
+                    case KeyEvent.VK_F2: n = 6; break;
+                    case KeyEvent.VK_F3: n = 7; break;
+                    case KeyEvent.VK_F4: n = 8; break;
+                    case KeyEvent.VK_F5: n = 9; break;
+                }
+                if((n >= 0) && (n < actions.length)) {
+                    wdgmsg("use", n);
+                    return(true);
+                }
+            } else if((key == 9) && ((ev.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) != 0)) {
+                Fightview.Relation cur = fv.current;
+                if(cur != null) {
+                    fv.lsrel.remove(cur);
+                    fv.lsrel.addLast(cur);
+                }
+                fv.wdgmsg("bump", (int)fv.lsrel.get(0).gobid);
+                return(true);
             }
-            fv.wdgmsg("bump", (int)fv.lsrel.get(0).gobid);
-            return(true);
         }
+
         return(super.globtype(key, ev));
     }
     private static class DefBar {
