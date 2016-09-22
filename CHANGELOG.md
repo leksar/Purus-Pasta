@@ -1,5 +1,9 @@
 ## Changelog
 
+### 2.21.0
+	- Updated curio.config
+	- Improved drinking and treechopping script
+	- Latest merges from Amber & Default client
 ### 2.20.0
 	- Fixed ctrl + h delay
 	- Added some curios to curio.config
