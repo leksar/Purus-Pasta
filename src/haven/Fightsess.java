@@ -377,6 +377,16 @@ public class Fightsess extends Widget {
     }
 
     public boolean globtype(char key, KeyEvent ev) {
+        if (ev.getKeyCode() == KeyEvent.VK_TAB && ev.isControlDown()) {
+            Fightview.Relation cur = fv.current;
+            if (cur != null) {
+                fv.lsrel.remove(cur);
+                fv.lsrel.addLast(cur);
+            }
+            fv.wdgmsg("bump", (int) fv.lsrel.get(0).gobid);
+            return (true);
+        }
+
         if (Config.combatkeys == 0) {
             if ((key == 0) && (ev.getModifiersEx() & (InputEvent.CTRL_DOWN_MASK | KeyEvent.META_DOWN_MASK | KeyEvent.ALT_DOWN_MASK)) == 0) {
                 int n = -1;
@@ -393,17 +403,9 @@ public class Fightsess extends Widget {
                     wdgmsg("use", n);
                     return(true);
                 }
-            } else if((key == 9) && ((ev.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) != 0)) {
-                Fightview.Relation cur = fv.current;
-                if(cur != null) {
-                    fv.lsrel.remove(cur);
-                    fv.lsrel.addLast(cur);
-                }
-                fv.wdgmsg("bump", (int)fv.lsrel.get(0).gobid);
-                return(true);
             }
         } else { // F1-F5
-            if (key == 0) {
+             if (key == 0) {
                 int n = -1;
                 switch(ev.getKeyCode()) {
                     case KeyEvent.VK_1: n = 0; break;
@@ -421,14 +423,6 @@ public class Fightsess extends Widget {
                     wdgmsg("use", n);
                     return(true);
                 }
-            } else if((key == 9) && ((ev.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) != 0)) {
-                Fightview.Relation cur = fv.current;
-                if(cur != null) {
-                    fv.lsrel.remove(cur);
-                    fv.lsrel.addLast(cur);
-                }
-                fv.wdgmsg("bump", (int)fv.lsrel.get(0).gobid);
-                return(true);
             }
         }
 

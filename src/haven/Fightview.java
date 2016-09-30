@@ -27,9 +27,7 @@
 package haven;
 
 import java.awt.Color;
-import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
 
 public class Fightview extends Widget {
     static Tex bg = Resource.loadtex("gfx/hud/bosq");
@@ -41,7 +39,6 @@ public class Fightview extends Widget {
     static Coord cgivec = new Coord(cavac.x - 35, cavac.y);
     static Coord cpursc = new Coord(cavac.x - 75, cgivec.y + 35);
     public LinkedList<Relation> lsrel = new LinkedList<Relation>();
-    private List<Long> rotationlist = new ArrayList<Long>();
     public Relation current = null;
     public Indir<Resource> blk, batk, iatk;
     public double atkcs, atkct;
@@ -56,7 +53,8 @@ public class Fightview extends Widget {
     {
         buffs.hide();
     }
-    private static final Color combatLogClr = new Color(86, 153, 191);
+    private static final Color combatLogMeClr = new Color(86, 153, 191);
+    private static final Color combatLogOpClr = new Color(234, 105, 105);
 
     public class Relation {
         public final long gobid;
@@ -104,10 +102,10 @@ public class Fightview extends Widget {
                     Resource res = lastact.get();
                     Resource.Tooltip tt = res.layer(Resource.tooltip);
                     if (tt == null) {
-                        gameui().syslog.append("Combat: WARNING! tooltip is missing for " + res.name + ". Notify Jorb/Loftar about this.", combatLogClr);
+                        gameui().syslog.append("Combat: WARNING! tooltip is missing for " + res.name + ". Notify Jorb/Loftar about this.", combatLogOpClr);
                         return;
                     }
-                    gameui().syslog.append(String.format("Combat: %d - %s, ip %d - %d", gobid, tt.t, ip, oip), combatLogClr);
+                    gameui().syslog.append(String.format("Combat: %d - %s, ip %d - %d", gobid, tt.t, ip, oip), combatLogOpClr);
                 } catch (Loading l) {
                 }
             }
@@ -122,11 +120,11 @@ public class Fightview extends Widget {
                 Resource res = lastact.get();
                 Resource.Tooltip tt = res.layer(Resource.tooltip);
                 if (tt == null) {
-                    gameui().syslog.append("Combat: WARNING! tooltip is missing for " + res.name + ". Notify Jorb/Loftar about this.", combatLogClr);
+                    gameui().syslog.append("Combat: WARNING! tooltip is missing for " + res.name + ". Notify Jorb/Loftar about this.", combatLogMeClr);
                     return;
                 }
                 String cd = Utils.fmt1DecPlace(atkct - System.currentTimeMillis() / 1000.0);
-                gameui().syslog.append(String.format("Combat: me - %s, ip %d - %d, cd %ss", tt.t, current.ip, current.oip, cd), combatLogClr);
+                gameui().syslog.append(String.format("Combat: me - %s, ip %d - %d, cd %ss", tt.t, current.ip, current.oip, cd), combatLogMeClr);
             } catch (Loading l) {
             }
         }
@@ -271,7 +269,6 @@ public class Fightview extends Widget {
             rel.ip = (Integer) args[2];
             rel.oip = (Integer) args[3];
             lsrel.addFirst(rel);
-            rotationlist.add(rel.gobid);
             ui.sess.glob.oc.isfight = true;
             return;
         } else if (msg == "del") {
@@ -285,7 +282,6 @@ public class Fightview extends Widget {
             }
             rel.remove();
             lsrel.remove(rel);
-            rotationlist.remove(rel.gobid);
             if (lsrel.size() == 0) {
                 oc.removedmgoverlay(MapView.plgob);
                 oc.isfight = false;
