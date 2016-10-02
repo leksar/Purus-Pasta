@@ -147,7 +147,7 @@ public class FlowerMenu extends Widget {
         public void ntick(double s) {
             Petal pick = null;
             for (Petal p : opts) {
-                p.move(p.ta + ((1 - s) * PI), p.tr * s);
+                p.move(p.ta + ((1 - s) * PI), p.rad * s);
                 p.a = s;
                 if (p.name.equals("Pick"))
                     pick = p;
@@ -207,7 +207,7 @@ public class FlowerMenu extends Widget {
 
         public void ntick(double s) {
             for (Petal p : opts) {
-                p.move(p.ta + ((s) * PI), p.tr * (1 - s));
+                p.move(p.ta + ((s) * PI), p.rad * (1 - s));
                 p.a = 1 - s;
             }
             if (s == 1.0)
