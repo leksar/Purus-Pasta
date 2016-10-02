@@ -36,7 +36,7 @@ public class FlowerMenu extends Widget {
     public static final Text.Foundry ptf = new Text.Foundry(Text.dfont, Config.fontsizeglobal * 12 / 11);
     public static final IBox pbox = Window.wbox;
     public static final Tex pbg = Window.bg;
-    public static final int ph = 30, ppl = 8;
+    public static final int ph = 30;
     public Petal[] opts;
     private UI.Grab mg, kg;
     
@@ -52,7 +52,8 @@ public class FlowerMenu extends Widget {
  
     public class Petal extends Widget {
         public String name;
-        public double ta, tr;
+        public double ta;
+        private final static double rad = 75;
         public int num;
         private Text text;
         private double a = 1;
@@ -64,17 +65,34 @@ public class FlowerMenu extends Widget {
             resize(text.sz().x + 25, ph);
         }
 
-        public void move(Coord c) {
-            this.c = c.sub(sz.div(2));
-        }
-
         public void move(double a, double r) {
-            move(Coord.sc(a, r));
+            this.c = Coord.sc(a, r).sub(sz.div(2));
+
+            // raise/lower petals at 90 degrees as to not overlap those at 45
+            if (num == 0)
+                this.c.y -= 12;
+            else if (num == 4)
+                this.c.y += 12;
+
+            // adjust horizontal position for potentially parallel petals to avoid overlap
+            if (r == rad) {
+                for (Petal p : opts) {
+                    if (this.c.x + sz.x >= p.c.x &&
+                            (num == 7 && p.num == 1 || num == 6 && p.num == 2 || num == 5 && p.num == 3)) {
+                        p.c.x = opts[0].c.x + opts[0].sz.x / 2 + 5;
+                        this.c.x = p.c.x - sz.x - 5;
+                        break;
+                    }
+                }
+            }
         }
 
         public void draw(GOut g) {
             g.chcolor(new Color(255, 255, 255, (int) (255 * a)));
             g.image(pbg, new Coord(3, 3), new Coord(3, 3), sz.add(new Coord(-6, -6)));
+            // pbg is to short for wide petals
+            if (pbg.sz().x < sz.x)
+                g.image(pbg, new Coord(pbg.sz().x, 3), new Coord(3, 3), sz.add(new Coord(-6, -6)));
             pbox.draw(g, Coord.z, sz);
             g.image(text.tex(), sz.div(2).sub(text.sz().div(2)));
         }
@@ -82,14 +100,6 @@ public class FlowerMenu extends Widget {
         public boolean mousedown(Coord c, int button) {
             choose(this);
             return (true);
-        }
-
-        public Area ta(Coord tc) {
-            return (Area.sized(tc.sub(sz.div(2)), sz));
-        }
-
-        public Area ta(double a, double r) {
-            return (ta(Coord.sc(a, r)));
         }
     }
     
@@ -105,7 +115,7 @@ public class FlowerMenu extends Widget {
             Petal split = null;
             Petal study = null;
             for (Petal p : opts) {
-                p.move(p.ta + ((1 - s) * PI), p.tr * s);
+                p.move(p.ta + ((1 - s) * PI), p.rad * s);
                 p.a = s;
                 if (p.name.equals(Resource.getLocString(Resource.BUNDLE_FLOWER, "Pick")))
                     pick = p;
@@ -161,7 +171,7 @@ public class FlowerMenu extends Widget {
                     if (s > 0.6) {
                         p.a = 1 - ((s - 0.6) / 0.4);
                     } else if (s < 0.3) {
-                        p.move(p.ta, p.tr * (1 - (s / 0.3)));
+                        p.move(p.ta, p.rad * (1 - (s / 0.3)));
                     }
                 } else {
                     if (s > 0.3)
@@ -182,7 +192,7 @@ public class FlowerMenu extends Widget {
 
         public void ntick(double s) {
             for (Petal p : opts) {
-                p.move(p.ta + ((s) * PI), p.tr * (1 - s));
+                p.move(p.ta + ((s) * PI), p.rad * (1 - s));
                 p.a = 1 - s;
             }
             if (s == 1.0)
@@ -206,37 +216,16 @@ public class FlowerMenu extends Widget {
     }
 
     private void organize(Petal[] opts) {
-        Area bounds = parent.area().xl(c.inv());
-        int l = 1, p = 0, i = 0, mp = 0, ml = 1, t = 0, tt = -1;
-        boolean muri = false;
-        while (i < opts.length) {
-            place:
-            {
-                double ta = (PI / 2) - (p * (2 * PI / (l * ppl)));
-                double tr = 75 + (50 * (l - 1));
-                if (!muri && !bounds.contains(opts[i].ta(ta, tr))) {
-                    if (tt < 0) {
-                        tt = ppl * l;
-                        t = 1;
-                        mp = p;
-                        ml = l;
-                    } else if (++t >= tt) {
-                        muri = true;
-                        p = mp;
-                        l = ml;
-                        continue;
-                    }
-                    break place;
-                }
-                tt = -1;
-                opts[i].ta = ta;
-                opts[i].tr = tr;
-                i++;
-            }
-            if (++p >= (ppl * l)) {
-                l++;
-                p = 0;
-            }
+        for (int i = 0 ; i < opts.length; i++) {
+            double ta = PI/2 - i * PI/4;
+
+            // slightly adjust 45 degrees angles
+            if (ta == PI/4 || ta == -3*PI/4)
+                ta -= 0.1;
+            if (ta == -PI/4 || ta == -5*PI/4)
+                ta += 0.1;
+
+            opts[i].ta = ta;
         }
     }
 
