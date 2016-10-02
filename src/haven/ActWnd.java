@@ -40,11 +40,11 @@ public abstract class ActWnd extends Window {
             public boolean keydown(KeyEvent e) {
                 if(e.getKeyCode() == KeyEvent.VK_UP) {
                     list.change(Math.max(list.selindex - 1, 0));
-                    list.showsel();
+                    list.display();
                     return true;
                 } else if(e.getKeyCode() == KeyEvent.VK_DOWN) {
                     list.change((Math.min(list.selindex + 1, list.listitems() - 1)));
-                    list.showsel();
+                    list.display();
                     return true;
                 } else {
                     return super.keydown(e) ;
@@ -53,7 +53,6 @@ public abstract class ActWnd extends Window {
         });
         setfocus(entry);
         list = add(new ActList(WIDTH, 10) {
-            @Override
             protected void itemactivate(ActItem item) {
                 act(list.sel.pagina);
                 ActWnd.this.hide();
@@ -69,7 +68,7 @@ public abstract class ActWnd extends Window {
         super.show();
         entry.settext("");
         list.change(0);
-        list.showsel();
+        list.display();
         parent.setfocus(this);
     }
 
@@ -109,7 +108,7 @@ public abstract class ActWnd extends Window {
         if (list.listitems() > 0) {
             list.change(Math.min(list.selindex, list.listitems() - 1));
             list.sb.val = 0;
-            list.showsel();
+            list.display();
         }
     }
 
