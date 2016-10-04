@@ -14,15 +14,12 @@
   </target>
   
   <target name="buildinfo" depends="build-env" unless="has-buildinfo">
-    <exec executable="git" outputproperty="gitrev" failifexecutionfails="false">
-      <arg line="rev-parse HEAD" />
-    </exec>
     <echo file="build/classes/buildinfo" xml:space="default">${version},${gitrev}</echo>
   </target>
 
   <target name="hafen-client" depends="build-env">
     <javac srcdir="src" destdir="build/classes" debug="on"
-	   source="1.8" target="1.8" includeantruntime="no">
+	   encoding="UTF-8" source="1.8" target="1.8" includeantruntime="no">
       <classpath>
 	<pathelement path="lib/jogl.jar" />
 	<pathelement path="lib/gluegen-rt.jar" />
@@ -115,14 +112,16 @@
   		</copy>
   </target>
 	
-	 <target name="dist" depends="rebuild">
-	    <zip destfile="${basedir}/${name}-${version}.zip" update="false">
-	        <fileset dir="${basedir}" includes="README"/>
-	    	<fileset dir="build" includes="hafen.jar"/>
-	    	<fileset dir="build" includes="lib/*.jar"/>
-	        <fileset dir="etc" includes="*.bat"/>
-	    </zip>
-	  </target>
+ <target name="dist" depends="rebuild">
+    <zip destfile="${basedir}/build/build.zip" update="false">
+        <fileset dir="build" includes="hafen.jar, lib/*" />
+        <fileset dir="etc" includes="*.bat,run.sh,run.command"/>
+    </zip>
+    <zip destfile="${basedir}/build/update.zip" update="false">
+        <fileset dir="build" includes="hafen.jar" />
+        <fileset dir="build/lib" includes="amber-res.jar, l10n.jar, pasta-res.jar" />
+    </zip>
+  </target>
 
   <target name="deftgt" depends="jars" />
 
