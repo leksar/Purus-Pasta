@@ -109,33 +109,19 @@ public class FlowerMenu extends Widget {
         }
 
         public void ntick(double s) {
-            Petal pick = null;
-            Petal harvest = null;
-            Petal eat = null;
-            Petal split = null;
-            Petal study = null;
             for (Petal p : opts) {
                 p.move(p.ta + ((1 - s) * PI), p.rad * s);
                 p.a = s;
-                if (p.name.equals(Resource.getLocString(Resource.BUNDLE_FLOWER, "Pick")))
-                    pick = p;
-                else if (p.name.equals(Resource.getLocString(Resource.BUNDLE_FLOWER, "Harvest")))
-                    harvest = p;
-                else if (p.name.equals(Resource.getLocString(Resource.BUNDLE_FLOWER, "Eat")))
-                    eat = p;
-                else if (p.name.equals(Resource.getLocString(Resource.BUNDLE_FLOWER, "Split")))
-                    split = p;
-                else if (p.name.equals("Study"))
-                	study = p;
+                if (Config.autopick && s == 1.0 && p.name.equals(Resource.getLocString(Resource.BUNDLE_FLOWER, "Pick")) ||
+                        (Config.autoharvest && s == 1.0 && p.name.equals(Resource.getLocString(Resource.BUNDLE_FLOWER, "Harvest"))) ||
+                        (Config.autoeat && s == 1.0 && p.name.equals(Resource.getLocString(Resource.BUNDLE_FLOWER, "Eat"))) ||
+                        (Config.autosplit && s == 1.0 && p.name.equals(Resource.getLocString(Resource.BUNDLE_FLOWER, "Split"))) ||
+                        (Config.autokill && s == 1.0 && p.name.equals(Resource.getLocString(Resource.BUNDLE_FLOWER, "Kill"))) ||
+                        (Config.autoslice && s == 1.0 && p.name.equals(Resource.getLocString(Resource.BUNDLE_FLOWER, "Slice")))) {
+                    choose(p);
+                    break;
+                }
             }
-            if (Config.autopick && pick != null && s == 1.0)
-                choose(pick);
-            else if (Config.autoharvest && harvest != null && s == 1.0)
-                choose(harvest);
-            else if (Config.autoeat && eat != null && s == 1.0 && study == null)
-                choose(eat);
-            else if (Config.autosplit && split != null && s == 1.0)
-                choose(split);
         }
     }
     

@@ -113,13 +113,12 @@ public class IMeter extends Widget {
                 }
             } catch (Loading e) {
             }
-            
-            if (Config.ponyalarm && ponyalarm) {
+            if (ponyalarm) {
                 try {
                     Resource res = bg.get();
                     if (res != null && res.name.equals("gfx/hud/meter/mount")) {
                         if (meters.get(0).a <= 10) {
-                            Audio.play(ponysfx, Config.ponyalarmvol);
+                            Audio.play(ponysfx, 1.0);
                             ponyalarm = false;
                         }
                     }

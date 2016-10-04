@@ -46,10 +46,10 @@ import static haven.GItem.Quality.AVG_MODE_GEOMETRIC;
 import static haven.GItem.Quality.AVG_MODE_QUADRATIC;
 
 public class OptWnd extends Window {
-	public static final int VERTICAL_MARGIN = 10;
-	public static final int HORIZONTAL_MARGIN = 5;
-	public static final int VERTICAL_AUDIO_MARGIN = 5;
-    public final Panel main, video, audio, display, map, general, combat, hide, control, uis, quality;
+    public static final int VERTICAL_MARGIN = 10;
+    public static final int HORIZONTAL_MARGIN = 5;
+    public static final int VERTICAL_AUDIO_MARGIN = 5;
+    public final Panel main, video, audio, display, map, general, combat, hide, control, uis, quality, flowermenus, soundalarms;
     public Panel current;
 
     public void chpanel(Panel p) {
@@ -91,8 +91,8 @@ public class OptWnd extends Window {
     public class VideoPanel extends Panel {
         public VideoPanel(Panel back) {
             super();
-            add(new PButton(200, "Back", 27, back), new Coord(270, 360));
-            resize(new Coord(740, 400));
+            add(new PButton(200, "Back", 27, back), new Coord(210, 360));
+            resize(new Coord(620, 400));
         }
 
         public class CPanel extends Widget {
@@ -255,19 +255,6 @@ public class OptWnd extends Window {
                         a = val;
                     }
                 });
-                appender.add(new CheckBox("Limit background FPS to 1") {
-                	{
-                		a = Config.limitbgfps;
-                	}
-                
-                	public void set(boolean val) {
-                		Utils.setprefb("limitbgfps", val);
-                		Config.limitbgfps = val;
-                		a = val;
-                		HavenPanel.bgfd = val ? 1000 : 200;
-                		Utils.setprefi("bghz", val ? 1000 : 200);
-                	}
-                });
                 appender.add(new CheckBox("Show FPS") {
                     {
                         a = Config.showfps;
@@ -280,7 +267,7 @@ public class OptWnd extends Window {
                     }
                 });
 
-                add(new Label("Disable animations (req. restart):"), new Coord(550, 0));
+                add(new Label("Disable animations (req. restart):"), new Coord(440, 0));
                 CheckListbox animlist = new CheckListbox(180, 18) {
                     protected void itemclick(CheckListboxItem itm, int button) {
                         super.itemclick(itm, button);
@@ -306,7 +293,7 @@ public class OptWnd extends Window {
                         selected = true;
                     animlist.items.add(new CheckListboxItem(obj.a, selected));
                 }
-                add(animlist, new Coord(550, 15));
+                add(animlist, new Coord(440, 15));
 
                 pack();
             }
@@ -325,7 +312,8 @@ public class OptWnd extends Window {
     }
 
     public OptWnd(boolean gopts) {
-        super(new Coord(740, 400), "Options", true);
+        super(new Coord(620, 400), "Options", true);
+
         main = add(new Panel());
         video = add(new VideoPanel(main));
         audio = add(new Panel());
@@ -337,7 +325,9 @@ public class OptWnd extends Window {
         control = add(new Panel());
         uis = add(new Panel());
         quality = add(new Panel());
-        
+        flowermenus = add(new Panel());
+        soundalarms = add(new Panel());
+
         initMain(gopts);
         initAudio();
         initDisplay();
@@ -348,21 +338,28 @@ public class OptWnd extends Window {
         initUis();
         initQuality();
         initHide();
+        initFlowermenus();
+        initSoundAlarms();
         
         chpanel(main);
     }
         
     private void initMain(boolean gopts) {
+    	
         main.add(new PButton(200, "Video settings", 'v', video), new Coord(0, 0));
         main.add(new PButton(200, "Audio settings", 'a', audio), new Coord(0, 30));
         main.add(new PButton(200, "Display settings", 'd', display), new Coord(0, 60));
         main.add(new PButton(200, "Map settings", 'm', map), new Coord(0, 90));
+        
         main.add(new PButton(200, "General settings", 'g', general), new Coord(210, 0));
         main.add(new PButton(200, "Combat settings", 'c', combat), new Coord(210, 30));
-        main.add(new PButton(200, "Hide settings", 'h', hide), new Coord(0, 120));
         main.add(new PButton(200, "Control settings", 'k', control), new Coord(210, 60));
         main.add(new PButton(200, "UI settings", 'u', uis), new Coord(210, 90));
+        
         main.add(new PButton(200, "Quality settings", 'q', quality), new Coord(420, 0));
+        main.add(new PButton(200, "Menu settings", 'f', flowermenus), new Coord(420, 30));
+        main.add(new PButton(200, "Sound alarms", 's', soundalarms), new Coord(420, 60));
+        main.add(new PButton(200, "Hide settings", 'h', hide), new Coord(420, 90));
         
         if (gopts) {
             main.add(new Button(200, "Switch character") {
@@ -372,7 +369,7 @@ public class OptWnd extends Window {
                     if (gui != null & gui.map != null)
                         gui.map.canceltasks();
                 }
-            }, new Coord(270, 300));
+            }, new Coord(210, 300));
             main.add(new Button(200, "Log out") {
                 public void click() {
                     GameUI gui = gameui();
@@ -380,20 +377,20 @@ public class OptWnd extends Window {
                     if (gui != null & gui.map != null)
                         gui.map.canceltasks();
                 }
-            }, new Coord(270, 330));
+            }, new Coord(210, 330));
         }
         main.add(new Button(200, "Close") {
             public void click() {
                 OptWnd.this.hide();
             }
-        }, new Coord(270, 360));
+        }, new Coord(210, 360));
         main.pack();
-}
+    }
 
     private void initAudio() {
         initAudioFirstColumn();
         initAudioSecondColumn(); 
-        audio.add(new PButton(200, "Back", 27, main), new Coord(270, 360));
+        audio.add(new PButton(200, "Back", 27, main), new Coord(210, 360));
         audio.pack();
     }
 
@@ -575,30 +572,6 @@ public class OptWnd extends Window {
             }
         });
         appender.setVerticalMargin(0);
-        appender.add(new CheckBox("Alarm when pony power < 10%") {
-            {
-                a = Config.ponyalarm;
-            }
-
-            public void set(boolean val) {
-                Utils.setprefb("ponyalarm", val);
-                Config.ponyalarm = val;
-                a = val;
-            }
-        });
-        appender.setVerticalMargin(VERTICAL_AUDIO_MARGIN);
-        appender.add(new HSlider(200, 0, 1000, 0) {
-            protected void attach(UI ui) {
-                super.attach(ui);
-                val = (int) (Config.ponyalarmvol * 1000);
-            }
-
-            public void changed() {
-                double vol = val / 1000.0;
-                Config.ponyalarmvol = vol;
-                Utils.setprefd("ponyalarmvol", vol);
-            }
-        });
     }
     
     private void initAudioSecondColumn() {
@@ -650,56 +623,6 @@ public class OptWnd extends Window {
             }
         });
         appender.setVerticalMargin(0);
-        appender.add(new CheckBox("Alarm on rare curios (bluebells, glimmers, ...)") {
-            {
-                a = Config.alarmonforagables;
-            }
-
-            public void set(boolean val) {
-                Utils.setprefb("alarmonforagables", val);
-                Config.alarmonforagables = val;
-                a = val;
-            }
-        });
-        appender.setVerticalMargin(VERTICAL_AUDIO_MARGIN);
-        appender.add(new HSlider(200, 0, 1000, 0) {
-            protected void attach(UI ui) {
-                super.attach(ui);
-                val = (int) (Config.alarmonforagablesvol * 1000);
-            }
-
-            public void changed() {
-                double vol = val / 1000.0;
-                Config.alarmonforagablesvol = vol;
-                Utils.setprefd("alarmonforagablesvol", vol);
-            }
-        });
-        appender.setVerticalMargin(0);
-        appender.add(new CheckBox("Alarm on bears & lynx") {
-            {
-                a = Config.alarmbears;
-            }
-
-            public void set(boolean val) {
-                Utils.setprefb("alarmbears", val);
-                Config.alarmbears = val;
-                a = val;
-            }
-        });
-        appender.setVerticalMargin(VERTICAL_AUDIO_MARGIN);
-        appender.add(new HSlider(200, 0, 1000, 0) {
-            protected void attach(UI ui) {
-                super.attach(ui);
-                val = (int) (Config.alarmbearsvol * 1000);
-            }
-
-            public void changed() {
-                double vol = val / 1000.0;
-                Config.alarmbearsvol = vol;
-                Utils.setprefd("alarmbearsvol", vol);
-            }
-        });
-        appender.setVerticalMargin(0);
         appender.add(new Label("Fireplace sound volume (req. restart)"));
         appender.setVerticalMargin(VERTICAL_AUDIO_MARGIN);
         appender.add(new HSlider(200, 0, 1000, 0) {
@@ -714,86 +637,10 @@ public class OptWnd extends Window {
                 Utils.setprefd("sfxfirevol", vol);
             }
         });
-        appender.setVerticalMargin(0);
-        appender.add(new CheckBox("Alarm on trolls") {
-            {
-                a = Config.alarmtroll;
-            }
-
-            public void set(boolean val) {
-                Utils.setprefb("alarmtroll", val);
-                Config.alarmtroll = val;
-                a = val;
-            }
-        });
-        appender.setVerticalMargin(VERTICAL_AUDIO_MARGIN);
-        appender.add(new HSlider(200, 0, 1000, 0) {
-            protected void attach(UI ui) {
-                super.attach(ui);
-                val = (int) (Config.alarmtrollvol * 1000);
-            }
-
-            public void changed() {
-                double vol = val / 1000.0;
-                Config.alarmtrollvol = vol;
-                Utils.setprefd("alarmtrollvol", vol);
-            }
-        });
-        appender.setVerticalMargin(0);
-        appender.add(new CheckBox("Alarm on mammoths") {
-            {
-                a = Config.alarmmammoth;
-            }
-
-            public void set(boolean val) {
-                Utils.setprefb("alarmmammoth", val);
-                Config.alarmmammoth = val;
-                a = val;
-            }
-        });
-        appender.setVerticalMargin(VERTICAL_AUDIO_MARGIN);
-        appender.add(new HSlider(200, 0, 1000, 0) {
-            protected void attach(UI ui) {
-                super.attach(ui);
-                val = (int) (Config.alarmmammothvol * 1000);
-            }
-
-            public void changed() {
-                double vol = val / 1000.0;
-                Config.alarmmammothvol = vol;
-                Utils.setprefd("alarmmammothvol", vol);
-            }
-        });
-        appender.setVerticalMargin(0);
-        appender.add(new CheckBox("Alarm on battering rams and catapults") {
-            {
-                a = Config.alarmbram;
-            }
-
-            public void set(boolean val) {
-                Utils.setprefb("alarmbram", val);
-                Config.alarmbram = val;
-                a = val;
-            }
-        });
-        appender.setVerticalMargin(VERTICAL_AUDIO_MARGIN);
-        appender.add(new HSlider(200, 0, 1000, 0) {
-            protected void attach(UI ui) {
-                super.attach(ui);
-                val = (int) (Config.alarmbramvol * 1000);
-            }
-
-            public void changed() {
-                double vol = val / 1000.0;
-                Config.alarmbramvol = vol;
-                Utils.setprefd("alarmbramvol", vol);
-            }
-        });
     }
     private void initDisplay() {
-    	initDisplayFirstColumn();
-    	initDisplaySecondColumn();
-        display.add(new PButton(200, "Back", 27, main), new Coord(270, 360));
+        initDisplayFirstColumn();
+        display.add(new PButton(200, "Back", 27, main), new Coord(210, 360));
         display.pack();
     }
     private void initDisplayFirstColumn() {
@@ -906,14 +753,14 @@ public class OptWnd extends Window {
                 a = val;
             }
         });
-        appender.add(new CheckBox("Show contents bars for buckets/flasks") {
+        appender.add(new CheckBox("Show wear bars") {
             {
-                a = Config.showcontentsbars;
+                a = Config.showwearbars;
             }
 
             public void set(boolean val) {
-                Utils.setprefb("showcontentsbars", val);
-                Config.showcontentsbars = val;
+                Utils.setprefb("showwearbars", val);
+                Config.showwearbars = val;
                 a = val;
             }
         });
@@ -1086,46 +933,21 @@ public class OptWnd extends Window {
     }
 
     private void initMap() {
-    	final WidgetVerticalAppender appender = new WidgetVerticalAppender(map);
-    	
-    	appender.setVerticalMargin(VERTICAL_MARGIN);
-    	appender.setHorizontalMargin(HORIZONTAL_MARGIN);
-    	
-    	appender.add(new CheckBox("Save map tiles to disk") {
-            {
-                a = Config.savemmap;
-            }
+        map.add(new Label("Show boulders:"), new Coord(10, 0));
+        map.add(new Label("Show bushes:"), new Coord(165, 0));
+        map.add(new Label("Show trees:"), new Coord(320, 0));
+        map.add(new Label("Hide icons:"), new Coord(475, 0));
 
-            public void set(boolean val) {
-                Utils.setprefb("savemmap", val);
-                Config.savemmap = val;
-                MapGridSave.mgs = null;
-                a = val;
-            }
-        });
-
-        map.add(new Label("Show boulders:"), new Coord(180, 0));
-        map.add(new Label("Show bushes:"), new Coord(325, 0));
-        map.add(new Label("Show trees:"), new Coord(470, 0));
-        map.add(new Label("Hide icons:"), new Coord(615, 0));
-
-        map.add(new PButton(200, "Back", 27, main), new Coord(270, 360));
+        map.add(new PButton(200, "Back", 27, main), new Coord(210, 360));
         map.pack();
     }
-    
-        private void initGeneral() {
-        	initGeneralFirstColumn();
-        	initGeneralSecondColumn();
-        	general.add(new PButton(200, "Back", 27, main), new Coord(270, 360));
-        	general.pack();
-        }
-        
-        private void initGeneralFirstColumn() {
-        	final WidgetVerticalAppender appender = new WidgetVerticalAppender(general);
-        	
-        	appender.setVerticalMargin(VERTICAL_MARGIN);
-        	appender.setHorizontalMargin(HORIZONTAL_MARGIN);
-        	
+
+    private void initGeneral() {
+        final WidgetVerticalAppender appender = new WidgetVerticalAppender(general);
+
+        appender.setVerticalMargin(VERTICAL_MARGIN);
+        appender.setHorizontalMargin(HORIZONTAL_MARGIN);
+
         appender.add(new CheckBox("Save chat logs to disk") {
             {
                 a = Config.chatsave;
@@ -1142,6 +964,18 @@ public class OptWnd extends Window {
                     } catch (Exception e) {
                     }
                 }
+            }
+        });
+        appender.add(new CheckBox("Save map tiles to disk") {
+            {
+                a = Config.savemmap;
+            }
+
+            public void set(boolean val) {
+                Utils.setprefb("savemmap", val);
+                Config.savemmap = val;
+                MapGridSave.mgs = null;
+                a = val;
             }
         });
         appender.add(new CheckBox("Show timestamps in chats") {
@@ -1199,17 +1033,6 @@ public class OptWnd extends Window {
                 a = val;
             }
         });
-        appender.add(new CheckBox("Automatically select 'Pick' action") {
-            {
-                a = Config.autopick;
-            }
-
-            public void set(boolean val) {
-                Utils.setprefb("autopick", val);
-                Config.autopick = val;
-                a = val;
-            }
-        });
         appender.add(new CheckBox("Fast Flower Menu") {
             {
                 a = Config.fastflower;
@@ -1229,17 +1052,6 @@ public class OptWnd extends Window {
             public void set(boolean val) {
                 Utils.setprefb("afklogout", val);
                 Config.afklogout = val;
-                a = val;
-            }
-        });
-        appender.add(new CheckBox("Automatically select 'Harvest' action") {
-            {
-                a = Config.autoharvest;
-            }
-
-            public void set(boolean val) {
-                Utils.setprefb("autoharvest", val);
-                Config.autoharvest = val;
                 a = val;
             }
         });
@@ -1265,17 +1077,6 @@ public class OptWnd extends Window {
                 a = val;
             }
         });
-        appender.add(new CheckBox("Automatically select 'Eat' action") {
-            {
-                a = Config.autoeat;
-            }
-
-            public void set(boolean val) {
-                Utils.setprefb("autoeat", val);
-                Config.autoeat = val;
-                a = val;
-            }
-        });
         appender.add(new CheckBox("Run on login") {
             {
                 a = Config.runonlogin;
@@ -1287,15 +1088,6 @@ public class OptWnd extends Window {
                 a = val;
             }
         });
-        }
-        
-        private void initGeneralSecondColumn() {
-        final WidgetVerticalAppender appender = new WidgetVerticalAppender(general);
-
-        appender.setVerticalMargin(VERTICAL_MARGIN);
-        appender.setHorizontalMargin(HORIZONTAL_MARGIN);
-        appender.setX(310);
-
         appender.add(new CheckBox("Show server time") {
             {
                 a = Config.showservertime;
@@ -1304,17 +1096,6 @@ public class OptWnd extends Window {
             public void set(boolean val) {
                 Utils.setprefb("showservertime", val);
                 Config.showservertime = val;
-                a = val;
-            }
-        });
-        appender.add(new CheckBox("Automatically select 'Split' action") {
-            {
-                a = Config.autosplit;
-            }
-
-            public void set(boolean val) {
-                Utils.setprefb("autosplit", val);
-                Config.autosplit = val;
                 a = val;
             }
         });
@@ -1340,7 +1121,9 @@ public class OptWnd extends Window {
                 a = val;
             }
         });
-        }
+        general.add(new PButton(200, "Back", 27, main), new Coord(210, 360));
+        general.pack();
+    }
 
         private void initCombat() {
         final WidgetVerticalAppender appender = new WidgetVerticalAppender(combat);
@@ -1438,7 +1221,7 @@ public class OptWnd extends Window {
         });
         appender.addRow(new Label("Combat key bindings:"), combatkeysDropdown());
 
-        combat.add(new PButton(200, "Back", 27, main), new Coord(270, 360));
+        combat.add(new PButton(200, "Back", 27, main), new Coord(210, 360));
         combat.pack();
         }
         private void initHide() {
@@ -1568,7 +1351,7 @@ public class OptWnd extends Window {
                         a = val;
                     }
                 	});
-        		appender.setX(550);
+        		appender.setX(450);
         		appender.setVerticalMargin(0);
                 appender.add(new Label("Red"));
                 appender.setVerticalMargin(VERTICAL_AUDIO_MARGIN);
@@ -1614,8 +1397,7 @@ public class OptWnd extends Window {
                         Utils.setprefd("hideblue", vol);
                     }
                 });
-                
-                hide.add(new PButton(200, "Back", 27, main), new Coord(270, 360));
+                hide.add(new PButton(200, "Back", 27, main), new Coord(210, 360));
                 hide.pack();
         }
         private void initControl() {
@@ -1736,7 +1518,7 @@ public class OptWnd extends Window {
             }
         });
 
-        control.add(new PButton(200, "Back", 27, main), new Coord(270, 360));
+        control.add(new PButton(200, "Back", 27, main), new Coord(210, 360));
         control.pack();
         }
 
@@ -1855,17 +1637,10 @@ public class OptWnd extends Window {
                 }
             }
         });
-        appender.add(new CheckBox("Instant flower menus") {
-            {
-                a = Config.instantflowermenu;
-            }
-
-            public void set(boolean val) {
-                Utils.setprefb("instantflowermenu", val);
-                Config.instantflowermenu = val;
-                a = val;
-            }
-        });
+        //appender.addRow(new Label("Interface font size (req. restart):"), makeFontSizeGlobalDropdown());
+        //appender.addRow(new Label("Button font size (req. restart):"), makeFontSizeButtonDropdown());
+        //appender.addRow(new Label("Window title font size (req. restart):"), makeFontSizeWndCapDropdown());
+        appender.addRow(new Label("Chat font size (req. restart):"), makeFontSizeChatDropdown());
 
         Button resetWndBtn = new Button(220, "Reset Windows (req. logout)") {
             @Override
@@ -1888,9 +1663,8 @@ public class OptWnd extends Window {
                 Utils.delpref("fbelt_vertical");
             }
         };
-        uis.add(resetWndBtn, new Coord(740 / 2 - resetWndBtn.sz.x / 2 , 320));
-
-        uis.add(new PButton(200, "Back", 27, main), new Coord(270, 360));
+        uis.add(resetWndBtn, new Coord(620 / 2 - resetWndBtn.sz.x / 2 , 320));
+        uis.add(new PButton(200, "Back", 27, main), new Coord(210, 360));
         uis.pack();
         }
 
@@ -1977,9 +1751,333 @@ public class OptWnd extends Window {
                 }
             });
 
-        quality.add(new PButton(200, "Back", 27, main), new Coord(270, 360));
+        quality.add(new PButton(200, "Back", 27, main), new Coord(210, 360));
         quality.pack();
     }
+
+
+    private void initFlowermenus() {
+        final WidgetVerticalAppender appender = new WidgetVerticalAppender(flowermenus);
+
+        appender.setVerticalMargin(VERTICAL_MARGIN);
+        appender.setHorizontalMargin(HORIZONTAL_MARGIN);
+
+        appender.add(new CheckBox("Open object menus without delay") {
+            {
+                a = Config.instantflowermenu;
+            }
+
+            public void set(boolean val) {
+                Utils.setprefb("instantflowermenu", val);
+                Config.instantflowermenu = val;
+                a = val;
+            }
+        });
+        appender.add(new CheckBox("Automatically select 'Pick' action") {
+            {
+                a = Config.autopick;
+            }
+
+            public void set(boolean val) {
+                Utils.setprefb("autopick", val);
+                Config.autopick = val;
+                a = val;
+            }
+        });
+        appender.add(new CheckBox("Automatically select 'Harvest' action") {
+            {
+                a = Config.autoharvest;
+            }
+
+            public void set(boolean val) {
+                Utils.setprefb("autoharvest", val);
+                Config.autoharvest = val;
+                a = val;
+            }
+        });
+        appender.add(new CheckBox("Automatically select 'Eat' action") {
+            {
+                a = Config.autoeat;
+            }
+
+            public void set(boolean val) {
+                Utils.setprefb("autoeat", val);
+                Config.autoeat = val;
+                a = val;
+            }
+        });
+        appender.add(new CheckBox("Automatically select 'Split' action") {
+            {
+                a = Config.autosplit;
+            }
+
+            public void set(boolean val) {
+                Utils.setprefb("autosplit", val);
+                Config.autosplit = val;
+                a = val;
+            }
+        });
+        appender.add(new CheckBox("Automatically select 'Kill' action") {
+            {
+                a = Config.autokill;
+            }
+
+            public void set(boolean val) {
+                Utils.setprefb("autokill", val);
+                Config.autokill = val;
+                a = val;
+            }
+        });
+        appender.add(new CheckBox("Automatically select 'Slice' action") {
+            {
+                a = Config.autoslice;
+            }
+
+            public void set(boolean val) {
+                Utils.setprefb("autoslice", val);
+                Config.autoslice = val;
+                a = val;
+            }
+        });
+        flowermenus.add(new PButton(200, "Back", 27, main), new Coord(210, 360));
+        flowermenus.pack();
+    }
+
+    private void initSoundAlarms() {
+        final WidgetVerticalAppender appender = new WidgetVerticalAppender(soundalarms);
+
+        appender.setVerticalMargin(VERTICAL_MARGIN);
+        appender.setHorizontalMargin(HORIZONTAL_MARGIN);
+
+        appender.setVerticalMargin(0);
+        appender.add(new CheckBox("Alarm on unknown players") {
+            {
+                a = Config.alarmunknown;
+            }
+
+            public void set(boolean val) {
+                Utils.setprefb("alarmunknown", val);
+                Config.alarmunknown = val;
+                a = val;
+            }
+        });
+        appender.setVerticalMargin(VERTICAL_AUDIO_MARGIN);
+        appender.add(new HSlider(200, 0, 1000, 0) {
+            protected void attach(UI ui) {
+                super.attach(ui);
+                val = (int)(Config.alarmunknownvol * 1000);
+            }
+
+            public void changed() {
+                double vol = val / 1000.0;
+                Config.alarmunknownvol = vol;
+                Utils.setprefd("alarmunknownvol", vol);
+            }
+        });
+        appender.setVerticalMargin(0);
+        appender.add(new CheckBox("Alarm on red players") {
+            {
+                a = Config.alarmred;
+            }
+
+            public void set(boolean val) {
+                Utils.setprefb("alarmred", val);
+                Config.alarmred = val;
+                a = val;
+            }
+        });
+        appender.setVerticalMargin(VERTICAL_AUDIO_MARGIN);
+        appender.add(new HSlider(200, 0, 1000, 0) {
+            protected void attach(UI ui) {
+                super.attach(ui);
+                val = (int) (Config.alarmredvol * 1000);
+            }
+
+            public void changed() {
+                double vol = val / 1000.0;
+                Config.alarmredvol = vol;
+                Utils.setprefd("alarmredvol", vol);
+            }
+        });
+        appender.setVerticalMargin(0);
+        appender.add(new CheckBox("Alarm on new private/party chat") {
+            {
+                a = Config.chatalarm;
+            }
+
+            public void set(boolean val) {
+                Utils.setprefb("chatalarm", val);
+                Config.chatalarm = val;
+                a = val;
+            }
+        });
+        appender.setVerticalMargin(VERTICAL_AUDIO_MARGIN);
+        appender.add(new HSlider(200, 0, 1000, 0) {
+            protected void attach(UI ui) {
+                super.attach(ui);
+                val = (int) (Config.chatalarmvol * 1000);
+            }
+
+            public void changed() {
+                double vol = val / 1000.0;
+                Config.chatalarmvol = vol;
+                Utils.setprefd("chatalarmvol", vol);
+            }
+        });
+        appender.setVerticalMargin(0);
+        appender.add(new CheckBox("Alarm when curio finishes") {
+            {
+                a = Config.studyalarm;
+            }
+
+            public void set(boolean val) {
+                Utils.setprefb("studyalarm", val);
+                Config.studyalarm = val;
+                a = val;
+            }
+        });
+        appender.setVerticalMargin(VERTICAL_AUDIO_MARGIN);
+        appender.add(new HSlider(200, 0, 1000, 0) {
+            protected void attach(UI ui) {
+                super.attach(ui);
+                val = (int) (Config.studyalarmvol * 1000);
+            }
+
+            public void changed() {
+                double vol = val / 1000.0;
+                Config.studyalarmvol = vol;
+                Utils.setprefd("studyalarmvol", vol);
+            }
+        });
+        appender.setVerticalMargin(0);
+        appender.add(new CheckBox("Alarm on rare curios (bluebells, glimmers, ...)") {
+            {
+                a = Config.alarmonforagables;
+            }
+
+            public void set(boolean val) {
+                Utils.setprefb("alarmonforagables", val);
+                Config.alarmonforagables = val;
+                a = val;
+            }
+        });
+        appender.setVerticalMargin(VERTICAL_AUDIO_MARGIN);
+        appender.add(new HSlider(200, 0, 1000, 0) {
+            protected void attach(UI ui) {
+                super.attach(ui);
+                val = (int) (Config.alarmonforagablesvol * 1000);
+            }
+
+            public void changed() {
+                double vol = val / 1000.0;
+                Config.alarmonforagablesvol = vol;
+                Utils.setprefd("alarmonforagablesvol", vol);
+            }
+        });
+        appender.add(new CheckBox("Alarm on trolls") {
+            {
+                a = Config.alarmtroll;
+            }
+
+            public void set(boolean val) {
+                Utils.setprefb("alarmtroll", val);
+                Config.alarmtroll = val;
+                a = val;
+            }
+        });
+        appender.setVerticalMargin(VERTICAL_AUDIO_MARGIN);
+        appender.add(new HSlider(200, 0, 1000, 0) {
+            protected void attach(UI ui) {
+                super.attach(ui);
+                val = (int) (Config.alarmtrollvol * 1000);
+            }
+
+            public void changed() {
+                double vol = val / 1000.0;
+                Config.alarmtrollvol = vol;
+                Utils.setprefd("alarmtrollvol", vol);
+            }
+        });
+        appender.setVerticalMargin(0);
+        appender.add(new CheckBox("Alarm on battering rams and catapults") {
+            {
+                a = Config.alarmbram;
+            }
+
+            public void set(boolean val) {
+                Utils.setprefb("alarmbram", val);
+                Config.alarmbram = val;
+                a = val;
+            }
+        });
+        appender.setVerticalMargin(VERTICAL_AUDIO_MARGIN);
+        appender.add(new HSlider(200, 0, 1000, 0) {
+            protected void attach(UI ui) {
+                super.attach(ui);
+                val = (int) (Config.alarmbramvol * 1000);
+            }
+
+            public void changed() {
+                double vol = val / 1000.0;
+                Config.alarmbramvol = vol;
+                Utils.setprefd("alarmbramvol", vol);
+            }
+        });
+        appender.setVerticalMargin(0);
+        appender.add(new CheckBox("Alarm on bears & lynx") {
+            {
+                a = Config.alarmbears;
+            }
+
+            public void set(boolean val) {
+                Utils.setprefb("alarmbears", val);
+                Config.alarmbears = val;
+                a = val;
+            }
+        });
+        appender.setVerticalMargin(VERTICAL_AUDIO_MARGIN);
+        appender.add(new HSlider(200, 0, 1000, 0) {
+            protected void attach(UI ui) {
+                super.attach(ui);
+                val = (int) (Config.alarmbearsvol * 1000);
+            }
+
+            public void changed() {
+                double vol = val / 1000.0;
+                Config.alarmbearsvol = vol;
+                Utils.setprefd("alarmbearsvol", vol);
+            }
+        });
+        appender.setVerticalMargin(0);
+        appender.add(new CheckBox("Alarm on mammoths") {
+            {
+                a = Config.alarmmammoth;
+            }
+
+            public void set(boolean val) {
+                Utils.setprefb("alarmmammoth", val);
+                Config.alarmmammoth = val;
+                a = val;
+            }
+        });
+        appender.setVerticalMargin(VERTICAL_AUDIO_MARGIN);
+        appender.add(new HSlider(200, 0, 1000, 0) {
+            protected void attach(UI ui) {
+                super.attach(ui);
+                val = (int) (Config.alarmmammothvol * 1000);
+            }
+
+            public void changed() {
+                double vol = val / 1000.0;
+                Config.alarmmammothvol = vol;
+                Utils.setprefd("alarmmammothvol", vol);
+            }
+        });
+
+        soundalarms.add(new PButton(200, "Back", 27, main), new Coord(210, 360));
+        soundalarms.pack();
+    }
+
 
     private Dropbox<Locale> langDropdown() {
         List<Locale> languages = enumerateLanguages();
@@ -2243,7 +2341,7 @@ public class OptWnd extends Window {
     public void setMapSettings() {
         final String charname = gameui().chrid;
 
-        CheckListbox boulderlist = new CheckListbox(130, 18) {
+        CheckListbox boulderlist = new CheckListbox(140, 18) {
             @Override
             protected void itemclick(CheckListboxItem itm, int button) {
                 super.itemclick(itm, button);
@@ -2252,9 +2350,9 @@ public class OptWnd extends Window {
         };
         for (CheckListboxItem itm : Config.boulders.values())
             boulderlist.items.add(itm);
-        map.add(boulderlist, new Coord(180, 15));
+        map.add(boulderlist, new Coord(10, 15));
 
-        CheckListbox bushlist = new CheckListbox(130, 18) {
+        CheckListbox bushlist = new CheckListbox(140, 18) {
             @Override
             protected void itemclick(CheckListboxItem itm, int button) {
                 super.itemclick(itm, button);
@@ -2263,9 +2361,9 @@ public class OptWnd extends Window {
         };
         for (CheckListboxItem itm : Config.bushes.values())
             bushlist.items.add(itm);
-        map.add(bushlist, new Coord(325, 15));
+        map.add(bushlist, new Coord(165, 15));
 
-        CheckListbox treelist = new CheckListbox(130, 18) {
+        CheckListbox treelist = new CheckListbox(140, 18) {
             @Override
             protected void itemclick(CheckListboxItem itm, int button) {
                 super.itemclick(itm, button);
@@ -2274,9 +2372,9 @@ public class OptWnd extends Window {
         };
         for (CheckListboxItem itm : Config.trees.values())
             treelist.items.add(itm);
-        map.add(treelist, new Coord(470, 15));
+        map.add(treelist, new Coord(320, 15));
 
-        CheckListbox iconslist = new CheckListbox(130, 18) {
+        CheckListbox iconslist = new CheckListbox(140, 18) {
             @Override
             protected void itemclick(CheckListboxItem itm, int button) {
                 super.itemclick(itm, button);
@@ -2285,7 +2383,7 @@ public class OptWnd extends Window {
         };
         for (CheckListboxItem itm : Config.icons.values())
             iconslist.items.add(itm);
-        map.add(iconslist, new Coord(615, 15));
+        map.add(iconslist, new Coord(475, 15));
 
 
         map.pack();

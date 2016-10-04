@@ -20,14 +20,12 @@ public class QuickSlotsWdg extends Widget implements DTarget {
             WItem left = e.quickslots[6];
             if (left != null) {
                 drawitem(g.reclipl(lc, g.sz), left);
-                if (Config.showcontentsbars)
-                    drawamountbar(g, left.item, 44 + 6);
+                drawamountbar(g, left.item, 44 + 6);
             }
             WItem right = e.quickslots[7];
             if (right != null) {
                 drawitem(g.reclipl(rc, g.sz), right);
-                if (Config.showcontentsbars)
-                    drawamountbar(g, right.item, 0);
+                drawamountbar(g, right.item, 0);
             }
         }
     }

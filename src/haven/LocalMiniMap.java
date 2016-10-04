@@ -62,6 +62,7 @@ public class LocalMiniMap extends Widget {
 	private static final Resource alarmplayersfx = Resource.local().loadwait("sfx/alarmplayer");
     private static final Resource foragablesfx = Resource.local().loadwait("sfx/awwyeah");
     private static final Resource bearsfx = Resource.local().loadwait("sfx/bear");
+    private static final Resource lynxfx = Resource.local().loadwait("sfx/lynx");
     private static final Resource trollsfx = Resource.local().loadwait("sfx/troll");
     private static final Resource mammothsfx = Resource.local().loadwait("sfx/mammoth");
     private static final Resource doomedsfx = Resource.local().loadwait("sfx/doomed");
@@ -298,7 +299,7 @@ public class LocalMiniMap extends Widget {
                     if (Config.alarmonforagables && Config.foragables.contains(res.name)) {
                         sgobs.add(gob.id);
                         Audio.play(foragablesfx, Config.alarmonforagablesvol);
-                    } else if (Config.alarmbears && (res.name.equals("gfx/kritter/lynx/lynx") || res.name.equals("gfx/kritter/bear/bear"))) {
+                    } else if (Config.alarmbears && res.name.equals("gfx/kritter/bear/bear")) {
                         sgobs.add(gob.id);
                         GAttrib drw = gob.getattr(Drawable.class);
                         if (drw != null && drw instanceof Composite) {
@@ -313,6 +314,23 @@ public class LocalMiniMap extends Widget {
                                 }
                             } else {
                                 Audio.play(bearsfx, Config.alarmbearsvol);
+                            }
+                        }
+                    } else if (Config.alarmbears && res.name.equals("gfx/kritter/lynx/lynx")) {
+                        sgobs.add(gob.id);
+                        GAttrib drw = gob.getattr(Drawable.class);
+                        if (drw != null && drw instanceof Composite) {
+                            Composite cpst = (Composite) drw;
+                            if (cpst.nposes != null && cpst.nposes.size() > 0) {
+                                for (ResData resdata : cpst.nposes) {
+                                    Resource posres = resdata.res.get();
+                                    if (posres == null || !posres.name.endsWith("/knock")) {
+                                        Audio.play(lynxfx, Config.alarmbearsvol);
+                                        break;
+                                    }
+                                }
+                            } else {
+                                Audio.play(lynxfx, Config.alarmbearsvol);
                             }
                         }
                     } else if (res.name.equals("gfx/kritter/troll/troll")) {

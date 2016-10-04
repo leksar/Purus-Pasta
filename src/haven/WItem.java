@@ -305,11 +305,9 @@ public class WItem extends Widget implements DTarget {
                 g.image(item.metertex, Coord.z);
             }
 
-            if (Config.showcontentsbars) {
-                ItemInfo.Contents cnt = item.getcontents();
-                if (cnt != null && cnt.content > 0)
-                    drawamountbar(g, cnt.content, cnt.isseeds);
-            }
+            ItemInfo.Contents cnt = item.getcontents();
+            if (cnt != null && cnt.content > 0)
+                drawamountbar(g, cnt.content, cnt.isseeds);
 
             if (Config.showwearbars) {
                 try {

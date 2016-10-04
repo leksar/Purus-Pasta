@@ -1893,6 +1893,45 @@ public class Resource implements Serializable {
                 if (ll != null)
                     ll = String.format(ll, key.substring(0, key.length() - spar.length()));
             }
+            // quests
+            final String qTell = " of your exploits";
+            if (key.endsWith(qTell)) {
+                ll = map.get("Tell %s of your exploits");
+                if (ll != null) {
+                    int telllen = "Tell ".length();
+                    ll = String.format(ll, key.substring(telllen, key.indexOf(' ', telllen)));
+                }
+            }
+            final String qLaugh = "Go laugh at ";
+            if (key.startsWith(qLaugh)) {
+                ll = map.get("Go laugh at %s");
+                if (ll != null)
+                    ll = String.format(ll, key.substring(qLaugh.length()));
+            }
+            final String qRage = "Go rage at ";
+            if (key.startsWith(qRage)) {
+                ll = map.get("Go rage at %s");
+                if (ll != null)
+                    ll = String.format(ll, key.substring(qRage.length()));
+            }
+            final String qWave = "Go wave to ";
+            if (key.startsWith(qWave)) {
+                ll = map.get("Go wave to %s");
+                if (ll != null)
+                    ll = String.format(ll, key.substring(qWave.length()));
+            }
+            final String qGreet = "Greet ";
+            if (key.startsWith(qGreet)) {
+                ll = map.get("Greet %s");
+                if (ll != null)
+                    ll = String.format(ll, key.substring(qGreet.length()));
+            }
+            final String qVisit = "Visit ";
+            if (key.startsWith(qVisit)) {
+                ll = map.get("Visit %s");
+                if (ll != null)
+                    ll = String.format(ll, key.substring(qVisit.length()));
+            }
         } else if (ll == null && bundle == BUNDLE_FLOWER) {
             // gild
             if (key.startsWith("Gild (")) {

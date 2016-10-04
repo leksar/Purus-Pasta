@@ -33,6 +33,10 @@ public class Bufflist extends Widget {
     public final static Resource bufftrack = Resource.local().loadwait("gfx/hud/buffs/toggles/tracking");
     public final static Resource buffcrime = Resource.local().loadwait("gfx/hud/buffs/toggles/crime");
 
+    public Bufflist() {
+        super(new Coord(0, Buff.cframe.sz().y * 2 + margin));
+    }
+
     private void arrange(Widget imm) {
         int i = 0;
         Coord br = new Coord();

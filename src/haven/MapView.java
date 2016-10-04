@@ -80,12 +80,12 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
     private boolean showgrid;
     private TileOutline gridol;
     private Coord lasttc = Coord.z;
-    private static final Gob.Overlay rovlsupport = new Gob.Overlay(new BPRadSprite(100.0F, 0));
-    private static final Gob.Overlay rovlcolumn = new Gob.Overlay(new BPRadSprite(125.0F, 0));
-    private static final Gob.Overlay rovltrough = new Gob.Overlay(new BPRadSprite(200.0F, -10.0F));
-    private static final Gob.Overlay rovlbeehive = new Gob.Overlay(new BPRadSprite(151.0F, -10.0F));
-    private static final Gob.Overlay animalradius = new Gob.Overlay(new BPRadSprite(100.0F, -10.0F));
-    private static final Gob.Overlay bramradius = new Gob.Overlay(new BPRadSprite(125.0F, -10.0F));
+    private static final Gob.Overlay animalradius = new Gob.Overlay(new BPRadSprite(100.0F, -10.0F, BPRadSprite.smatDanger));
+    private static final Gob.Overlay bramradius = new Gob.Overlay(new BPRadSprite(125.0F, -10.0F, BPRadSprite.smatDanger));
+    private static final Gob.Overlay rovlsupport = new Gob.Overlay(new BPRadSprite(100.0F, 0, BPRadSprite.smatDanger));
+    private static final Gob.Overlay rovlcolumn = new Gob.Overlay(new BPRadSprite(125.0F, 0, BPRadSprite.smatDanger));
+    private static final Gob.Overlay rovltrough = new Gob.Overlay(new BPRadSprite(200.0F, -10.0F, BPRadSprite.smatTrough));
+    private static final Gob.Overlay rovlbeehive = new Gob.Overlay(new BPRadSprite(151.0F, -10.0F, BPRadSprite.smatBeehive));
     private long lastmmhittest = System.currentTimeMillis();
     private Coord lasthittestc = Coord.z;
     private final PartyHighlight partyHighlight;
@@ -1752,6 +1752,12 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
 
         protected void hit(Coord pc, Coord mc, ClickInfo inf) {
             Resource curs = ui.root.getcurs(c);
+
+            // reset alt so we could walk with alt+lmb while having item on the cursor
+            int modflags = ui.modflags();
+            if (gameui().vhand != null && clickb == 1)
+                modflags = modflags & ~4;
+
             if (inf == null) {
                 if (Config.tilecenter && clickb == 3) {
                     mc.x = mc.x / 11 * 11 + 5;
@@ -1761,19 +1767,21 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
                 if (Config.pf && clickb == 1 && curs != null && !curs.name.equals("gfx/hud/curs/study")) {
                     pfLeftClick(mc, null);
                 } else {
-                    wdgmsg("click", pc, mc, clickb, ui.modflags());
+                    wdgmsg("click", pc, mc, clickb, modflags);
                 }
             } else {
                 if (ui.modmeta && clickb == 1) {
                     if (gobselcb != null)
                         gobselcb.gobselect(inf.gob);
 
-                    for (Widget w = gameui().chat.lchild; w != null; w = w.prev) {
-                        if (w instanceof ChatUI.MultiChat) {
-                            ChatUI.MultiChat chat = (ChatUI.MultiChat) w;
-                            if (chat.name().equals(Resource.getLocString(Resource.BUNDLE_LABEL, "Area Chat"))) {
-                                chat.send(ChatUI.CMD_PREFIX_HLIGHT + inf.gob.id);
-                                break;
+                    if (gameui().vhand == null) {   // do not highlight when walking with an item
+                        for (Widget w = gameui().chat.lchild; w != null; w = w.prev) {
+                            if (w instanceof ChatUI.MultiChat) {
+                                ChatUI.MultiChat chat = (ChatUI.MultiChat) w;
+                                if (chat.name().equals(Resource.getLocString(Resource.BUNDLE_LABEL, "Area Chat"))) {
+                                    chat.send(ChatUI.CMD_PREFIX_HLIGHT + inf.gob.id);
+                                    break;
+                                }
                             }
                         }
                     }
@@ -1782,10 +1790,10 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
                     if (Config.pf && curs != null && !curs.name.equals("gfx/hud/curs/study")) {
                         pfRightClick(inf.gob, getid(inf.r), clickb, 0, null);
                     } else {
-                        wdgmsg("click", pc, mc, clickb, ui.modflags(), 0, (int) inf.gob.id, inf.gob.rc, 0, getid(inf.r));
+                        wdgmsg("click", pc, mc, clickb, modflags, 0, (int) inf.gob.id, inf.gob.rc, 0, getid(inf.r));
                     }
                 } else {
-                    wdgmsg("click", pc, mc, clickb, ui.modflags(), 1, (int) inf.gob.id, inf.gob.rc, inf.ol.id, getid(inf.r));
+                    wdgmsg("click", pc, mc, clickb, modflags, 1, (int) inf.gob.id, inf.gob.rc, inf.ol.id, getid(inf.r));
                 }
             }
         }
