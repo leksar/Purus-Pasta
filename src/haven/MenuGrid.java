@@ -412,8 +412,57 @@ public class MenuGrid extends Widget {
             } else {
                 if (ad.length > 0 && (ad[0].equals("craft") || ad[0].equals("bp")))
                     gameui().histbelt.push(r);
-                wdgmsg("act", (Object[]) ad);
+
+                if (Config.confirmmagic && r.res.get().name.startsWith("paginae/seid/")) {
+                    Window confirmwnd = new Window(new Coord(225, 100), "Confirm") {
+                        @Override
+                        public void wdgmsg(Widget sender, String msg, Object... args) {
+                            if (sender == cbtn)
+                                reqdestroy();
+                            else
+                                super.wdgmsg(sender, msg, args);
+                        }
+
+                        @Override
+                        public boolean type(char key, KeyEvent ev) {
+                            if (key == 27) {
+                                reqdestroy();
+                                return true;
+                            }
+                            return super.type(key, ev);
+                        }
+                    };
+
+                    confirmwnd.add(new Label(Resource.getLocString(Resource.BUNDLE_LABEL, "Using magic costs experience points. Are you sure you want to proceed?")),
+                            new Coord(10, 20));
+                    confirmwnd.pack();
+
+                    MenuGrid mg = this;
+                    Button yesbtn = new Button(70, "Yes") {
+                        @Override
+                        public void click() {
+                            mg.wdgmsg("act", (Object[]) ad);
+                            parent.reqdestroy();
+                        }
+                    };
+                    confirmwnd.add(yesbtn, new Coord(confirmwnd.sz.x / 2 - 60 - yesbtn.sz.x, 60));
+                    Button nobtn = new Button(70, "No") {
+                        @Override
+                        public void click() {
+                            parent.reqdestroy();
+                        }
+                    };
+                    confirmwnd.add(nobtn, new Coord(confirmwnd.sz.x / 2 + 20, 60));
+                    confirmwnd.pack();
+
+                    GameUI gui = gameui();
+                    gui.add(confirmwnd, new Coord(gui.sz.x / 2 - confirmwnd.sz.x / 2, gui.sz.y / 2 - 200));
+                    confirmwnd.show();
+                } else {
+                    wdgmsg("act", (Object[]) ad);
+                }
             }
+
             if (reset)
                 this.cur = null;
             curoff = 0;

@@ -153,7 +153,7 @@ public class Config {
     public static boolean autokill = Utils.getprefb("autokill", false);
     public static boolean autoslice = Utils.getprefb("autoslice", false);
     public static boolean runonlogin = Utils.getprefb("runonlogin", false);
-    public static Coord chatsz = Utils.getprefc("chatsz", Coord.z);
+    public static Coord chatsz = Utils.getprefc("chatsz", new Coord(683, 111));
     public static boolean alternmapctrls = Utils.getprefb("alternmapctrls", true);
     public static boolean autostudy = Utils.getprefb("autostudy", true);
     public static boolean showfillamount = Utils.getprefb("showfillamount", false);
@@ -207,6 +207,8 @@ public class Config {
     public static boolean autologout =  Utils.getprefb("autologout", false);
     public static int combatkeys =  Utils.getprefi("combatkeys", 0);
     public static boolean logcombatactions =  Utils.getprefb("logcombatactions", false);
+    public static boolean autopickmussels =  Utils.getprefb("autopickmussels", false);
+    public static boolean confirmmagic =  Utils.getprefb("confirmmagic", true);
 
     public static int avgmode = Utils.getprefi("avgmode", 0);
     private final static Map<String, Integer> defFontSzGlobal =  new HashMap<String, Integer>(3) {{

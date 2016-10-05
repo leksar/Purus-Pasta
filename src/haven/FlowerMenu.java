@@ -67,13 +67,6 @@ public class FlowerMenu extends Widget {
 
         public void move(double a, double r) {
             this.c = Coord.sc(a, r).sub(sz.div(2));
-
-            // raise/lower petals at 90 degrees as to not overlap those at 45
-            if (num == 0)
-                this.c.y -= 12;
-            else if (num == 4)
-                this.c.y += 12;
-
             // adjust horizontal position for potentially parallel petals to avoid overlap
             if (r == rad) {
                 for (Petal p : opts) {
@@ -207,9 +200,9 @@ public class FlowerMenu extends Widget {
 
             // slightly adjust 45 degrees angles
             if (ta == PI/4 || ta == -3*PI/4)
-                ta -= 0.1;
+                ta -= 0.25;
             if (ta == -PI/4 || ta == -5*PI/4)
-                ta += 0.1;
+                ta += 0.25;
 
             opts[i].ta = ta;
         }

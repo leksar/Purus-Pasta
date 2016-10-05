@@ -1637,6 +1637,17 @@ public class OptWnd extends Window {
                 }
             }
         });
+        appender.add(new CheckBox("Display confirmation dialog when using magic") {
+            {
+                a = Config.confirmmagic;
+            }
+
+            public void set(boolean val) {
+                Utils.setprefb("confirmmagic", val);
+                Config.confirmmagic = val;
+                a = val;
+            }
+        });
         //appender.addRow(new Label("Interface font size (req. restart):"), makeFontSizeGlobalDropdown());
         //appender.addRow(new Label("Button font size (req. restart):"), makeFontSizeButtonDropdown());
         //appender.addRow(new Label("Window title font size (req. restart):"), makeFontSizeWndCapDropdown());
@@ -1839,6 +1850,18 @@ public class OptWnd extends Window {
                 a = val;
             }
         });
+        appender.add(new CheckBox("Automatically pick all clustered mussels (auto 'Pick' needs to be enabled)") {
+            {
+                a = Config.autopickmussels;
+            }
+
+            public void set(boolean val) {
+                Utils.setprefb("autopickmussels", val);
+                Config.autopickmussels = val;
+                a = val;
+            }
+        });
+
         flowermenus.add(new PButton(200, "Back", 27, main), new Coord(210, 360));
         flowermenus.pack();
     }
