@@ -357,9 +357,10 @@ public class LocalMiniMap extends Widget {
                                 Audio.play(mammothsfx, Config.alarmmammothvol);
                             }
                         }
-                    } else if (Config.alarmbram && (res.name.equals("gfx/terobjs/vehicle/bram") || res.name.equals("gfx/terobjs/vehicle/catapult"))) {
+                    } else if (Config.alarmbram && (res.name.equals("gfx/terobjs/vehicle/catapult"))) {
                         sgobs.add(gob.id);
                         Audio.play(doomedsfx, Config.alarmbramvol);
+                        gameui().msg("Catapult detected");
                     }
                     if (Config.alarmram) {
                     	 try {
@@ -367,11 +368,13 @@ public class LocalMiniMap extends Widget {
                                  if (!sgobs.contains(gob.id)) {
                                      sgobs.add(gob.id);
                                      Audio.play(ramalarmsfx, Config.alarmbramvol);
+                                     gameui().msg("Battering ram detected");
                                  }
                              } else if (res!=null && "wreckingball".equals(res.basename())) {
                                  if (!sgobs.contains(gob.id)) {
                                      sgobs.add(gob.id);
                                      Audio.play(wreckingarmsfx, Config.alarmbramvol);
+                                     gameui().msg("Wrecking ball detected");
                                  }
                              }
                     } 
