@@ -198,6 +198,7 @@ public class UI {
                                 int count = Integer.parseInt(dtext());
                                 for (int i = 0; i < count; i++)
                                     wdg.wdgmsg("xfer");
+                                return true;
                             } catch (NumberFormatException e) {
                             }
                         }
