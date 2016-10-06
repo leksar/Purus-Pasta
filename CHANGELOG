@@ -1,3 +1,27 @@
+Version 1.37.0
+    New:
+        * Automatic picking of clustered mussels.
+        * Confirmation dialog for magic actions.
+        * Walk while having an item on the cursor with alt+lmb.
+        * Allow taking specific number of items from stockpiles.
+
+    Fixed:
+        * Aiming vectors not working on ATI/AMD GPUs.
+        * Overlapping flower menus (e.g. cross roads).
+        * Using branches with steel refueler.
+        * Incoming party messages not being saved to file (log chats option).
+        * Buff tooltips not working when pointing at the lower half of buff icons.
+        * Combat moves were mistakenly placed under maneuvers filters and vise versa.
+
+    Misc:
+        * Chinese translation updated by raislin_mage.
+        * Russian translation updated by zebratul.
+        * Settings window was reorganized.
+        * Changed colors of beehive and trough radiuses.
+        * Large window close button is now embedded into the client.
+        * Different sound for lynx alarm.
+
+
 Version 1.36.4
     Fixed:
         * ctrl+tab for switching opponents not working on Windows.

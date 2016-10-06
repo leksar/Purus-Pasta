@@ -361,6 +361,7 @@ public class Config {
         put("cart", new CheckListboxItem("Cart"));
         put("wball", new CheckListboxItem("Wrecking Ball"));
         put("windweed", new CheckListboxItem("Wild Windsown Weed"));
+        put("mussels", new CheckListboxItem("Mussels"));
     }};
 
     public final static Map<String, Tex> additonalicons = new HashMap<String, Tex>(13) {{

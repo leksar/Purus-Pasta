@@ -208,6 +208,10 @@ public abstract class GLState {
         public String toString() {
             return("Slot<" + scl.getName() + ">");
         }
+
+        public static int num() {
+            return(slotnum);
+        }
     }
 
     public static class Buffer {

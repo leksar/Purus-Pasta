@@ -1088,10 +1088,11 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
                 clickbuf.dispose();
                 clickbuf = null;
             }
-            clickbuf = new TexE(sz, GL.GL_RGB, GL.GL_RGB, GL.GL_UNSIGNED_BYTE);
+            clickbuf = new TexE(sz, GL.GL_RGBA, GL.GL_RGBA, GL.GL_UNSIGNED_BYTE);
             clickfb = new GLFrameBuffer(clickbuf, null);
         }
         clickfb.prep(ret);
+        new States.Blending(GL.GL_ONE, GL.GL_ZERO).prep(ret);
         return (ret);
     }
 
@@ -1193,16 +1194,13 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
             int dfl = 0;
 
             {
-		Maplist rl = new Maplist(g.gc);
+                Maplist rl = new Maplist(g.gc);
                 rl.setup(map, clickbasic(g));
                 rl.fin();
 
                 rl.render(g);
                 rl.get(g, c, new Callback<MapMesh>() {
-                    public void done(MapMesh hit) {
-                        cut = hit;
-                        ckdone(1);
-                    }
+                    public void done(MapMesh hit) {cut = hit; ckdone(1);}
                 });
                 // rl.limit = hit;
 
@@ -1211,27 +1209,16 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
                 g.getpixel(c, new Callback<Color>() {
                     public void done(Color col) {
                         tile = new Coord(col.getRed() - 1, col.getGreen() - 1);
+                        pixel = new Coord((col.getBlue() * tilesz.x) / 255, (col.getAlpha() * tilesz.y) / 255);
                         ckdone(2);
-                    }
-                });
-
-                rl.mode = 2;
-                rl.render(g);
-                g.getpixel(c, new Callback<Color>() {
-                    public void done(Color col) {
-                        if (col.getBlue() != 0)
-                            pixel = null;
-                        else
-                            pixel = new Coord((col.getRed() * tilesz.x) / 255, (col.getGreen() * tilesz.y) / 255);
-                        ckdone(4);
                     }
                 });
             }
 
             void ckdone(int fl) {
-                synchronized (this) {
-                    if ((dfl |= fl) == 7) {
-                        if ((cut == null) || !tile.isect(Coord.z, cut.sz))
+                synchronized(this) {
+                    if((dfl |= fl) == 3) {
+                        if((cut == null) || !tile.isect(Coord.z, cut.sz))
                             cb.done(null);
                         else
                             cb.done(cut.ul.add(tile).mul(tilesz).add(pixel));

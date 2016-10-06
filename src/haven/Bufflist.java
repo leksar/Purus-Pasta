@@ -53,7 +53,7 @@ public class Bufflist extends Widget {
             if (c.x > br.x) br.x = c.x;
             if (c.y > br.y) br.y = c.y;
         }
-        resize(br.add(Buff.cframe.sz()));
+        resize(new Coord(br.x + Buff.cframe.sz().x, Buff.cframe.sz().y * 2 + margin));
     }
 
     public void addchild(Widget child, Object... args) {
