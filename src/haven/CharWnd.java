@@ -967,7 +967,7 @@ public class CharWnd extends Window {
         private Quest(int id, Indir<Resource> res, String title, int done, int mtime) {
             this.id = id;
             this.res = res;
-            this.title = title;
+            this.title = Resource.getLocString(Resource.BUNDLE_LABEL, title);
             this.done = done;
             this.mtime = mtime;
         }
@@ -1060,7 +1060,7 @@ public class CharWnd extends Window {
                 super(Coord.z);
                 this.id = id;
                 this.res = res;
-                this.title = title;
+                this.title = Resource.getLocString(Resource.BUNDLE_LABEL, title);
             }
 
             public String title() {
