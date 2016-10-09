@@ -166,7 +166,7 @@ public class UI {
 
             if (type.equals("sm")) {
                 synchronized (fmAutoSelName) {
-                    if (fmAutoSelName != null && System.currentTimeMillis() - fmAutoTime < FM_AUTO_TIMEOUT) {
+                    if (System.currentTimeMillis() - fmAutoTime < FM_AUTO_TIMEOUT) {
                         Widget w = new WidgetDummy();
                         pwdg.addchild(w, pargs);
                         bind(w, id);

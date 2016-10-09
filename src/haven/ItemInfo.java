@@ -35,6 +35,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import haven.res.ui.tt.ArmorFactory;
+import haven.res.ui.tt.WearFactory;
+
 public abstract class ItemInfo {
     public final Owner owner;
 
@@ -323,7 +326,17 @@ public abstract class ItemInfo {
                 } else {
                     throw (new ClassCastException("Unexpected info specification " + a[0].getClass()));
                 }
-                InfoFactory f = ttres.getcode(InfoFactory.class, true);
+
+                InfoFactory f;
+                // custom armor and wear classes are used because server returns identically named class "Wear"
+                // for both of those.
+                if (ttres.name.equals("ui/tt/armor"))
+                    f = new ArmorFactory();
+                else if (ttres.name.equals("ui/tt/wear"))
+                    f = new WearFactory();
+                else
+                    f = ttres.getcode(InfoFactory.class, true);
+
                 ItemInfo inf = f.build(owner, a);
                 if (inf != null)
                     ret.add(inf);

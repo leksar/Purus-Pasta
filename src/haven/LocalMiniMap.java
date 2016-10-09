@@ -190,7 +190,7 @@ public class LocalMiniMap extends Widget {
                         }
 
                         CheckListboxItem itm = Config.icons.get(res.basename());
-                        if (itm == null || itm != null && !itm.selected) {
+                        if (itm == null || !itm.selected) {
                             Coord gc = p2c(gob.rc);
                             Tex tex = icon != null ? icon.tex() : Config.additonalicons.get(res.name);
                             g.image(tex, gc.sub(tex.sz().div(2)).add(delta));
@@ -400,7 +400,7 @@ public class LocalMiniMap extends Widget {
                         if (c.isect(gc.sub(sz.div(2)), sz)) {
                             Resource res = icon.res.get();
                             CheckListboxItem itm = Config.icons.get(res.basename());
-                            if (itm == null || itm != null && !itm.selected)
+                            if (itm == null || !itm.selected)
                                 return gob;
                         }
                     } else { // custom icons
@@ -411,7 +411,7 @@ public class LocalMiniMap extends Widget {
                             Resource res = gob.getres();
                             if (res != null && Config.additonalicons.containsKey(res.name)) {
                                 CheckListboxItem itm = Config.icons.get(res.basename());
-                                if (itm == null || itm != null && !itm.selected)
+                                if (itm == null || !itm.selected)
                                     return gob;
                             }
                         }

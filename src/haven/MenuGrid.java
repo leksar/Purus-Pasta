@@ -65,8 +65,7 @@ import purus.farmer.Farmer;
 
 
 public class MenuGrid extends Widget {
-    public final static Tex bg = Resource.loadtex("gfx/hud/invsq");
-    public final static Coord bgsz = bg.sz().add(-1, -1);
+    public final static Coord bgsz = Inventory.invsq.sz().add(-1, -1);
     public final static Pagina next = new Glob.Pagina(Resource.local().loadwait("gfx/hud/sc-next").indir());
     public final static Pagina bk = new Glob.Pagina(Resource.local().loadwait("gfx/hud/sc-back").indir());
     public final static RichText.Foundry ttfnd = new RichText.Foundry(TextAttribute.FAMILY, "SansSerif", TextAttribute.SIZE, Config.fontsizeglobal);
@@ -248,7 +247,7 @@ public class MenuGrid extends Widget {
         for (int y = 0; y < gsz.y; y++) {
             for (int x = 0; x < gsz.x; x++) {
                 Coord p = bgsz.mul(new Coord(x, y));
-                g.image(bg, p);
+                g.image(Inventory.invsq, p);
                 Pagina btn = layout[x][y];
                 if (btn != null) {
                     Tex btex = btn.img.tex();
@@ -259,7 +258,7 @@ public class MenuGrid extends Widget {
                             m += (1 - m) * (double) (now - btn.gettime) / (double) btn.dtime;
                         m = Utils.clip(m, 0, 1);
                         g.chcolor(255, 255, 255, 128);
-			g.fellipse(p.add(bgsz.div(2)), bgsz.div(2), Math.PI / 2, ((Math.PI / 2) + (Math.PI * 2 * m)));
+			            g.fellipse(p.add(bgsz.div(2)), bgsz.div(2), Math.PI / 2, ((Math.PI / 2) + (Math.PI * 2 * m)));
                         g.chcolor();
                     }
                     if (btn.newp != 0) {

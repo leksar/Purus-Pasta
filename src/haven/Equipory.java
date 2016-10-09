@@ -34,6 +34,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import haven.res.ui.tt.Armor;
+
 public class Equipory extends Widget implements DTarget {
     private static final Tex bg = Resource.loadtex("gfx/hud/equip/bg");
     private static final int rx = 34 + bg.sz().x;
@@ -196,16 +198,11 @@ public class Equipory extends Widget implements DTarget {
                     WItem itm = quickslots[i];
                     if (itm != null) {
                         for (ItemInfo info : itm.item.info()) {
-                            if (info.getClass().getSimpleName().equals("Wear")) {
-                                // This will always generate exception since we will get "incorrect" Wear class before
-                                // the correct one. See comment in WItem showwearbars handling for explanation.
-                                // But since it only happens when items are added/removed it's not a big deal.
-                                try {
-                                    h += (int) info.getClass().getDeclaredField("hard").get(info);
-                                    s += (int) info.getClass().getDeclaredField("soft").get(info);
-                                    t = h + s;
-                                } catch (Exception ex) { // ignore everything
-                                }
+                            if (info instanceof Armor) {
+                                h += ((Armor)info).hard;
+                                s += ((Armor)info).soft;
+                                t = h + s;
+                                break;
                             }
                         }
                     }

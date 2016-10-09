@@ -1,3 +1,11 @@
+Version 1.38.0
+    New:
+        * Alternative combat UI.
+
+    Fixed:
+        * Fixed circular progress indicators.
+
+
 Version 1.37.0
     New:
         * Automatic picking of clustered mussels.

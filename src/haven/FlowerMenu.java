@@ -32,7 +32,6 @@ import java.awt.Color;
 
 public class FlowerMenu extends Widget {
     public static final Color pink = new Color(255, 0, 128);
-    public static final Color ptc = Color.YELLOW;
     public static final Text.Foundry ptf = new Text.Foundry(Text.dfont, Config.fontsizeglobal * 12 / 11);
     public static final IBox pbox = Window.wbox;
     public static final Tex pbg = Window.bg;
@@ -61,7 +60,7 @@ public class FlowerMenu extends Widget {
         public Petal(String name) {
             super(Coord.z);
             this.name = name;
-            text = ptf.render(name, ptc);
+            text = ptf.render(Resource.getLocString(Resource.BUNDLE_FLOWER, name), name.startsWith("Travel ") ? Color.GREEN : Color.YELLOW);
             resize(text.sz().x + 25, ph);
         }
 
@@ -105,12 +104,13 @@ public class FlowerMenu extends Widget {
             for (Petal p : opts) {
                 p.move(p.ta + ((1 - s) * PI), p.rad * s);
                 p.a = s;
-                if (Config.autopick && s == 1.0 && p.name.equals(Resource.getLocString(Resource.BUNDLE_FLOWER, "Pick")) ||
-                        (Config.autoharvest && s == 1.0 && p.name.equals(Resource.getLocString(Resource.BUNDLE_FLOWER, "Harvest"))) ||
-                        (Config.autoeat && s == 1.0 && p.name.equals(Resource.getLocString(Resource.BUNDLE_FLOWER, "Eat"))) ||
-                        (Config.autosplit && s == 1.0 && p.name.equals(Resource.getLocString(Resource.BUNDLE_FLOWER, "Split"))) ||
-                        (Config.autokill && s == 1.0 && p.name.equals(Resource.getLocString(Resource.BUNDLE_FLOWER, "Kill"))) ||
-                        (Config.autoslice && s == 1.0 && p.name.equals(Resource.getLocString(Resource.BUNDLE_FLOWER, "Slice")))) {
+                if (s == 1.0 &&
+                        (Config.autopick && p.name.equals("Pick") ||
+                        Config.autoharvest && p.name.equals("Harvest") ||
+                        Config.autoeat && p.name.equals("Eat") ||
+                        Config.autosplit && p.name.equals("Split") ||
+                        Config.autokill && p.name.equals("Kill") ||
+                        Config.autoslice && p.name.equals("Slice"))) {
                     choose(p);
                     break;
                 }
@@ -212,8 +212,7 @@ public class FlowerMenu extends Widget {
         super(Coord.z);
         opts = new Petal[options.length];
         for (int i = 0; i < options.length; i++) {
-            String name = options[i];
-            add(opts[i] = new Petal(Resource.getLocString(Resource.BUNDLE_FLOWER, name)));
+            add(opts[i] = new Petal(options[i]));
             opts[i].num = i;
         }
     }

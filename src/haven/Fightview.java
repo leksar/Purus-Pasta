@@ -105,7 +105,7 @@ public class Fightview extends Widget {
                         gameui().syslog.append("Combat: WARNING! tooltip is missing for " + res.name + ". Notify Jorb/Loftar about this.", combatLogOpClr);
                         return;
                     }
-                    gameui().syslog.append(String.format("Combat: %d - %s, ip %d - %d", gobid, tt.t, ip, oip), combatLogOpClr);
+                    gameui().syslog.append(String.format("%d: %s, ip %d - %d", gobid, tt.t, ip, oip), combatLogOpClr);
                 } catch (Loading l) {
                 }
             }
@@ -124,7 +124,7 @@ public class Fightview extends Widget {
                     return;
                 }
                 String cd = Utils.fmt1DecPlace(atkct - System.currentTimeMillis() / 1000.0);
-                gameui().syslog.append(String.format("Combat: me - %s, ip %d - %d, cd %ss", tt.t, current.ip, current.oip, cd), combatLogMeClr);
+                gameui().syslog.append(String.format("me: %s, ip %d - %d, cd %ss", tt.t, current.ip, current.oip, cd), combatLogMeClr);
             } catch (Loading l) {
             }
         }

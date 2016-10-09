@@ -202,13 +202,14 @@ public class Config {
     public static boolean instantflowermenu =  Utils.getprefb("instantflowermenu", false);
     public static double sfxwhipvol = Utils.getprefd("sfxwhipvol", 1.0);
     public static boolean showarchvector =  Utils.getprefb("showarchvector", false);
-    public static boolean showcddelta =  Utils.getprefb("showcddelta", false);
+    //public static boolean showcddelta =  Utils.getprefb("showcddelta", false);
     public static boolean disabledrinkhotkey =  Utils.getprefb("disabledrinkhotkey", false);
     public static boolean autologout =  Utils.getprefb("autologout", false);
     public static int combatkeys =  Utils.getprefi("combatkeys", 0);
     public static boolean logcombatactions =  Utils.getprefb("logcombatactions", false);
     public static boolean autopickmussels =  Utils.getprefb("autopickmussels", false);
     public static boolean confirmmagic =  Utils.getprefb("confirmmagic", true);
+    public static boolean altfightui =  Utils.getprefb("altfightui", true);
 
     public static int avgmode = Utils.getprefi("avgmode", 0);
     private final static Map<String, Integer> defFontSzGlobal =  new HashMap<String, Integer>(3) {{

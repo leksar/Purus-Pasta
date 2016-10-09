@@ -1197,7 +1197,7 @@ public class OptWnd extends Window {
                 a = val;
             }
         });
-        appender.add(new CheckBox("Show attack cooldown delta") {
+        /*appender.add(new CheckBox("Show attack cooldown delta") {
             {
                 a = Config.showcddelta;
             }
@@ -1207,7 +1207,7 @@ public class OptWnd extends Window {
                 Config.showcddelta = val;
                 a = val;
             }
-        });
+        });*/
         appender.add(new CheckBox("Log combat actions to system log") {
             {
                 a = Config.logcombatactions;
@@ -1216,6 +1216,17 @@ public class OptWnd extends Window {
             public void set(boolean val) {
                 Utils.setprefb("logcombatactions", val);
                 Config.logcombatactions = val;
+                a = val;
+            }
+        });
+        appender.add(new CheckBox("Alternative combat UI") {
+            {
+                a = Config.altfightui;
+            }
+
+            public void set(boolean val) {
+                Utils.setprefb("altfightui", val);
+                Config.altfightui = val;
                 a = val;
             }
         });

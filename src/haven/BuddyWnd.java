@@ -280,17 +280,16 @@ public class BuddyWnd extends Widget implements Iterable<BuddyWnd.Buddy> {
 
                     public void choose(Petal opt) {
                         if (opt != null) {
-                            if (opt.name.equals(Resource.getLocString(Resource.BUNDLE_FLOWER, "End kinship"))) {
+                            if (opt.name.equals("End kinship"))
                                 b.endkin();
-                            } else if (opt.name.equals(Resource.getLocString(Resource.BUNDLE_FLOWER, "Chat"))) {
+                            else if (opt.name.equals("Chat"))
                                 b.chat();
-                            } else if (opt.name.equals(Resource.getLocString(Resource.BUNDLE_FLOWER, "Invite"))) {
+                            else if (opt.name.equals("Invite"))
                                 b.invite();
-                            } else if (opt.name.equals(Resource.getLocString(Resource.BUNDLE_FLOWER, "Forget"))) {
+                            else if (opt.name.equals("Forget"))
                                 b.forget();
-                            } else if (opt.name.equals(Resource.getLocString(Resource.BUNDLE_FLOWER, "Describe"))) {
+                            else if (opt.name.equals("Describe"))
                                 b.describe();
-                            }
                             uimsg("act", opt.num);
                         } else {
                             uimsg("cancel");

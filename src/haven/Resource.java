@@ -2044,7 +2044,15 @@ public class Resource implements Serializable {
             try {
                 map.put(key, val);
                 key = key.replace(" ", "\\ ").replace(":", "\\:").replace("=", "\\=");
+                if (key.startsWith("\\ "))
+                    key = "\\u0020" + key.substring(2);
+                if (key.endsWith("\\ "))
+                    key = "\\u0020" + key.substring(0, key.length() - 2);
                 val = val.replace("\\", "\\\\").replace("\n", "\\n").replace("\u0000", "");
+                if (val.startsWith(" "))
+                    val = "\\u0020" + val.substring(1);
+                if (val.endsWith(" "))
+                    val = "\\u0020" + val.substring(0, val.length() - 1);
                 out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("l10n/" + bundle + "_new.properties", true), encoder));
                 out.write(key + " = " + val);
                 out.newLine();
