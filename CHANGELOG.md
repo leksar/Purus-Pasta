@@ -1,5 +1,9 @@
 ## Changelog
 
+### 2.22.0
+	- Text warnings if siege equipment is detected
+	- Various fixes
+	- Latest merges from Amber & Default client
 ### 2.21.1
 	- Amber merges
 ### 2.21.0
