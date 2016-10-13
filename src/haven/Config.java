@@ -209,7 +209,9 @@ public class Config {
     public static boolean logcombatactions =  Utils.getprefb("logcombatactions", false);
     public static boolean autopickmussels =  Utils.getprefb("autopickmussels", false);
     public static boolean confirmmagic =  Utils.getprefb("confirmmagic", true);
-    public static boolean altfightui =  Utils.getprefb("altfightui", true);
+    public static boolean altfightui =  Utils.getprefb("altfightui", false);
+    public static boolean combshowkeys =  Utils.getprefb("combshowkeys", true);
+    public static boolean combaltopenings =  Utils.getprefb("combaltopenings", false);
 
     public static int avgmode = Utils.getprefi("avgmode", 0);
     private final static Map<String, Integer> defFontSzGlobal =  new HashMap<String, Integer>(3) {{
@@ -394,7 +396,6 @@ public class Config {
         add(new Pair<String, String>("Fires", "gfx/terobjs/pow"));
         add(new Pair<String, String>("Full trash stockpiles", "gfx/terobjs/stockpile-trash"));
         add(new Pair<String, String>("Idle animals", "/idle"));
-        add(new Pair<String, String>("Dream catchers", "gfx/terobjs/dreca"));
     }};
     public final static Set<String> disableanimSet = new HashSet<String>(disableanim.size());
 

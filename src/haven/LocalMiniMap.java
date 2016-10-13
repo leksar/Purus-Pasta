@@ -40,6 +40,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import haven.automation.MusselPicker;
 import haven.resutil.Ridges;
 
 public class LocalMiniMap extends Widget {
@@ -603,10 +604,13 @@ public class LocalMiniMap extends Widget {
                 if (cc == null)
                     return false;
                 Gob gob = findicongob(c.sub(delta));
-                if (gob == null)
+                if (gob == null) {
                     mv.wdgmsg("click", rootpos().add(c.sub(delta)), c2p(c.sub(delta)), button, ui.modflags());
-                else
+                } else {
                     mv.wdgmsg("click", rootpos().add(c.sub(delta)), c2p(c.sub(delta)), button, ui.modflags(), 0, (int) gob.id, gob.rc, 0, -1);
+                    if (Config.autopickmussels)
+                        mv.startMusselsPicker(gob);
+                }
             } else if (button == 2 && !Config.maplocked) {
                 doff = c;
                 dragging = ui.grabmouse(this);
@@ -616,10 +620,13 @@ public class LocalMiniMap extends Widget {
                 if (cc == null)
                     return false;
                 Gob gob = findicongob(c.sub(delta));
-                if (gob == null)
+                if (gob == null) {
                     mv.wdgmsg("click", rootpos().add(c.sub(delta)), c2p(c.sub(delta)), 1, ui.modflags());
-                else
+                } else {
                     mv.wdgmsg("click", rootpos().add(c.sub(delta)), c2p(c.sub(delta)), button, ui.modflags(), 0, (int) gob.id, gob.rc, 0, -1);
+                    if (Config.autopickmussels)
+                        mv.startMusselsPicker(gob);
+                }
             } else if (button == 1 && !Config.maplocked) {
                 doff = c;
                 dragging = ui.grabmouse(this);

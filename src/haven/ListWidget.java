@@ -40,10 +40,6 @@ public abstract class ListWidget<T> extends Widget {
     protected abstract int listitems();
     protected abstract void drawitem(GOut g, T item, int i);
 
-    public void change(T item) {
-        this.sel = item;
-    }
-
     public void change(int index) {
         int count = listitems();
         if (index >= 0 && index < count) {
@@ -70,7 +66,12 @@ public abstract class ListWidget<T> extends Widget {
         return (-1);
     }
 
-	public boolean mouseclick(Coord c, int button, int count) {
-		return false;
-	}
+    public void change(T item) {
+        this.sel = item;
+    }
+
+    public void change2(T item) {
+        this.sel = item;
+    }
+
 }

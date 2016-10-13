@@ -1,3 +1,17 @@
+Version 1.38.1
+    New:
+        * Highlight Travel menu options.
+
+    Fixed:
+        * Combat school not switching without pressing save.
+        * Mussel picker not working with minimap.
+
+    Misc:
+        * Localization support improvements.
+        * Updated Russian localization.
+        * Code cleanup.
+
+
 Version 1.38.0
     New:
         * Alternative combat UI.
