@@ -55,6 +55,7 @@ import haven.automation.SteelRefueler;
 import haven.pathfinder.PFListener;
 import haven.pathfinder.Pathfinder;
 import haven.resutil.BPRadSprite;
+import purus.GlobalChat;
 import purus.TroughFiller;
 import purus.farmer.AreaSelect;
 import purus.farmer.CarrotFarmer;
@@ -98,6 +99,7 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
     public AutoLeveler autoleveler;
     public TroughFiller troughfiller;
     public Farmer farmer;
+    public GlobalChat GlobalChat;
     public boolean carrotSelect;
     private haven.Widget w;
     private haven.Inventory i;

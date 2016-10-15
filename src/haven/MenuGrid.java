@@ -55,6 +55,7 @@ import purus.Builder;
 import purus.DragonflyCollector;
 import purus.Drinker;
 import purus.Forager;
+import purus.GlobalChat;
 import purus.KoordMaker;
 import purus.MusselPicker;
 import purus.OvenFueler;
@@ -172,6 +173,7 @@ public class MenuGrid extends Widget {
     	p.add(glob.paginafor(Resource.local().load("paginae/custom/build")));
     	p.add(glob.paginafor(Resource.local().load("paginae/custom/troughfill")));
     	p.add(glob.paginafor(Resource.local().load("paginae/custom/farmer")));
+    	p.add(glob.paginafor(Resource.local().load("paginae/custom/globalchat")));
     	// work in progress p.add(glob.paginafor(Resource.local().load("paginae/custom/oven")));
     	// Disable this for now because amber has one
     	//p.add(glob.paginafor(Resource.local().load("paginae/custom/fillsmelter")));
@@ -526,6 +528,8 @@ public class MenuGrid extends Widget {
             synchronized (AreaSelect.class) {
                 gui.map.registerAreaSelect(f);;
             }
+        } else if(ad[1].equals("globalchat")) {
+        	}
         }
     }
 
