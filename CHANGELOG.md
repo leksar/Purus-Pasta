@@ -1,5 +1,8 @@
 ## Changelog
 
+### 2.23.0
+	- Added global chat
+	- Latest merges from Amber & Default client
 ### 2.22.0
 	- Text warnings if siege equipment is detected
 	- Various fixes
