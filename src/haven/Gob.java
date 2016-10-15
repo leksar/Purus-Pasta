@@ -535,8 +535,6 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
                      
                 } catch (Loading le) {
                 }
-            } else {
-                d.setup(rl);
             }
 
             if (Config.showboundingboxes) {
