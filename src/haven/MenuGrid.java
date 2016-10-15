@@ -529,7 +529,15 @@ public class MenuGrid extends Widget {
                 gui.map.registerAreaSelect(f);;
             }
         } else if(ad[1].equals("globalchat")) {
+        	if(parent.ui.gui.map.GlobalChat!=null) {
+        		parent.ui.gui.map.GlobalChat.disconnect();
+        		parent.ui.gui.map.GlobalChat.reqdestroy();
+        		parent.ui.gui.map.GlobalChat = null;
         	}
+        	parent.ui.gui.map.GlobalChat =  new GlobalChat(new Coord().add(200, 250), parent.ui.gui.chrid);
+            HavenPanel.lui.root.add(parent.ui.gui.map.GlobalChat);
+            parent.ui.gui.map.GlobalChat.show();
+            parent.ui.gui.map.GlobalChat.raise();
         }
     }
 
