@@ -50,16 +50,27 @@ public class Debug {
         pk4 = kf4;
     }
 
-    public static void dumpimage(BufferedImage img, String fn) {
+    public static void dumpimage(BufferedImage img, File path) {
         try {
-            javax.imageio.ImageIO.write(img, "PNG", new File(fn));
+	    javax.imageio.ImageIO.write(img, "PNG", path);
         } catch (IOException e) {
             throw (new RuntimeException(e));
         }
     }
 
+    public static void dumpimage(BufferedImage img, String fn) {
+	dumpimage(img, new File(fn));
+    }
+
     public static void dumpimage(BufferedImage img) {
         dumpimage(img, "/tmp/test.png");
+    }
+
+    public static File somedir(String basename) {
+	String home = System.getProperty("user.home", null);
+	if(home == null)
+	    return(new File(basename));
+	return(new File(new File(home), basename));
     }
 
     public static class DumpGL extends TraceGL4bc {

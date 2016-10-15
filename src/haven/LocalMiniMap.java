@@ -67,6 +67,7 @@ public class LocalMiniMap extends Widget {
     private static final Resource trollsfx = Resource.local().loadwait("sfx/troll");
     private static final Resource mammothsfx = Resource.local().loadwait("sfx/mammoth");
     private static final Resource doomedsfx = Resource.local().loadwait("sfx/doomed");
+    private static final Resource swagsfx = Resource.local().loadwait("sfx/swag");
 	private final HashSet<Long> sgobs = new HashSet<Long>();
     private final HashMap<Coord, Tex> maptiles = new HashMap<Coord, Tex>(28, 0.75f) {
         @Override
@@ -300,6 +301,9 @@ public class LocalMiniMap extends Widget {
                     if (Config.alarmonforagables && Config.foragables.contains(res.name)) {
                         sgobs.add(gob.id);
                         Audio.play(foragablesfx, Config.alarmonforagablesvol);
+                    } else if (Config.alarmlocres && Config.locres.contains(res.name)) {
+                        sgobs.add(gob.id);
+                        Audio.play(swagsfx, Config.alarmlocresvol);
                     } else if (Config.alarmbears && res.name.equals("gfx/kritter/bear/bear")) {
                         sgobs.add(gob.id);
                         GAttrib drw = gob.getattr(Drawable.class);

@@ -2129,7 +2129,31 @@ public class OptWnd extends Window {
                 Utils.setprefd("alarmmammothvol", vol);
             }
         });
+        appender.setVerticalMargin(0);
+        appender.add(new CheckBox("Alarm on localized resources") {
+            {
+                a = Config.alarmlocres;
+            }
 
+            public void set(boolean val) {
+                Utils.setprefb("alarmlocres", val);
+                Config.alarmlocres = val;
+                a = val;
+            }
+        });
+        appender.setVerticalMargin(VERTICAL_AUDIO_MARGIN);
+        appender.add(new HSlider(200, 0, 1000, 0) {
+            protected void attach(UI ui) {
+                super.attach(ui);
+                val = (int) (Config.alarmlocresvol * 1000);
+            }
+
+            public void changed() {
+                double vol = val / 1000.0;
+                Config.alarmlocresvol = vol;
+                Utils.setprefd("alarmlocresvol", vol);
+            }
+        });
         soundalarms.add(new PButton(200, "Back", 27, main), new Coord(210, 360));
         soundalarms.pack();
     }

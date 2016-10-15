@@ -535,9 +535,11 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
                      
                 } catch (Loading le) {
                 }
+            } else {
+                d.setup(rl);
             }
 
-            if (Config.showboundingboxes && !hide) {
+            if (Config.showboundingboxes) {
                 GobHitbox.BBox bbox = GobHitbox.getBBox(this, true);
                 if (bbox != null)
                     rl.add(new Overlay(new GobHitbox(this, bbox.a, bbox.b, false)), null);
@@ -626,27 +628,21 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
                 }
             }
 
-            if (res != null && dangerousanimalrad.contains(res.name)) {
-                if (Config.showanimalrad) {
-                    if (!ols.contains(animalradius)) {
-                        GAttrib drw = getattr(Drawable.class);
-                        if (drw != null && drw instanceof Composite) {
-                            Composite cpst = (Composite) drw;
-                            if (cpst.nposes != null && cpst.nposes.size() > 0) {
-                                for (ResData resdata : cpst.nposes) {
-                                    Resource posres = resdata.res.get();
-                                    if (posres != null && !posres.name.endsWith("/knock") || posres == null) {
-                                        ols.add(animalradius);
-                                        break;
-                                    }
-                                }
-                            } else if (!cpst.nposesold){
+            if (Config.showanimalrad && res != null && dangerousanimalrad.contains(res.name) && !ols.contains(animalradius)) {
+                GAttrib drw = getattr(Drawable.class);
+                if (drw != null && drw instanceof Composite) {
+                    Composite cpst = (Composite) drw;
+                    if (cpst.nposes != null && cpst.nposes.size() > 0) {
+                        for (ResData resdata : cpst.nposes) {
+                            Resource posres = resdata.res.get();
+                            if (posres != null && !posres.name.endsWith("/knock") || posres == null) {
                                 ols.add(animalradius);
+                                break;
                             }
                         }
+                    } else if (!cpst.nposesold){
+                        ols.add(animalradius);
                     }
-                } else {
-                    ols.remove(animalradius);
                 }
             }
             

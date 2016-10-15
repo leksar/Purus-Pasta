@@ -63,6 +63,7 @@ import purus.farmer.Farmer;
 
 
 public class MapView extends PView implements DTarget, Console.Directory, PFListener {
+    public static final boolean clickdb = false;
     public static long plgob = -1;
     public Coord cc;
     public final Glob glob;
@@ -1198,11 +1199,15 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
                 rl.fin();
 
                 rl.render(g);
+                if(clickdb)
+                    g.getimage(img -> Debug.dumpimage(img, Debug.somedir("click1.png")));
                 rl.get(g, c, hit -> {cut = hit; ckdone(1);});
                 // rl.limit = hit;
 
                 rl.mode = 1;
                 rl.render(g);
+                if(clickdb)
+                    g.getimage(img -> Debug.dumpimage(img, Debug.somedir("click2.png")));
                 g.getpixel(c, col -> {
                     tile = new Coord(col.getRed() - 1, col.getGreen() - 1);
                     pixel = new Coord((col.getBlue() * tilesz.x) / 255, (col.getAlpha() * tilesz.y) / 255);
@@ -1313,6 +1318,8 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
         rl.setup(gobs, clickbasic(g));
         rl.fin();
         rl.render(g);
+        if(clickdb)
+            g.getimage(img -> Debug.dumpimage(img, Debug.somedir("click3.png")));
         rl.get(g, c, inf -> cb.done(((inf == null) || (inf.gob == null))?null:inf));
     }
 

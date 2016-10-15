@@ -183,6 +183,8 @@ public class Config {
     public static double alarmonforagablesvol = Utils.getprefd("alarmonforagablesvol", 0.8);
     public static boolean alarmbears = Utils.getprefb("alarmbears", true);
     public static double alarmbearsvol = Utils.getprefd("alarmbearsvol", 0.8);
+    public static boolean alarmlocres = Utils.getprefb("alarmlocres", false);
+    public static double alarmlocresvol = Utils.getprefd("alarmlocresvol", 0.8);
     public static boolean alarmtroll = Utils.getprefb("alarmtroll", false);
     public static double alarmtrollvol = Utils.getprefd("alarmtrollvol", 0.8);
     public static boolean alarmmammoth = Utils.getprefb("alarmmammoth", true);
@@ -390,6 +392,19 @@ public class Config {
     public final static Set<String> foragables = new HashSet<String>(Arrays.asList(
             "gfx/terobjs/herbs/flotsam", "gfx/terobjs/herbs/chimingbluebell", "gfx/terobjs/herbs/edelweiss",
             "gfx/terobjs/herbs/bloatedbolete", "gfx/terobjs/herbs/glimmermoss"));
+
+    public final static Set<String> locres = new HashSet<String>(Arrays.asList(
+            "gfx/terobjs/saltbasin",
+            "gfx/terobjs/abyssalchasm",
+            "gfx/terobjs/windthrow",
+            "gfx/terobjs/icespire",
+            "gfx/terobjs/woodheart",
+            "gfx/terobjs/jotunmussel",
+            "gfx/terobjs/guanopile",
+            "gfx/terobjs/geyser",
+            "gfx/terobjs/claypit",
+            "gfx/terobjs/caveorgan",
+            "gfx/terobjs/rockcrystal"));
 
     public final static ArrayList<Pair<String, String>> disableanim = new ArrayList<Pair<String, String>>() {{
         add(new Pair<String, String>("Beehives", "gfx/terobjs/beehive"));
