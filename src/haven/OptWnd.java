@@ -930,7 +930,7 @@ public class OptWnd extends Window {
                 Utils.delpref("fbelt_c");
                 Utils.delpref("fbelt_vertical");
             }
-        }, new Coord(260, 320));
+        }, new Coord(200, 320));
     }
 
     private void initMap() {
