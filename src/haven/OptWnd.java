@@ -640,6 +640,7 @@ public class OptWnd extends Window {
     }
     private void initDisplay() {
         initDisplayFirstColumn();
+        initDisplaySecondColumn();
         display.add(new PButton(200, "Back", 27, main), new Coord(210, 360));
         display.pack();
     }
