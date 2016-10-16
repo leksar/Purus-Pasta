@@ -1,5 +1,7 @@
 ## Changelog
 
+### 2.23.2
+	- Fixed issues with Display menu
 ### 2.23.1
 	- Fixed critical issue with gobs
 ### 2.23.0
