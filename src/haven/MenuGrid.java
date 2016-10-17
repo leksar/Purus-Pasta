@@ -515,7 +515,11 @@ public class MenuGrid extends Widget {
         } else if (ad[1].equals("autobuild")) {
         	new Builder(ui,w,i).Run();
         } else if (ad[1].equals("troughfill")) {
-            TroughFiller tf = new TroughFiller(ui,w,i);
+        	if(gui.map.troughfiller!=null){
+        		gui.map.troughfiller.stop();
+        		gui.map.troughfiller = null;
+        	}
+            TroughFiller tf = new TroughFiller(ui, w , i);
             gui.map.troughfiller = tf;
             gui.add(tf, new Coord(gui.sz.x / 2 - tf.sz.x / 2, gui.sz.y / 2 - tf.sz.y / 2 - 200));
             synchronized (GobSelectCallback.class) {

@@ -230,6 +230,9 @@ public class BotUtils {
 	// Takes item in hand
     public void takeItem(Widget item) {
         item.wdgmsg("take", Coord.z);
+        while(getItemAtHand()==null) {
+        	sleep(10);
+        }
     }
     
     //  Returns item in hand
