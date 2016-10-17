@@ -369,7 +369,7 @@ public class Config {
         put("mussels", new CheckListboxItem("Mussels"));
     }};
 
-    public final static Map<String, Tex> additonalicons = new HashMap<String, Tex>(13) {{
+    public final static Map<String, Tex> additonalicons = new HashMap<String, Tex>(24) {{
         put("gfx/terobjs/vehicle/bram", Resource.loadtex("gfx/icons/bram"));
         put("gfx/kritter/toad/toad", Resource.loadtex("gfx/icons/toad"));
         put("gfx/terobjs/vehicle/rowboat", Resource.loadtex("gfx/icons/rowboat"));
@@ -383,6 +383,18 @@ public class Config {
         put("gfx/terobjs/vehicle/wheelbarrow", Resource.loadtex("gfx/icons/wheelbarrow"));
         put("gfx/terobjs/vehicle/cart", Resource.loadtex("gfx/icons/cart"));
         put("gfx/terobjs/vehicle/wreckingball", Resource.loadtex("gfx/icons/wball"));
+        // grayscale icons for dead animals
+        put("gfx/kritter/badger/badger", Resource.loadtex("gfx/icons/badger"));
+        put("gfx/kritter/bear/bear", Resource.loadtex("gfx/icons/bear"));
+        put("gfx/kritter/boar/boar", Resource.loadtex("gfx/icons/boar"));
+        put("gfx/kritter/fox/fox", Resource.loadtex("gfx/icons/fox"));
+        put("gfx/kritter/horse/horse", Resource.loadtex("gfx/icons/horse"));
+        put("gfx/kritter/lynx/lynx", Resource.loadtex("gfx/icons/lynx"));
+        put("gfx/kritter/mammoth/mammoth", Resource.loadtex("gfx/icons/mammoth"));
+        put("gfx/kritter/moose/moose", Resource.loadtex("gfx/icons/moose"));
+        put("gfx/kritter/reddeer/reddeer", Resource.loadtex("gfx/icons/reddeer"));
+        put("gfx/kritter/sheep/mouflon", Resource.loadtex("gfx/icons/mouflon"));
+        put("gfx/kritter/troll/troll", Resource.loadtex("gfx/icons/troll"));
     }};
 
     public final static Set<String> dangerousgobres = new HashSet<String>(Arrays.asList(
@@ -404,7 +416,7 @@ public class Config {
             "gfx/terobjs/geyser",
             "gfx/terobjs/claypit",
             "gfx/terobjs/caveorgan",
-            "gfx/terobjs/rockcrystal"));
+            "gfx/terobjs/bumlings/rockcrystal"));
 
     public final static ArrayList<Pair<String, String>> disableanim = new ArrayList<Pair<String, String>>() {{
         add(new Pair<String, String>("Beehives", "gfx/terobjs/beehive"));

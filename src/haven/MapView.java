@@ -48,6 +48,7 @@ import java.util.WeakHashMap;
 import javax.media.opengl.GL;
 
 import haven.GLProgram.VarID;
+import haven.automation.AreaSelectCallback;
 import haven.automation.AutoLeveler;
 import haven.automation.GobSelectCallback;
 import haven.automation.MusselPicker;
@@ -94,6 +95,7 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
     private final PartyHighlight partyHighlight;
     public AreaMine areamine;
     private GobSelectCallback gobselcb;
+    private AreaSelectCallback areaselcb;
     private Pathfinder pf;
     public Thread pfthread;
     public SteelRefueler steelrefueler;
@@ -1829,6 +1831,14 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
         this.areaSelect = null;
     }
 
+    public void registerAreaSelect(AreaSelectCallback callback) {
+        this.areaselcb = callback;
+    }
+
+    public void unregisterAreaSelect() {
+        this.areaselcb = null;
+    }
+
     public void pfLeftClick(Coord mc, String action) {
         Gob player = player();
         if (player == null)
@@ -1928,6 +1938,13 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
                         selection = null;
                     }
                 } else if (areaSelectB){
+                    if (ui.modshift && selection == null) {
+                        selection = new Selector(this);
+                    } else if (selection != null) {
+                        selection.destroy();
+                        selection = null;
+                    }
+                } else if (areaselcb != null) {
                     if (ui.modshift && selection == null) {
                         selection = new Selector(this);
                     } else if (selection != null) {
@@ -2254,18 +2271,19 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
             	            	}
             	            }
     	                	new CarrotFarmer(ui, w, i, gobs).Run();
+                    if (mv != null) {
+                        if (areaselcb != null) {
+                            areaselcb.areaselect(ol.getc1(), ol.getc2());
+                        } else { //  TODO: should reimplement miner to use callbacks
+                            areamine = new AreaMine(ol.getc1(), ol.getc2(), mv);
+                            new Thread(areamine, "Area miner").start();
                             if (selection != null) {
                                 selection.destroy();
                                 selection = null;
                             }
             	        }
             	        carrotSelect = false;
-                    } else if (mv != null && AreaMineB) {
-                        areamine = new AreaMine(ol.getc1(), ol.getc2(), mv);
-                        new Thread(areamine, "Area miner").start();
-                        if (selection != null) {
-                            selection.destroy();
-                            selection = null;
+                    }
                         }
                     } else {
                         wdgmsg("sel", sc, ec, modflags);
