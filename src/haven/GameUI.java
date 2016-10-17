@@ -213,7 +213,7 @@ public class GameUI extends ConsoleHost implements Console.Directory {
 
         if (Config.statuswdgvisible) {
             statuswindow = new StatusWdg();
-            add(statuswindow, new Coord(HavenPanel.w / 2 + 80, 10));
+            add(statuswindow, new Coord(HavenPanel.w / 2, 15));
         }
         
         makewnd = add(new CraftWindow(), new Coord(400, 200));
@@ -1023,7 +1023,7 @@ public class GameUI extends ConsoleHost implements Console.Directory {
                 Utils.setprefb("statuswdgvisible", false);
             } else {
                 statuswindow = new StatusWdg();
-                add(statuswindow, new Coord(HavenPanel.w / 2 + 80, 10));
+                add(statuswindow, new Coord(HavenPanel.w / 2, 15));
                 Config.statuswdgvisible = true;
                 Utils.setprefb("statuswdgvisible", true);
             }
@@ -1162,7 +1162,7 @@ public class GameUI extends ConsoleHost implements Console.Directory {
             map.resize(sz);
         beltwdg.c = new Coord(blpw + 10, sz.y - beltwdg.sz.y - 5);
         if (statuswindow != null)
-            statuswindow.c = new Coord(HavenPanel.w / 2 + 80, 10);
+            statuswindow.c = new Coord(HavenPanel.w / 2, 15);
         super.resize(sz);
     }
 
