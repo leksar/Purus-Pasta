@@ -26,37 +26,27 @@
 
 package haven;
 
-import java.io.ByteArrayOutputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+public interface Hash<T> {
+    public int hash(T ob);
 
-public interface ResCache {
-    public OutputStream store(String name) throws IOException;
+    public boolean equal(T x, T y);
 
-    public InputStream fetch(String name) throws IOException;
-
-    public static ResCache global = StupidJavaCodeContainer.makeglobal();
-
-    public static class StupidJavaCodeContainer {
-        private static ResCache makeglobal() {
-	    return(HashDirCache.create());
-        }
-    }
-
-    public static class TestCache implements ResCache {
-        public OutputStream store(final String name) {
-            return (new ByteArrayOutputStream() {
-                public void close() {
-                    byte[] res = toByteArray();
-                    System.out.println(name + ": " + res.length);
-                }
-            });
+    public static final Hash<Object> eq = new Hash<Object>() {
+        public int hash(Object ob) {
+            return ((ob == null) ? 0 : ob.hashCode());
         }
 
-        public InputStream fetch(String name) throws IOException {
-            throw (new FileNotFoundException());
+        public boolean equal(Object x, Object y) {
+            return ((x == null) ? (y == null) : x.equals(y));
         }
-    }
+    };
+    public static final Hash<Object> id = new Hash<Object>() {
+        public int hash(Object ob) {
+            return (System.identityHashCode(ob));
+        }
+
+        public boolean equal(Object x, Object y) {
+            return (x == y);
+        }
+    };
 }

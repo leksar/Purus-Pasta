@@ -51,6 +51,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
+<<<<<<< HEAD
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
@@ -67,6 +68,16 @@ import java.util.prefs.Preferences;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+=======
+import java.lang.ref.*;
+import java.lang.reflect.*;
+import java.util.prefs.*;
+import java.util.*;
+import java.util.function.*;
+import java.awt.Graphics;
+import java.awt.Color;
+import java.awt.image.*;
+>>>>>>> refs/remotes/romovs/master
 
 public class Utils {
     public static final java.nio.charset.Charset utf8 = java.nio.charset.Charset.forName("UTF-8");
@@ -1296,6 +1307,14 @@ public class Utils {
         Iterator<T> i = c.iterator();
         if (!i.hasNext()) return (null);
         return (i.next());
+    }
+
+    public static boolean strcheck(String str, IntPredicate p) {
+        for (int i = 0; i < str.length(); i++) {
+            if (!p.test(str.charAt(i)))
+                return (false);
+        }
+        return (true);
     }
 
     public static <T> T construct(Constructor<T> cons, Object... args) {

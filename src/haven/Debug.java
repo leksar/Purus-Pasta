@@ -67,10 +67,7 @@ public class Debug {
     }
 
     public static File somedir(String basename) {
-	String home = System.getProperty("user.home", null);
-	if(home == null)
 	    return(new File(basename));
-	return(new File(new File(home), basename));
     }
 
     public static class DumpGL extends TraceGL4bc {

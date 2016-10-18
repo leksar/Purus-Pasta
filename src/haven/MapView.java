@@ -64,7 +64,7 @@ import purus.farmer.Farmer;
 
 
 public class MapView extends PView implements DTarget, Console.Directory, PFListener {
-    public static final boolean clickdb = false;
+    public static boolean clickdb = false;
     public static long plgob = -1;
     public Coord cc;
     public final Glob glob;
@@ -2383,6 +2383,11 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
                 if (l == null)
                     throw (new Exception("Not loading"));
                 l.printStackTrace(cons.out);
+            }
+        });
+        Console.setscmd("clickdb", new Console.Command() {
+            public void run(Console cons, String[] args) {
+                clickdb = Utils.parsebool(args[1], false);
             }
         });
     }
