@@ -51,7 +51,6 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
-<<<<<<< HEAD
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
@@ -64,20 +63,11 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Random;
+import java.util.function.IntPredicate;
 import java.util.prefs.Preferences;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-=======
-import java.lang.ref.*;
-import java.lang.reflect.*;
-import java.util.prefs.*;
-import java.util.*;
-import java.util.function.*;
-import java.awt.Graphics;
-import java.awt.Color;
-import java.awt.image.*;
->>>>>>> refs/remotes/romovs/master
 
 public class Utils {
     public static final java.nio.charset.Charset utf8 = java.nio.charset.Charset.forName("UTF-8");
