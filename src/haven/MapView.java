@@ -1774,8 +1774,8 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
 
             if (inf == null) {
                 if (Config.tilecenter && clickb == 3) {
-                    mc.x = mc.x / 11 * 11 + 5;
-                    mc.y = mc.y / 11 * 11 + 5;
+                    mc.x = mc.x / 11 * 11 + Integer.signum(mc.x) * 5;
+                    mc.y = mc.y / 11 * 11 + Integer.signum(mc.y) * 5;
                 }
 
                 if (Config.pf && clickb == 1 && curs != null && !curs.name.equals("gfx/hud/curs/study")) {
@@ -2074,8 +2074,8 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
             public void hit(Coord pc, Coord mc, ClickInfo inf) {
                 if (inf == null) {
                     if (Config.tilecenter) {
-                        mc.x = mc.x / 11 * 11 + 5;
-                        mc.y = mc.y / 11 * 11 + 5;
+                        mc.x = mc.x / 11 * 11 + Integer.signum(mc.x) * 5;
+                        mc.y = mc.y / 11 * 11 + Integer.signum(mc.y) * 5;
                     }
                     wdgmsg("itemact", pc, mc, ui.modflags());
                 } else {

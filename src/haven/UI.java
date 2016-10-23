@@ -188,9 +188,6 @@ public class UI {
                 TextEntry entry = new TextEntry(40, "") {
                     @Override
                     public boolean type(char c, KeyEvent ev) {
-                        if (Config.userazerty)
-                            c = Utils.azerty2qwerty(c);
-
                         if (c >= KeyEvent.VK_0 && c <= KeyEvent.VK_9 && buf.line.length() < 2 || c == '\b') {
                             return buf.key(ev);
                         } else if (c == '\n') {

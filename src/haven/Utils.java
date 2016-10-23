@@ -64,6 +64,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Random;
 import java.util.function.IntPredicate;
+import java.util.function.Supplier;
 import java.util.prefs.Preferences;
 
 import org.json.JSONArray;
@@ -1299,12 +1300,24 @@ public class Utils {
         return (i.next());
     }
 
+    public static <T> T take(Iterable<T> c) {
+	Iterator<T> i = c.iterator();
+	if(!i.hasNext()) return(null);
+	T ret = i.next();
+	i.remove();
+	return(ret);
+    }
+
     public static boolean strcheck(String str, IntPredicate p) {
         for (int i = 0; i < str.length(); i++) {
             if (!p.test(str.charAt(i)))
                 return (false);
         }
         return (true);
+    }
+
+    public static <T> T or(T val, Supplier<T> els) {
+	return((val != null)?val:els.get());
     }
 
     public static <T> T construct(Constructor<T> cons, Object... args) {

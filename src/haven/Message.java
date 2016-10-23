@@ -86,6 +86,9 @@ public abstract class Message {
         public FormatError(String message) {
             super(message);
         }
+	public FormatError(String message, Throwable cause) {
+	    super(message, cause);
+	}
     }
 
     public abstract boolean underflow(int hint);

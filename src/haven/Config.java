@@ -369,7 +369,7 @@ public class Config {
         put("mussels", new CheckListboxItem("Mussels"));
     }};
 
-    public final static Map<String, Tex> additonalicons = new HashMap<String, Tex>(24) {{
+    public final static Map<String, Tex> additonalicons = new HashMap<String, Tex>(23) {{
         put("gfx/terobjs/vehicle/bram", Resource.loadtex("gfx/icons/bram"));
         put("gfx/kritter/toad/toad", Resource.loadtex("gfx/icons/toad"));
         put("gfx/terobjs/vehicle/rowboat", Resource.loadtex("gfx/icons/rowboat"));
@@ -393,7 +393,6 @@ public class Config {
         put("gfx/kritter/mammoth/mammoth", Resource.loadtex("gfx/icons/mammoth"));
         put("gfx/kritter/moose/moose", Resource.loadtex("gfx/icons/moose"));
         put("gfx/kritter/reddeer/reddeer", Resource.loadtex("gfx/icons/reddeer"));
-        put("gfx/kritter/sheep/mouflon", Resource.loadtex("gfx/icons/mouflon"));
         put("gfx/kritter/troll/troll", Resource.loadtex("gfx/icons/troll"));
     }};
 
@@ -416,7 +415,7 @@ public class Config {
             "gfx/terobjs/geyser",
             "gfx/terobjs/claypit",
             "gfx/terobjs/caveorgan",
-            "gfx/terobjs/bumlings/rockcrystal"));
+            "gfx/terobjs/crystalpatch"));
 
     public final static ArrayList<Pair<String, String>> disableanim = new ArrayList<Pair<String, String>>() {{
         add(new Pair<String, String>("Beehives", "gfx/terobjs/beehive"));
