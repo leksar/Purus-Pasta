@@ -106,7 +106,6 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
     public boolean carrotSelect;
     private haven.Widget w;
     private haven.Inventory i;
-    private boolean AreaMineB;
     private static TexCube sky = new TexCube(Resource.loadimg("skycube"));
     
     private AreaSelect areaSelect;
@@ -1925,7 +1924,6 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
                 if (curs != null && curs.name.equals("gfx/hud/curs/mine")) {
                     if (ui.modshift && selection == null) {
                         selection = new Selector(this);
-                        AreaMineB = true;
                     } else if (selection != null) {
                         selection.destroy();
                         selection = null;
@@ -2244,6 +2242,19 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
                     ol.destroy();
                     mgrab.remove();
                     
+                    if (mv != null) {
+                        if (areaselcb != null) {
+                            areaselcb.areaselect(ol.getc1(), ol.getc2());
+                        } else { //  TODO: should reimplement miner to use callbacks
+                            areamine = new AreaMine(ol.getc1(), ol.getc2(), mv);
+                            new Thread(areamine, "Area miner").start();
+                            if (selection != null) {
+                                selection.destroy();
+                                selection = null;
+                            }
+                        }
+                    }
+                    
                     if(areaSelectB) {
 	                    areaSelect.areaSelect(rc1, rc2);
 	                	ui.root.findchild(GameUI.class).msg("Area selected", Color.white);
@@ -2271,19 +2282,6 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
             	            	}
             	            }
     	                	new CarrotFarmer(ui, w, i, gobs).Run();
-                    if (mv != null) {
-                        if (areaselcb != null) {
-                            areaselcb.areaselect(ol.getc1(), ol.getc2());
-                        } else { //  TODO: should reimplement miner to use callbacks
-                            areamine = new AreaMine(ol.getc1(), ol.getc2(), mv);
-                            new Thread(areamine, "Area miner").start();
-                            if (selection != null) {
-                                selection.destroy();
-                                selection = null;
-                            }
-            	        }
-            	        carrotSelect = false;
-                    }
                         }
                     } else {
                         wdgmsg("sel", sc, ec, modflags);
