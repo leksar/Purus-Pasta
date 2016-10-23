@@ -1,5 +1,7 @@
 ## Changelog
 
+### 2.24.1
+	- Fixed autominer
 ### 2.24.0
 	- Improved trough filler script
 	- Latest merges from Amber & Default client
