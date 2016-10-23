@@ -1,5 +1,9 @@
 ## Changelog
 
+### 2.24.0
+	- Improved trough filler script
+	- Latest merges from Amber & Default client
+	- Small fixes
 ### 2.23.2
 	- Fixed issues with Display menu
 ### 2.23.1
