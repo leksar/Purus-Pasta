@@ -1,5 +1,8 @@
 ## Changelog
 
+### 2.24.2
+	- Latest merges from amber and default client
+	- Fixed issue with ore droppe and farmer
 ### 2.24.1
 	- Fixed autominer
 ### 2.24.0
