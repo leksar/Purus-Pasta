@@ -331,11 +331,7 @@ public class RenderList {
 
     public static boolean cachedb = false;
     static {
-        Console.setscmd("cachedb", new Console.Command() {
-            public void run(Console cons, String[] args) {
-                cachedb = Utils.parsebool(args[1], false);
-            }
-        });
+        Console.setscmd("cachedb", (cons, args) -> cachedb = Utils.parsebool(args[1], false));
     }
     private static void dumprejects(Map<Cached, Cached> prev, Map<Cached, Cached> cur) {
         Map<Rendered, Cached> croots = new IdentityHashMap<Rendered, Cached>();

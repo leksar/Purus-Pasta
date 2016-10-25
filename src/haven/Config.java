@@ -48,22 +48,18 @@ import haven.error.ErrorHandler;
 
 public class Config {
     public static final boolean iswindows = System.getProperty("os.name").startsWith("Windows");
-    public static String authuser = getprop("haven.authuser", null);
-    public static String authserv = getprop("haven.authserv", null);
-    public static String defserv = getprop("haven.defserv", "127.0.0.1");
-    public static URL resurl = geturl("haven.resurl", "");
-    public static URL mapurl = geturl("haven.mapurl", "");
-    public static boolean dbtext = getprop("haven.dbtext", "off").equals("on");
-    public static boolean profile = getprop("haven.profile", "off").equals("on");
-    public static boolean profilegpu = getprop("haven.profilegpu", "off").equals("on");
-    public static boolean fscache = getprop("haven.fscache", "on").equals("on");
-    public static String resdir = getprop("haven.resdir", null);
-    public static boolean nopreload = getprop("haven.nopreload", "no").equals("yes");
-    public static String loadwaited = getprop("haven.loadwaited", null);
-    public static String allused = getprop("haven.allused", null);
-    public static int mainport = getint("haven.mainport", 1870);
-    public static int authport = getint("haven.authport", 1871);
-
+	public static String authuser = null;
+	public static String authserv = null;
+	public static String defserv = null;
+	public static URL resurl = null;
+	public static URL mapurl = null;
+	public static boolean dbtext = false;
+	public static boolean profile = false;
+	public static boolean profilegpu = false;
+	public static String resdir = null;
+	public static boolean nopreload = false;
+	public static int mainport = 1870;
+	public static int authport = 1871;
     public static boolean hidesky = Utils.getprefb("hidesky", false);
     public static boolean hideflocomplete = Utils.getprefb("hideflocomplete", false);
     public static boolean hideflovisual = Utils.getprefb("hideflovisual", false);
@@ -495,24 +491,6 @@ public class Config {
         }
     }
 
-    private static int getint(String name, int def) {
-        String val = getprop(name, null);
-        if (val == null)
-            return (def);
-        return (Integer.parseInt(val));
-    }
-
-    private static URL geturl(String name, String def) {
-        String val = getprop(name, def);
-        if (val.equals(""))
-            return (null);
-        try {
-            return (new URL(val));
-        } catch (java.net.MalformedURLException e) {
-            throw (new RuntimeException(e));
-        }
-    }
-
     private static void usage(PrintStream out) {
         out.println("usage: haven.jar [OPTIONS] [SERVER[:PORT]]");
         out.println("Options include:");
@@ -592,22 +570,16 @@ public class Config {
     }
 
     static {
-        Console.setscmd("stats", new Console.Command() {
-            public void run(Console cons, String[] args) {
-                dbtext = Utils.parsebool(args[1]);
-            }
-        });
-        Console.setscmd("profile", new Console.Command() {
-            public void run(Console cons, String[] args) {
-                if (args[1].equals("none") || args[1].equals("off")) {
-                    profile = profilegpu = false;
-                } else if (args[1].equals("cpu")) {
-                    profile = true;
-                } else if (args[1].equals("gpu")) {
-                    profilegpu = true;
-                } else if (args[1].equals("all")) {
-                    profile = profilegpu = true;
-                }
+        Console.setscmd("stats", (cons, args) -> dbtext = Utils.parsebool(args[1]));
+        Console.setscmd("profile", (cons, args) -> {
+            if (args[1].equals("none") || args[1].equals("off")) {
+                profile = profilegpu = false;
+            } else if (args[1].equals("cpu")) {
+                profile = true;
+            } else if (args[1].equals("gpu")) {
+                profilegpu = true;
+            } else if (args[1].equals("all")) {
+                profile = profilegpu = true;
             }
         });
     }

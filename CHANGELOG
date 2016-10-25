@@ -1,3 +1,23 @@
+Version 1.41.0
+    Misc:
+        * Reverted back to AWT.
+
+
+Version 1.40.0
+    New:
+        * Full-screen mode with support for resolution changing.
+        * Support for hardware mouse cursors on Linux and Mac OS X.
+
+    Fixed:
+        * Tile centering bug.
+        * Localized resource alarm not firing on rock crystals.
+
+    Misc:
+        * Updated Chinese translation.
+        * Updated curio study times.
+        * Changed screenshot file type to PNG.
+
+
 Version 1.39.1
     Fixed:
         * Rockcrystal not being recognized for sound alarm

@@ -211,10 +211,6 @@ public class SkelSprite extends Sprite implements Gob.Overlay.CUpd, Skeleton.Has
     }
 
     static {
-        Console.setscmd("bonedb", new Console.Command() {
-            public void run(Console cons, String[] args) {
-                bonedb = Utils.parsebool(args[1], false);
-            }
-        });
+        Console.setscmd("bonedb", (cons, args) -> bonedb = Utils.parsebool(args[1], false));
     }
 }

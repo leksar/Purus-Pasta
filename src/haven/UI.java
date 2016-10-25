@@ -77,16 +77,8 @@ public class UI {
 
     private class WidgetConsole extends Console {
         {
-            setcmd("q", new Command() {
-                public void run(Console cons, String[] args) {
-                    HackThread.tg().interrupt();
-                }
-            });
-            setcmd("lo", new Command() {
-                public void run(Console cons, String[] args) {
-                    sess.close();
-                }
-            });
+            setcmd("q", (cons1, args) -> HackThread.tg().interrupt());
+            setcmd("lo", (cons1, args) -> sess.close());
         }
 
         private void findcmds(Map<String, Command> map, Widget wdg) {

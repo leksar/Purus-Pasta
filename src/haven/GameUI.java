@@ -1448,23 +1448,21 @@ public class GameUI extends ConsoleHost implements Console.Directory {
 
     private Map<String, Console.Command> cmdmap = new TreeMap<String, Console.Command>();
     {
-        cmdmap.put("afk", new Console.Command() {
-            public void run(Console cons, String[] args) {
-                afk = true;
-                wdgmsg("afk");
-            }
+        cmdmap.put("afk", (cons, args) -> {
+            afk = true;
+            wdgmsg("afk");
         });
-        cmdmap.put("act", new Console.Command() {
-            public void run(Console cons, String[] args) {
-                Object[] ad = new Object[args.length - 1];
-                System.arraycopy(args, 1, ad, 0, ad.length);
-                wdgmsg("act", ad);
-            }
+        cmdmap.put("act", (cons, args) -> {
+            Object[] ad = new Object[args.length - 1];
+            System.arraycopy(args, 1, ad, 0, ad.length);
+            wdgmsg("act", ad);
         });
-        cmdmap.put("tool", new Console.Command() {
-            public void run(Console cons, String[] args) {
-                add(gettype(args[1]).create(GameUI.this, new Object[0]), 200, 200);
-            }
+        cmdmap.put("tool", (cons, args) -> add(gettype(args[1]).create(GameUI.this, new Object[0]), 200, 200));
+        cmdmap.put("help", (cons, args) -> {
+            cons.out.println("Available console commands:");
+
+          //  cons.out.println();
+            cons.findcmds().forEach((s, cmd) -> cons.out.println(s));
         });
     }
 

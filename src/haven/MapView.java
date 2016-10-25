@@ -2352,34 +2352,26 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
     private Map<String, Console.Command> cmdmap = new TreeMap<String, Console.Command>();
 
     {
-        cmdmap.put("cam", new Console.Command() {
-            public void run(Console cons, String[] args) throws Exception {
-                if (args.length >= 2) {
-                    Class<? extends Camera> ct = camtypes.get(args[1]);
-                    String[] cargs = Utils.splice(args, 2);
-                    if (ct != null) {
-                        camera = makecam(ct, cargs);
-                        Utils.setpref("defcam", args[1]);
-                        Utils.setprefb("camargs", Utils.serialize(cargs));
-                    } else {
-                        throw (new Exception("no such camera: " + args[1]));
-                    }
+        cmdmap.put("cam", (cons, args) -> {
+            if (args.length >= 2) {
+                Class<? extends Camera> ct = camtypes.get(args[1]);
+                String[] cargs = Utils.splice(args, 2);
+                if (ct != null) {
+                    camera = makecam(ct, cargs);
+                    Utils.setpref("defcam", args[1]);
+                    Utils.setprefb("camargs", Utils.serialize(cargs));
+                } else {
+                    throw (new Exception("no such camera: " + args[1]));
                 }
             }
         });
-        cmdmap.put("whyload", new Console.Command() {
-            public void run(Console cons, String[] args) throws Exception {
-                Loading l = lastload;
-                if (l == null)
-                    throw (new Exception("Not loading"));
-                l.printStackTrace(cons.out);
-            }
+        cmdmap.put("whyload", (cons, args) -> {
+            Loading l = lastload;
+            if (l == null)
+                throw (new Exception("Not loading"));
+            l.printStackTrace(cons.out);
         });
-        Console.setscmd("clickdb", new Console.Command() {
-            public void run(Console cons, String[] args) {
-                clickdb = Utils.parsebool(args[1], false);
-            }
-        });
+        Console.setscmd("clickdb", (cons, args) -> clickdb = Utils.parsebool(args[1], false));
     }
 
     public Map<String, Console.Command> findcmds() {
