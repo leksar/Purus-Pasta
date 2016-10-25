@@ -2,7 +2,7 @@
 
 ### 2.24.2
 	- Latest merges from amber and default client
-	- Fixed issue with ore droppe and farmer
+	- Fixed issue with ore dropper and farmer
 ### 2.24.1
 	- Fixed autominer
 ### 2.24.0
