@@ -115,9 +115,8 @@ public class SeedCropFarmer extends Window implements Runnable {
 			if(stopThread)
 				return;
 			
-			BotUtils.sleep(100);
-            GItem item = BotUtils.getItemAtHand();
-            while (item == null) {
+            GItem item = null;
+            while (BotUtils.getItemAtHand()==null) {
             	 Inventory inv = BotUtils.playerInventory();
                  for (Widget w = inv.child; w != null; w = w.next) {
                      if (w instanceof GItem && ((GItem) w).resname().equals(seedName)) {
@@ -133,7 +132,7 @@ public class SeedCropFarmer extends Window implements Runnable {
             	BotUtils.sleep(10);
 			
 			// Plant the seed from hand
-			BotUtils.mapInteractClick(-1 );
+            BotUtils.gui().ui.gui.map.wdgmsg("itemact", BotUtils.getCenterScreenCoord(), BotUtils.player().rc, 0);
 			while(BotUtils.findNearestStageCrop(5, 0, cropName)==null) {
 				BotUtils.sleep(10);
 			}

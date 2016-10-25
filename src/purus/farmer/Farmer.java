@@ -9,9 +9,10 @@ import haven.Inventory;
 import haven.UI;
 import haven.Widget;
 import haven.Window;
+import haven.automation.AreaSelectCallback;
 import purus.BotUtils;
 
-public class Farmer extends Window implements AreaSelect {
+public class Farmer extends Window implements AreaSelectRc {
 	
 	private BotUtils BotUtils;
 	
@@ -92,6 +93,7 @@ public class Farmer extends Window implements AreaSelect {
             @Override
             public void click() {
             	if(rc1!=null && rc2!=null) {
+            		System.out.println(rc1 + "" + rc2);
                 	// Start barley farmer and close this window
                 	SeedCropFarmer bf = new SeedCropFarmer(rc1, rc2, BotUtils,
                 			"gfx/terobjs/plants/barley", "gfx/invobjs/seed-barley", 3);
@@ -165,15 +167,12 @@ public class Farmer extends Window implements AreaSelect {
             public void click() {
             	// Select area
             	BotUtils.sysMsg("Hold shift to drag area", Color.WHITE);
-            	ui.gui.map.areaSelectB = true;
+                synchronized (AreaSelectRc.class) {
+                    BotUtils.gui().map.registerAreaSelectRc(BotUtils.gui().map.farmer);
+                }
             }
         };
         add(areaSelBtn, new Coord(20, y));
-	}
-	
-	public void areaSelect(Coord rc1, Coord rc2) {
-		this.rc1 = rc1;
-		this.rc2 = rc2;
 	}
 	
     @Override
@@ -183,5 +182,25 @@ public class Farmer extends Window implements AreaSelect {
         else
             super.wdgmsg(sender, msg, args);
     }
+
+	public void areaSelect(Coord rc1, Coord rc2) {
+		this.rc1 = rc1;
+		this.rc2 = rc2;
+    	BotUtils.sysMsg("Area selected!", Color.WHITE);
+        synchronized (AreaSelectCallback.class) {
+            BotUtils.gui().map.unregisterAreaSelect();
+        }
+		
+	}
+
+	@Override
+	public void areaSelectRc(Coord rc1, Coord rc2) {
+		this.rc1 = rc1;
+		this.rc2 = rc2;
+    	BotUtils.sysMsg("Area selected!", Color.WHITE);
+        synchronized (AreaSelectRc.class) {
+            BotUtils.gui().map.unregisterAreaSelectRc();
+        }
+	}
 
 }

@@ -61,7 +61,6 @@ import purus.MusselPicker;
 import purus.OvenFueler;
 import purus.TreeChop;
 import purus.TroughFiller;
-import purus.farmer.AreaSelect;
 import purus.farmer.Farmer;
 
 
@@ -529,9 +528,6 @@ public class MenuGrid extends Widget {
         	Farmer f = new Farmer(ui, w, i);
             gui.map.farmer = f;
             gui.add(f, new Coord(gui.sz.x / 2 - f.sz.x / 2, gui.sz.y / 2 - f.sz.y / 2 - 200));
-            synchronized (AreaSelect.class) {
-                gui.map.registerAreaSelect(f);;
-            }
         } else if(ad[1].equals("globalchat")) {
         	if(parent.ui.gui.map.GlobalChat!=null) {
         		parent.ui.gui.map.GlobalChat.disconnect();

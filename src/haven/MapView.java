@@ -58,7 +58,7 @@ import haven.pathfinder.Pathfinder;
 import haven.resutil.BPRadSprite;
 import purus.GlobalChat;
 import purus.TroughFiller;
-import purus.farmer.AreaSelect;
+import purus.farmer.AreaSelectRc;
 import purus.farmer.CarrotFarmer;
 import purus.farmer.Farmer;
 
@@ -108,8 +108,7 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
     private haven.Inventory i;
     private static TexCube sky = new TexCube(Resource.loadimg("skycube"));
     
-    private AreaSelect areaSelect;
-    public boolean areaSelectB;
+    private AreaSelectRc areaSelectRc;
     private Thread musselPicker;
     public interface Delayed {
         public void run(GOut g);
@@ -1821,14 +1820,6 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
     public void unregisterGobSelect() {
         this.gobselcb = null;
     }
-    
-    public void registerAreaSelect(AreaSelect callback) {
-        this.areaSelect = callback;
-    }
-
-    public void unregisterareaSelect() {
-        this.areaSelect = null;
-    }
 
     public void registerAreaSelect(AreaSelectCallback callback) {
         this.areaselcb = callback;
@@ -1836,6 +1827,14 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
 
     public void unregisterAreaSelect() {
         this.areaselcb = null;
+    }
+    
+    public void registerAreaSelectRc(AreaSelectRc callback) {
+        this.areaSelectRc = callback;
+    }
+
+    public void unregisterAreaSelectRc() {
+        this.areaSelectRc = null;
     }
 
     public void pfLeftClick(Coord mc, String action) {
@@ -1935,14 +1934,14 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
                         selection.destroy();
                         selection = null;
                     }
-                } else if (areaSelectB){
+                } else if (areaselcb != null) {
                     if (ui.modshift && selection == null) {
                         selection = new Selector(this);
                     } else if (selection != null) {
                         selection.destroy();
                         selection = null;
                     }
-                } else if (areaselcb != null) {
+                } else if(areaSelectRc != null) {
                     if (ui.modshift && selection == null) {
                         selection = new Selector(this);
                     } else if (selection != null) {
@@ -2243,9 +2242,12 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
                     mgrab.remove();
                     
                     if (mv != null) {
+                    	if (areaSelectRc !=null ) {
+                    		areaSelectRc.areaSelectRc(rc1, rc2);
+                    	}
                         if (areaselcb != null) {
                             areaselcb.areaselect(ol.getc1(), ol.getc2());
-                        } else { //  TODO: should reimplement miner to use callbacks
+                        } else if(ui.root.getcurs(c)!=null && ui.root.getcurs(c).name.equals("gfx/hud/curs/mine")){ //  TODO: should reimplement miner to use callbacks
                             areamine = new AreaMine(ol.getc1(), ol.getc2(), mv);
                             new Thread(areamine, "Area miner").start();
                             if (selection != null) {
@@ -2253,16 +2255,8 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
                                 selection = null;
                             }
                         }
-                    }
-                    
-                    if(areaSelectB) {
-	                    areaSelect.areaSelect(rc1, rc2);
-	                	ui.root.findchild(GameUI.class).msg("Area selected", Color.white);
-	                    areaSelectB = false;
-	                    if (selection != null) {
-	                        selection.destroy();
-	                        selection = null;
-	                    }
+                    } else {
+                        wdgmsg("sel", sc, ec, modflags);
                     }
 
                     if(carrotSelect) {
@@ -2283,8 +2277,6 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
             	            }
     	                	new CarrotFarmer(ui, w, i, gobs).Run();
                         }
-                    } else {
-                        wdgmsg("sel", sc, ec, modflags);
                     }
                     sc = null;
                 }
