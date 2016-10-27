@@ -2244,6 +2244,10 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
                     if (mv != null) {
                     	if (areaSelectRc !=null ) {
                     		areaSelectRc.areaSelectRc(rc1, rc2);
+                            if (selection != null) {
+                                selection.destroy();
+                                selection = null;
+                            }
                     	}
                         if (areaselcb != null) {
                             areaselcb.areaselect(ol.getc1(), ol.getc2());
