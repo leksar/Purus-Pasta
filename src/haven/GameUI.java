@@ -59,6 +59,7 @@ public class GameUI extends ConsoleHost implements Console.Directory {
     public Window invwnd, equwnd;
     public Inventory maininv;
     public CharWnd chrwdg;
+    public MapWnd mapfile;
     private Widget qqview;
     public BuddyWnd buddies;
     private final Zergwnd zerg;
@@ -78,8 +79,9 @@ public class GameUI extends ConsoleHost implements Console.Directory {
     public final Map<Integer, String> polowners = new HashMap<Integer, String>();
     public Bufflist buffs;
     public MinimapWnd minimapWnd;
-    public static TimersWnd timerswnd;
     public StudyWnd studywnd;
+    public LocalMiniMap mmap;
+    public TimersWnd timerswnd;
     public QuickSlotsWdg quickslots;
     public StatusWdg statuswindow;
     public AlignPanel questpanel;
@@ -131,6 +133,7 @@ public class GameUI extends ConsoleHost implements Console.Directory {
         }
     }
 
+    private final Coord minimapc;
     public GameUI(String chrid, long plid) {
         this.chrid = chrid;
         this.plid = plid;
@@ -163,17 +166,11 @@ public class GameUI extends ConsoleHost implements Console.Directory {
                 return (new Coord(GameUI.this.sz.x, Math.min(brpanel.c.y - 79, GameUI.this.sz.y - menupanel.sz.y)));
             }
         }, new Coord(1, 0)));
-        menu = brpanel.add(new MenuGrid() {
-            // HACK:
-            // intercept menu item usage and notify craft window about it to be able
-            // to determine which crafting receipt caused creation of Makewindow
-            @Override
-            public boolean use(Glob.Pagina pagina) {
-                boolean result = super.use(pagina);
-                if (result)
-                    makewnd.setLastAction(pagina);
-                return result;
-            }}, 20, 34);
+        menu = brpanel.add(new MenuGrid(), 20, 34);
+
+        Tex lbtnbg = Resource.loadtex("gfx/hud/lbtn-bg");// FIXME
+        minimapc = new Coord(4, 34 + (lbtnbg.sz().y - 33));
+
         brpanel.add(new Img(Resource.loadtex("gfx/hud/brframe")), 0, 0);
         menupanel.add(new MainMenu(), 0, 0);
         foldbuttons();
@@ -333,17 +330,17 @@ public class GameUI extends ConsoleHost implements Console.Directory {
             StringBuilder buf = new StringBuilder();
 
             public void write(char[] src, int off, int len) {
-		    List<String> lines = new ArrayList<String>();
-		    synchronized(this) {
-			buf.append(src, off, len);
-			int p;
-			while((p = buf.indexOf("\n")) >= 0) {
-			    lines.add(buf.substring(0, p));
-			    buf.delete(0, p + 1);
-			}
-		    }
-		    for(String ln : lines)
-			syslog.append(ln, Color.WHITE);
+                List<String> lines = new ArrayList<String>();
+                synchronized(this) {
+                    buf.append(src, off, len);
+                    int p;
+                    while((p = buf.indexOf("\n")) >= 0) {
+                        lines.add(buf.substring(0, p));
+                        buf.delete(0, p + 1);
+                    }
+                }
+                for(String ln : lines)
+                    syslog.append(ln, Color.WHITE);
             }
 
             public void close() {
@@ -611,7 +608,41 @@ public class GameUI extends ConsoleHost implements Console.Directory {
             map.glob.gui = this;
             if (minimapWnd != null)
                 ui.destroy(minimapWnd);
+            if(mapfile != null) {
+                ui.destroy(mapfile);
+                mapfile = null;
+            }
             minimapWnd = minimap();
+            mmap = minimapWnd.mmap;
+            if(mmap.save != null) {
+                mapfile = new MapWnd(mmap.save, map, new Coord(700, 500), "Map");
+                mapfile.hide();
+                add(mapfile, 50, 50);
+                minimapWnd.mapfile = mapfile;
+            }
+
+
+            if (Config.enabletracking && menu != null && !trackon) {
+                menu.wdgmsg("act", new Object[]{"tracking"});
+                trackautotgld = true;
+            }
+            if (Config.enablecrime && menu != null && !crimeon) {
+                crimeautotgld = true;
+                menu.wdgmsg("act", new Object[]{"crime"});
+            }
+
+            if (trackon) {
+                buffs.addchild(new BuffToggle("track", Bufflist.bufftrack));
+                errornosfx("Tracking is now turned on.");
+            }
+            if (crimeon) {
+                buffs.addchild(new BuffToggle("crime", Bufflist.buffcrime));
+                errornosfx("Criminal acts are now turned on.");
+            }
+            if (swimon) {
+                buffs.addchild(new BuffToggle("swim", Bufflist.buffswim));
+                errornosfx("Swimming is now turned on.");
+            }
         } else if (place == "fight") {
             fv = urpanel.add((Fightview) child, 0, 0);
         } else if (place == "fsess") {
@@ -705,6 +736,7 @@ public class GameUI extends ConsoleHost implements Console.Directory {
         Coord mwsz = Utils.getprefc("mmapwndsz", new Coord(290, 310));
         minimapWnd = new MinimapWnd(mwsz, map);
         add(minimapWnd, Utils.getprefc("mmapc", new Coord(10, 100)));
+        mmap = (LocalMiniMap)minimapWnd.mmap;
         return minimapWnd;
     }
 
@@ -870,6 +902,13 @@ public class GameUI extends ConsoleHost implements Console.Directory {
                 help = adda(new HelpWnd(res), 0.5, 0.5);
             else
                 help.res = res;
+        } else if(msg == "map-mark") {
+            long gobid = ((Integer)args[0]) & 0xffffffff;
+            long oid = (Long)args[1];
+            Indir<Resource> res = ui.sess.getres((Integer)args[2]);
+            String nm = (String)args[3];
+            if(mapfile != null)
+                mapfile.markobj(gobid, oid, res, nm);
         } else {
             super.uimsg(msg, args);
         }
@@ -891,7 +930,7 @@ public class GameUI extends ConsoleHost implements Console.Directory {
         super.wdgmsg(sender, msg, args);
     }
 
-    private void fitwdg(Widget wdg) {
+    public void fitwdg(Widget wdg) {
         if (wdg.c.x < 0)
             wdg.c.x = 0;
         if (wdg.c.y < 0)
@@ -1191,11 +1230,14 @@ public class GameUI extends ConsoleHost implements Console.Directory {
     private static final Resource errsfx = Resource.local().loadwait("sfx/error");
     private static final Resource msgsfx = Resource.local().loadwait("sfx/msg");
 
+    private long lasterrsfx = 0;
     public void error(String msg) {
         msg(msg, new Color(192, 0, 0), new Color(255, 0, 0));
-        Audio.play(errsfx);
-        if (errmsgcb != null)
-            errmsgcb.notifyErrMsg(msg);
+        long now = System.currentTimeMillis();
+        if(now - lasterrsfx > 100) {
+            Audio.play(errsfx);
+            lasterrsfx = now;
+        }
     }
 
     public void errornosfx(String msg) {

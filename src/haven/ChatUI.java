@@ -865,7 +865,7 @@ public class ChatUI extends Widget {
                         notify(cmsg, urgency);
 
                     long time = System.currentTimeMillis();
-                    if (Config.chatalarm && (lastmsg == 0 || (time - lastmsg) / 1000 > 50 * 1000)) {
+                    if (Config.chatalarm && (lastmsg == 0 || (time - lastmsg) / 1000 > 50)) {
                         Audio.play(alarmsfx, Config.chatalarmvol);
                         lastmsg = time;
                     }
@@ -910,7 +910,7 @@ public class ChatUI extends Widget {
                     save(cmsg.text().text, buddy != null ? buddy.name : "???");
 
                     long time = System.currentTimeMillis();
-                    if (lastmsg == 0 || (time - lastmsg) / 1000 > 40 * 1000) {
+                    if (lastmsg == 0 || (time - lastmsg) / 1000 > 50) {
                         Audio.play(alarmsfx, Config.chatalarmvol);
                         lastmsg = time;
                     }
