@@ -1,5 +1,8 @@
 ## Changelog
 
+### 2.24.3
+	- Latest merges from Amber & Default client
+	- Minor text fixes
 ### 2.24.2
 	- Latest merges from amber and default client
 	- Fixed issue with ore dropper and farmer
