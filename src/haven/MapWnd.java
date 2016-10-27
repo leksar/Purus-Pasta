@@ -168,7 +168,11 @@ public class MapWnd extends Window {
     }
 
     public void tick(double dt) {
-        super.tick(dt);
+        try {
+			super.tick(dt);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
         synchronized (deferred) {
             for (Iterator<Runnable> i = deferred.iterator(); i.hasNext(); ) {
                 Runnable task = i.next();

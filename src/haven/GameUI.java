@@ -81,7 +81,7 @@ public class GameUI extends ConsoleHost implements Console.Directory {
     public MinimapWnd minimapWnd;
     public StudyWnd studywnd;
     public LocalMiniMap mmap;
-    public TimersWnd timerswnd;
+    public static TimersWnd timerswnd;
     public QuickSlotsWdg quickslots;
     public StatusWdg statuswindow;
     public AlignPanel questpanel;
