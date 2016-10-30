@@ -132,12 +132,13 @@ public class WItem extends Widget implements DTarget {
                 if (shorttip == null)
                 shorttip = new ShortTip(info);
                 tres = shorttip;
+                return shorttip;
             } else {
                 if (longtip == null)
                     longtip = new LongTip(info);
                 tres = longtip;
+                return longtip;
             }
-            return new TexI(CustomTips.itemTooltip(item, tres));
         } catch (Loading e) {
             return ("...");
         }
