@@ -1241,6 +1241,8 @@ public class GameUI extends ConsoleHost implements Console.Directory {
     private long lasterrsfx = 0;
     public void error(String msg) {
         msg(msg, new Color(192, 0, 0), new Color(255, 0, 0));
+        if (errmsgcb != null)
+            errmsgcb.notifyErrMsg(msg);
         long now = System.currentTimeMillis();
         if(now - lasterrsfx > 100) {
             Audio.play(errsfx);

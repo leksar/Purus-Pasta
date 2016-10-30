@@ -179,6 +179,11 @@ public class UI {
             if (wdg instanceof ISBox && pwdg instanceof Window && ((Window) pwdg).origcap.equals("Stockpile")) {
                 TextEntry entry = new TextEntry(40, "") {
                     @Override
+                    public boolean keydown(KeyEvent e) {
+                        return false;
+                    }
+
+                    @Override
                     public boolean type(char c, KeyEvent ev) {
                         if (c >= KeyEvent.VK_0 && c <= KeyEvent.VK_9 && buf.line.length() < 2 || c == '\b') {
                             return buf.key(ev);

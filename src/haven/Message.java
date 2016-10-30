@@ -426,6 +426,8 @@ public abstract class Message {
     }
 
     public int peekrbuf(int i) {
+        if (rbuf.length - 1 < i)
+            return -1;
         return rbuf[i];
     }
 }
