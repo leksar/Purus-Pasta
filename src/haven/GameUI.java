@@ -166,8 +166,15 @@ public class GameUI extends ConsoleHost implements Console.Directory {
                 return (new Coord(GameUI.this.sz.x, Math.min(brpanel.c.y - 79, GameUI.this.sz.y - menupanel.sz.y)));
             }
         }, new Coord(1, 0)));
-        menu = brpanel.add(new MenuGrid(), 20, 34);
-
+        menu = brpanel.add(new MenuGrid() {
+                @Override
+                public boolean use(Glob.Pagina pagina) {
+                    boolean result = super.use(pagina);
+                    if (result)
+                        makewnd.setLastAction(pagina);
+                    return result;
+                }}, 20, 34);
+        
         Tex lbtnbg = Resource.loadtex("gfx/hud/lbtn-bg");// FIXME
         minimapc = new Coord(4, 34 + (lbtnbg.sz().y - 33));
 
