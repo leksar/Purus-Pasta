@@ -1,5 +1,11 @@
 ## Changelog
 
+### 2.24.4
+	- Fixed crafting history tabs
+	- Fixed food satiation highlighting
+	- Fixed area selection bug with farmer
+	- Latest merges from Amber client
+	- Some other small fixes
 ### 2.24.3
 	- Latest merges from Amber & Default client
 	- Minor text fixes
