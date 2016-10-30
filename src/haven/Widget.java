@@ -772,7 +772,7 @@ public class Widget {
                 if (focused.type(key, ev))
                     return (true);
                 if (focustab) {
-                    if (key == '\t' && !Config.agroclosest) {
+                    if (key == '\t' && !ev.isShiftDown()) {
                         Widget f = focused;
                         while (true) {
                             if ((ev.getModifiers() & InputEvent.SHIFT_MASK) == 0) {
@@ -780,7 +780,7 @@ public class Widget {
                                 f = ((n == null) || !n.hasparent(this)) ? child : n;
                             } else {
                                 Widget p = f.rprev();
-				f = ((p == null) || (p == this) || !p.hasparent(this))?lchild:p;
+				                f = ((p == null) || (p == this) || !p.hasparent(this))?lchild:p;
                             }
                             if (f.canfocus)
                                 break;

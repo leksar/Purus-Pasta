@@ -48,18 +48,17 @@ import haven.error.ErrorHandler;
 
 public class Config {
     public static final boolean iswindows = System.getProperty("os.name").startsWith("Windows");
-	public static String authuser = null;
-	public static String authserv = null;
-	public static String defserv = null;
-	public static URL resurl = null;
-	public static URL mapurl = null;
-	public static boolean dbtext = false;
-	public static boolean profile = false;
-	public static boolean profilegpu = false;
-	public static String resdir = null;
-	public static boolean nopreload = false;
-	public static int mainport = 1870;
-	public static int authport = 1871;
+    public static String authuser = null;
+    public static String authserv = null;
+    public static String defserv = null;
+    public static URL resurl = null;
+    public static boolean dbtext = false;
+    public static boolean profile = false;
+    public static boolean profilegpu = false;
+    public static String resdir = null;
+    public static boolean nopreload = false;
+    public static int mainport = 1870;
+    public static int authport = 1871;
     public static boolean hidesky = Utils.getprefb("hidesky", false);
     public static boolean hideflocomplete = Utils.getprefb("hideflocomplete", false);
     public static boolean hideflovisual = Utils.getprefb("hideflovisual", false);
@@ -162,7 +161,6 @@ public class Config {
     public static boolean tilecenter = Utils.getprefb("tilecenter", false);
     public static boolean userazerty = Utils.getprefb("userazerty", false);
     public static boolean hlightcuropp = Utils.getprefb("hlightcuropp", false);
-    public static boolean agroclosest = Utils.getprefb("agroclosest", false);
     public static boolean reversebadcamx = Utils.getprefb("reversebadcamx", false);
     public static boolean reversebadcamy = Utils.getprefb("reversebadcamy", false);
     public static boolean showservertime = Utils.getprefb("showservertime", false);
