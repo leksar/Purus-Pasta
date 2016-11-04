@@ -256,7 +256,7 @@ public class Utils {
         try {
             String jsonstr = Utils.getpref(prefname, null);
             if (jsonstr == null)
-                return null;
+                return def;
             JSONArray ja = new JSONArray(jsonstr);
             String[] ra = new String[ja.length()];
             for (int i = 0; i < ja.length(); i++)

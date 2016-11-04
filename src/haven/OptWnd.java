@@ -931,6 +931,28 @@ public class OptWnd extends Window {
                 Utils.delpref("fbelt_vertical");
             }
         }, new Coord(200, 320));
+        appender.add(new CheckBox("Show last used curios in study window") {
+            {
+                a = Config.studyhist;
+            }
+
+            public void set(boolean val) {
+                Utils.setprefb("studyhist", val);
+                Config.studyhist = val;
+                a = val;
+            }
+        });
+        appender.add(new CheckBox("Display buff icon when study has free slots") {
+            {
+                a = Config.studybuff;
+            }
+
+            public void set(boolean val) {
+                Utils.setprefb("studybuff", val);
+                Config.studybuff = val;
+                a = val;
+            }
+        });
     }
 
     private void initMap() {

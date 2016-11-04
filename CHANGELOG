@@ -1,3 +1,19 @@
+Version 1.42.0
+    New:
+        * Option to show previously studied curiosities in study window.
+        * Option to show buff icon if study window is not fully occupied.
+        * Added minimap icons for dead hedgehogs and squirrels.
+
+    Fixed:
+        * Automatic ground leveler not taking dirt from stockpiles.
+        * F-hotkeys not working when stockpile window is open.
+        * Various small fixes.
+
+    Misc:
+        * Option to aggro closest player on Tab key has been replaced by shift+tab.
+        * Localization improvements.
+
+
 Version 1.41.1
     Misc:
         * Upstream code merge.
