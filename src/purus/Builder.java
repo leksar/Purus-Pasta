@@ -40,7 +40,7 @@ public class Builder {
 	Thread t = new Thread(new Runnable() {
 	public void run()  {
 		window = BotUtils.gui().add(new StatusWindow(), 300, 200);
-		BotUtils.sysMsg("Builder started, enter precise name of window to build.", Color.white);
+		BotUtils.sysMsg("Open sign to build and press start.", Color.white);
 		while(!start) {
 			BotUtils.sleep(100);
 			if(stop)
