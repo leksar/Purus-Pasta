@@ -35,6 +35,9 @@ import java.awt.image.WritableRaster;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import com.sun.java.swing.plaf.windows.resources.windows;
+
 import haven.automation.ErrorSysMsgCallback;
 
 import static haven.GItem.Quality.AVG_MODE_GEOMETRIC;
@@ -1309,6 +1312,21 @@ public class GameUI extends ConsoleHost implements Console.Directory {
             }
         }
         return null;
+    }
+    
+    public Button getbtn(String btnname) {
+        for (Widget w = lchild; w != null; w = w.prev) {
+            if (w instanceof Window) {
+                Button btn = w.getchild(Button.class);
+                // Wat te fuk
+                if(btn!=null && btn.text!=null && btn.text.text!=null) {
+        			if (btn.text.text.equals(btnname)) {
+        				return btn;
+                	}
+        		}
+            }
+       }
+       return null;
     }
 
 

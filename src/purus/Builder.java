@@ -22,7 +22,6 @@ public class Builder {
     public Petal[] opts;
     private Widget window; 
     
-    private String wndName;
     private boolean start = false;
     private boolean stop = false;
     
@@ -47,20 +46,18 @@ public class Builder {
 			if(stop)
 				return;
 		}
-		if(BotUtils.gui().getwnd("wndName")==null) {
-			BotUtils.sysMsg("Invalid window name, Builder stopped", Color.white);
-			window.destroy();
-			return;
-		}
-		while(BotUtils.gui().getwnd(wndName)!=null) {
+		while(BotUtils.gui().getbtn("Build")!=null) {
 			if(stop)
 				return;
 			BotUtils.drink();
 			if(stop)
 				return;
-			Window wnd = BotUtils.gui().getwnd(wndName);
-			BotUtils.pushButton("Build", wndName);
-			sleep(1000);
+			Button btn = BotUtils.gui().getbtn("Build");
+			System.out.println(btn.text);
+			if(btn!=null)
+			btn.click();
+				else break;
+			sleep(2000);
             while(BotUtils.gui().prog >= 0) {
             	sleep(100);
             }
@@ -84,17 +81,13 @@ public class Builder {
 		            super(Coord.z, "Builder");
 		            setLocal(true);
 		            int y = 0;
-		            add(new TextEntry(120, "Window Name") {
-		                {dshow = true;}
-		                public void activate(String text) {
-		                    wndName = text;
-		                }
-		            }, new Coord(0, y));
-		            y += 35;
 		            add(new Button(120, "Start") {
 		                public void click() {
+		                	if(start==false) {
 		                	gameui().msg("Started builder", Color.WHITE);
 		                	start = true;
+		                	} else
+		                		gameui().msg("Builder already running!", Color.WHITE);
 		                }
 		            }, new Coord(0, y));
 		            y += 35;
