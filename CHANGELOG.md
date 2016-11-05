@@ -1,5 +1,9 @@
 ## Changelog
 
+### 2.24.5
+	- Fixed builder script
+	- Fixed hunger level decimals
+	- Latest merges from Amber client
 ### 2.24.4
 	- Fixed crafting history tabs
 	- Fixed food satiation highlighting
