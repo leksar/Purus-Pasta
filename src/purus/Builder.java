@@ -53,7 +53,6 @@ public class Builder {
 			if(stop)
 				return;
 			Button btn = BotUtils.gui().getbtn("Build");
-			System.out.println(btn.text);
 			if(btn!=null)
 			btn.click();
 				else break;
