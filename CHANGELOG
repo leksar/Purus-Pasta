@@ -1,3 +1,18 @@
+Version 1.42.1
+    New:
+        * Switch between currently selected quality mode and 'all' mode with alt+q.
+
+    Fixed:
+        * Belt hotkeys being invoked when typing into stockpile window.
+        * Hitbox not shown for domestic horses.
+
+    Misc:
+        * Take one item from stockpile when clicking take without entering an amount.
+        * Changed extensions menu icon.
+        * Updated Russian localization.
+        * Upstream merge.
+
+
 Version 1.42.0
     New:
         * Option to show previously studied curiosities in study window.
