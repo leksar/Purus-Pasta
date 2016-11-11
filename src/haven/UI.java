@@ -203,7 +203,8 @@ public class UI {
                     @Override
                     public void click() {
                         try {
-                            int count = Integer.parseInt(entry.dtext());
+                            String cs = entry.dtext();
+                            int count = cs.isEmpty() ? 1 : Integer.parseInt(cs);
                             for (int i = 0; i < count; i++)
                                 wdg.wdgmsg("xfer");
                         } catch (NumberFormatException e) {

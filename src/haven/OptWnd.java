@@ -1628,17 +1628,6 @@ public class OptWnd extends Window {
                 }
             }
         });
-        appender.add(new CheckBox("Hide extensions menu (req. restart)") {
-            {
-                a = Config.hidexmenu;
-            }
-
-            public void set(boolean val) {
-                Utils.setprefb("hidexmenu", val);
-                Config.hidexmenu = val;
-                a = val;
-            }
-        });
         appender.add(new CheckBox("Show inventory on login") {
             {
                 a = Config.showinvonlogin;

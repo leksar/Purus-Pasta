@@ -147,18 +147,16 @@ public class MenuGrid extends Widget {
     
     @Override
     protected void attach(UI ui) {
-    	super.attach(ui);
-    	Glob glob = ui.sess.glob;
-    	ObservableCollection<Pagina> p = glob.paginae;
-    	// Amber Stuff
-        if (!Config.hidexmenu) {
+        super.attach(ui);
+        Glob glob = ui.sess.glob;
+        synchronized (glob.paginae) {
+            ObservableCollection<Pagina> p = glob.paginae;
             p.add(glob.paginafor(Resource.local().load("paginae/amber/coal11")));
             p.add(glob.paginafor(Resource.local().load("paginae/amber/coal12")));
             p.add(glob.paginafor(Resource.local().load("paginae/amber/branchoven")));
             p.add(glob.paginafor(Resource.local().load("paginae/amber/steel")));
             p.add(glob.paginafor(Resource.local().load("paginae/amber/autosurvey")));
             p.add(glob.paginafor(Resource.local().load("paginae/amber/torch")));
-        }
     	// Purus Cor Stuff
     	p.add(glob.paginafor(Resource.local().load("paginae/custom/timer")));
     	p.add(glob.paginafor(Resource.local().load("paginae/custom/study")));
@@ -176,6 +174,7 @@ public class MenuGrid extends Widget {
     	// work in progress p.add(glob.paginafor(Resource.local().load("paginae/custom/oven")));
     	// Disable this for now because amber has one
     	//p.add(glob.paginafor(Resource.local().load("paginae/custom/fillsmelter")));
+        }
     }
 
 

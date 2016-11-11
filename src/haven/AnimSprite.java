@@ -83,4 +83,8 @@ public class AnimSprite extends Sprite {
             ret = ret | anim.tick(dt);
         return (ret);
     }
+
+    public Object staticp() {
+        return((anims.length == 0)?CONSTANS:null);
+    }
 }

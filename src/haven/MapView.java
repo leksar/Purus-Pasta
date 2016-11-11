@@ -806,17 +806,18 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
         }
 
         final GobSet oldfags = new GobSet("old");
+        final GobSet semistat = new GobSet("semistat");
         final GobSet semifags = new Transitory("semi") {
             int cycle = 0;
 
             void update() {
-                if(++cycle >= 300) {
+                if (++cycle >= 300) {
                     Collection<Gob> cache = new ArrayList<Gob>();
-                    for(Map.Entry<Gob, Integer> ob : age.entrySet()) {
-                        if(ticks - ob.getValue() > 450)
+                    for (Map.Entry<Gob, Integer> ob : age.entrySet()) {
+                        if (ticks - ob.getValue() > 450)
                             cache.add(ob.getKey());
                     }
-                    for(Gob ob : cache)
+                    for (Gob ob : cache)
                         put(oldfags, ob);
                     cycle = 0;
                 }
@@ -828,12 +829,20 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
             void update() {
                 if(++cycle >= 20) {
                     Collection<Gob> cache = new ArrayList<Gob>();
+                    Collection<Gob> scache = new ArrayList<Gob>();
                     for(Map.Entry<Gob, Integer> ob : age.entrySet()) {
-                        if(ticks - ob.getValue() > 30)
-                            cache.add(ob.getKey());
+                        if(ticks - ob.getValue() > 30) {
+                            Gob gob = ob.getKey();
+                            if(gob.staticp() instanceof Gob.SemiStatic)
+                                scache.add(gob);
+                            else
+                                cache.add(gob);
+                        }
                     }
                     for(Gob ob : cache)
                         put(semifags, ob);
+                    for(Gob ob : scache)
+                        put(semistat, ob);
                     cycle = 0;
                 }
             }
@@ -845,7 +854,8 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
                 if(++cycle >= 5) {
                     Collection<Gob> cache = new ArrayList<Gob>();
                     for(Gob ob : obs) {
-                        if(ob.staticp() instanceof Gob.Static)
+                        Object seq = ob.staticp();
+                        if((seq instanceof Gob.Static) || (seq instanceof Gob.SemiStatic))
                             cache.add(ob);
                     }
                     for(Gob ob : cache)
@@ -856,7 +866,7 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
 
             public Object staticp() {return(null);}
         };
-        final GobSet[] all = {oldfags, semifags, newfags, dynamic};
+        final GobSet[] all = {oldfags, semifags, semistat, newfags, dynamic};
 
         void put(GobSet set, Gob ob) {
             GobSet p = parts.get(ob);
@@ -913,7 +923,7 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
         }
 
         public String toString() {
-            return(String.format("%,dd %,dn %,ds %,do", dynamic.size(), newfags.size(), semifags.size(), oldfags.size()));
+            return(String.format("%,dd %,dn %,dS %,ds %,do", dynamic.size(), newfags.size(), semistat.size(), semifags.size(), oldfags.size()));
         }
     }
     private final Rendered gobs;

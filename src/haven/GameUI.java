@@ -1040,6 +1040,8 @@ public class GameUI extends ConsoleHost implements Console.Directory {
         timerswnd.raise();
     }
 
+    private int prevQualityMode = Config.showqualitymode;
+
     public boolean globtype(char key, KeyEvent ev) {
         if (key == ':') {
             entercmd();
@@ -1152,6 +1154,14 @@ public class GameUI extends ConsoleHost implements Console.Directory {
                 ui.fmAutoTime = System.currentTimeMillis();
             }
             maininv.drink(100);
+            return true;
+        } else if (ev.isAltDown() && ev.getKeyCode() == KeyEvent.VK_Q) {
+            if (Config.showqualitymode == 2)  { // all
+                Config.showqualitymode = prevQualityMode;
+            } else {
+                prevQualityMode = Config.showqualitymode;
+                Config.showqualitymode = 2;
+            }
             return true;
         }
 
