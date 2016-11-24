@@ -40,7 +40,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import haven.automation.MusselPicker;
 import haven.resutil.Ridges;
 
 public class LocalMiniMap extends Widget {

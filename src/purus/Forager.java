@@ -15,7 +15,6 @@ import haven.Coord;
 import haven.FlowerMenu;
 import haven.Gob;
 import haven.Inventory;
-import haven.MapView;
 import haven.TextEntry;
 import haven.UI;
 import haven.WItem;

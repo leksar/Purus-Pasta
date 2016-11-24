@@ -2,8 +2,6 @@ package purus;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Map;
-import java.util.Scanner;
 
 import org.kitteh.irc.client.library.Client;
 import org.kitteh.irc.client.library.event.channel.ChannelMessageEvent;
@@ -13,7 +11,6 @@ import org.kitteh.irc.client.library.util.AcceptingTrustManagerFactory;
 import org.kitteh.irc.lib.net.engio.mbassy.listener.Handler;
 
 import haven.Coord;
-import haven.HavenPanel;
 import haven.TextEntry;
 import haven.Textlog;
 import haven.Widget;

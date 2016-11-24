@@ -1,7 +1,10 @@
 package haven.automation;
 
 
-import haven.*;
+import haven.GameUI;
+import haven.Gob;
+import haven.Loading;
+import haven.Resource;
 
 public class MusselPicker implements Runnable {
     private GameUI gui;

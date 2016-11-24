@@ -5,11 +5,9 @@ import java.util.List;
 
 import haven.Button;
 import haven.Coord;
-import haven.GItem;
 import haven.Gob;
 import haven.Inventory;
 import haven.UI;
-import haven.WItem;
 import haven.Widget;
 import haven.Window;
 

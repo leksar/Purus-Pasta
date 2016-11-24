@@ -1,15 +1,22 @@
-import haven.*;
-import haven.GItem.NumberInfo;
-import haven.ItemInfo.Tip;
-import haven.Resource.Image;
-import haven.Text.Foundry;
-
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+
+import haven.CharWnd;
+import haven.Coord;
+import haven.GItem.NumberInfo;
+import haven.Glob;
+import haven.ItemInfo;
+import haven.ItemInfo.Tip;
+import haven.PUtils;
+import haven.Resource;
+import haven.Resource.Image;
+import haven.RichText;
+import haven.Text;
+import haven.Text.Foundry;
 
 public class ISlots extends Tip implements NumberInfo {
     public static final Text ch = Text.render(Resource.getLocString(Resource.BUNDLE_LABEL, "Gilding:"));

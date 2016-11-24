@@ -1,7 +1,7 @@
 package haven;
 
 
-import java.awt.*;
+import java.awt.Font;
 import java.util.List;
 
 public class TimerWdg extends Widget {

@@ -26,13 +26,14 @@
 
 package haven;
 
+import static haven.BuddyWnd.width;
+
 import java.awt.Color;
 import java.awt.Font;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import static haven.BuddyWnd.width;
 
 public class Polity extends Widget {
     public final String cap, name;

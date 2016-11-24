@@ -26,23 +26,26 @@
 
 package haven;
 
-import static haven.Inventory.invsq;
-
-import java.awt.*;
-import java.util.*;
-import java.awt.event.KeyEvent;
-import java.awt.image.WritableRaster;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import com.sun.java.swing.plaf.windows.resources.windows;
-
-import haven.automation.ErrorSysMsgCallback;
-
 import static haven.GItem.Quality.AVG_MODE_GEOMETRIC;
 import static haven.GItem.Quality.AVG_MODE_QUADRATIC;
 import static haven.Inventory.invsq;
+
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.event.KeyEvent;
+import java.awt.image.WritableRaster;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import haven.automation.ErrorSysMsgCallback;
 
 public class GameUI extends ConsoleHost implements Console.Directory {
     public static final Text.Foundry msgfoundry = new Text.Foundry(Text.dfont, Config.fontsizeglobal * 14 / 11);

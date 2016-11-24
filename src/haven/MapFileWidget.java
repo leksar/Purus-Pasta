@@ -26,20 +26,18 @@
 
 package haven;
 
-import java.util.*;
-import java.util.function.*;
-import java.awt.Color;
-import java.awt.event.KeyEvent;
+import static haven.MCache.cmaps;
 
-import haven.MapFile.Segment;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Objects;
+
 import haven.MapFile.Grid;
 import haven.MapFile.GridInfo;
 import haven.MapFile.Marker;
 import haven.MapFile.PMarker;
 import haven.MapFile.SMarker;
-
-import static haven.MCache.cmaps;
-import static haven.Utils.or;
+import haven.MapFile.Segment;
 
 public class MapFileWidget extends Widget {
     public final MapFile file;

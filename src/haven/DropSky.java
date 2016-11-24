@@ -26,10 +26,21 @@
 
 package haven;
 
-import haven.ItemInfo.SpriteOwner;
-import haven.glsl.*;
-import javax.media.opengl.*;
-import static haven.glsl.Cons.*;
+import static haven.glsl.Cons.mul;
+import static haven.glsl.Cons.pick;
+import static haven.glsl.Cons.textureCube;
+
+import javax.media.opengl.GL;
+import javax.media.opengl.GL2;
+
+import haven.glsl.AutoVarying;
+import haven.glsl.Expression;
+import haven.glsl.Macro1;
+import haven.glsl.ProgramContext;
+import haven.glsl.ShaderMacro;
+import haven.glsl.Type;
+import haven.glsl.Uniform;
+import haven.glsl.VertexContext;
 
 public class DropSky extends Sprite implements Rendered {
     public final TexCube tex;

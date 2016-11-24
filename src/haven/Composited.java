@@ -34,9 +34,9 @@ import java.util.List;
 import java.util.Random;
 
 import haven.Composited.Model.Layer;
+import haven.MapView.ClickInfo;
 import haven.Skeleton.Pose;
 import haven.Skeleton.PoseMod;
-import haven.MapView.ClickInfo;
 
 public class Composited implements Rendered, MapView.Clickable {
     public final Skeleton skel;

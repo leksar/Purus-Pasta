@@ -4,11 +4,8 @@ import java.awt.Color;
 
 import haven.Button;
 import haven.Coord;
-import haven.FlowerMenu;
 import haven.FlowerMenu.Petal;
-import haven.Gob;
 import haven.Inventory;
-import haven.TextEntry;
 import haven.UI;
 import haven.Widget;
 import haven.Window;

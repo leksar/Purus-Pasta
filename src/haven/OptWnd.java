@@ -27,6 +27,10 @@
 package haven;
 
 
+import static haven.GItem.Quality.AVG_MODE_ARITHMETIC;
+import static haven.GItem.Quality.AVG_MODE_GEOMETRIC;
+import static haven.GItem.Quality.AVG_MODE_QUADRATIC;
+
 import java.io.IOException;
 import java.net.JarURLConnection;
 import java.net.URL;
@@ -40,10 +44,6 @@ import java.util.Set;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.stream.Collectors;
-
-import static haven.GItem.Quality.AVG_MODE_ARITHMETIC;
-import static haven.GItem.Quality.AVG_MODE_GEOMETRIC;
-import static haven.GItem.Quality.AVG_MODE_QUADRATIC;
 
 public class OptWnd extends Window {
     public static final int VERTICAL_MARGIN = 10;

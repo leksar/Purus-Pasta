@@ -1,18 +1,18 @@
 package haven.res.ui.barterbox;
 
+import java.util.List;
+import java.util.Random;
+
 import haven.GSprite;
+import haven.GSprite.Owner;
 import haven.Glob;
 import haven.ItemInfo;
+import haven.ItemInfo.Name;
+import haven.ItemInfo.SpriteOwner;
 import haven.ResData;
 import haven.Resource;
 import haven.Tex;
 import haven.TexI;
-import haven.GSprite.Owner;
-import haven.ItemInfo.Name;
-import haven.ItemInfo.SpriteOwner;
-
-import java.util.List;
-import java.util.Random;
 
 public class Spec implements Owner, SpriteOwner {
     private static final Object[] definfo = new Object[]{new Object[]{Resource.remote().loadwait("ui/tt/defn")}};

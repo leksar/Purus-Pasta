@@ -81,7 +81,6 @@ import haven.glsl.AutoVarying;
 import haven.glsl.Cons;
 import haven.glsl.Expression;
 import haven.glsl.Function;
-import haven.glsl.Function.PDir;
 import haven.glsl.Macro1;
 import haven.glsl.MiscLib;
 import haven.glsl.ProgramContext;
