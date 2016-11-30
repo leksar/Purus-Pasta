@@ -1,5 +1,9 @@
 ## Changelog
 
+### 2.25.0
+	- Merged latest changes from Amber & Default client
+	- Fixed minor text issues
+	- Updated curio.config
 ### 2.24.5
 	- Fixed builder script
 	- Fixed hunger level decimals
