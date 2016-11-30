@@ -5,6 +5,7 @@ import java.util.List;
 
 import haven.Button;
 import haven.Coord;
+import haven.Coord2d;
 import haven.Gob;
 import haven.Inventory;
 import haven.UI;
@@ -40,7 +41,7 @@ public class OvenFueler {
 		public void run()  {
 			window = BotUtils.gui().add(new StatusWindow(), 300, 200);
 			List<Gob> ovens = BotUtils.findObjectsByNames(2000, "gfx/terobjs/oven");
-			Coord startCoord = new Coord((int)BotUtils.player().rc.x, (int)BotUtils.player().rc.y);
+			Coord2d startCoord = new Coord2d((int)BotUtils.player().rc.x, (int)BotUtils.player().rc.y);
 			for(Gob gob : ovens) {
 				BotUtils.pfRightClick(gob, 1);
 				BotUtils.waitForWindow("Oven");

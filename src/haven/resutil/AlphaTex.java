@@ -53,6 +53,7 @@ import haven.glsl.ShaderMacro;
 import haven.glsl.Uniform;
 import haven.glsl.ValBlock;
 import haven.glsl.ValBlock.Value;
+import haven.glsl.Varying.Interpol;
 import haven.glsl.VertexContext;
 
 public class AlphaTex extends GLState {

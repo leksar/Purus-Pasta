@@ -68,7 +68,7 @@ public class Pathfinder implements Runnable {
     public void run() {
         do {
             moveinterupted = false;
-            pathfind(mv.player().rc);
+          //  pathfind(mv.player().rc);
         } while (moveinterupted && !terminate);
 
         notifyListeners();
@@ -88,7 +88,7 @@ public class Pathfinder implements Runnable {
                 if (this.gob != null && this.gob.id == gob.id)
                     continue;
                 GobHitbox.BBox box = GobHitbox.getBBox(gob, true);
-                if (box != null && isInsideBoundBox(gob.rc, gob.a, box, player.rc)) {
+                if (box != null && isInsideBoundBox(gob.rc.floor(), gob.a, box, player.rc.floor())) {
                     m.excludeGob(gob);
                     continue;
                 }

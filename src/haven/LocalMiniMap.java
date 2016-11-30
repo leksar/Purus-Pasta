@@ -28,6 +28,7 @@ package haven;
 
 import static haven.MCache.cmaps;
 import static haven.MCache.tilesz;
+import static haven.OCache.posres;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -171,11 +172,11 @@ public class LocalMiniMap extends Widget {
         }
     }
 
-    public Coord p2c(Coord pc) {
-        return (pc.div(tilesz).sub(cc).add(sz.div(2)));
+    public Coord p2c(Coord2d pc) {
+        return (pc.floor(tilesz).sub(cc).add(sz.div(2)));
     }
 
-    public Coord c2p(Coord c) {
+    public Coord2d c2p(Coord c) {
         return (c.sub(sz.div(2)).add(cc).mul(tilesz).add(tilesz.div(2)));
     }
 
@@ -409,16 +410,16 @@ public class LocalMiniMap extends Widget {
             this.cc = null;
             return;
         }
-        this.cc = pl.rc.div(tilesz);
+        this.cc = pl.rc.div(MCache.tilesz2);
         if(pl == null)
-            this.cc = mv.cc.div(tilesz);
+            this.cc = mv.cc.floor(tilesz);
         else
-            this.cc = pl.rc.div(tilesz);
+            this.cc = pl.rc.floor(tilesz);
 
         if (Config.playerposfile != null && MapGridSave.gul != null) {
             try {
                 // instead of synchronizing MapGridSave.gul we just handle NPE
-                plcrel = pl.rc.sub((MapGridSave.gul.x + 50) * tilesz.x, (MapGridSave.gul.y + 50) * tilesz.y);
+             //   plcrel = pl.rc.sub((MapGridSave.gul.x + 50) * tilesz.x, (MapGridSave.gul.y + 50) * tilesz.y);
             } catch (NullPointerException npe) {
             }
         }
@@ -445,9 +446,10 @@ public class LocalMiniMap extends Widget {
                     if (f == null) {
                         f = Defer.later(new Defer.Callable<MapTile>() {
                             public MapTile call() {
-                                boolean gczero = plg.gc.equals(Coord.z);
-                                if (gczero && cur == null || cur != null && gczero && cur.grid != plg)
+                                // clear tiles on teleports
+                                if (cur != null && seq == cur.seq && plg.gc.dist(cur.grid.gc) > 1.5)
                                     maptiles.clear();
+
                                 Coord ul = plg.ul;
                                 Coord gc = plg.gc;
                                 maptiles.put(gc.add(-1, -1), drawmap(ul.add(-100, -100), cmaps));
@@ -517,22 +519,18 @@ public class LocalMiniMap extends Widget {
         synchronized (ui.sess.glob.party.memb) {
             Collection<Party.Member> members = ui.sess.glob.party.memb.values();
             for (Party.Member m : members) {
-            	Coord mc;
-                try {
-                    mc = m.getc();
-                } catch (MCache.LoadingMap e) {
-                    mc = null;
-                }
-                if(mc == null)
-    			    continue;
+                Coord2d ppc;
                 Coord ptc;
+                Coord2d mc;
                 double angle;
                 try {
-                    ptc = m.getc();
-                    if (ptc == null) // chars are located in different worlds
+                    ppc = m.getc();
+                    if (ppc == null) // chars are located in different worlds
                         continue;
+                    
+                    mc = ppc;
 
-                    ptc = p2c(ptc).add(delta);
+                    ptc = p2c(ppc).add(delta);
                     Gob gob = m.getgob();
                     // draw 'x' if gob is outside of view range
                     if (gob == null) {
@@ -562,7 +560,7 @@ public class LocalMiniMap extends Widget {
                 if (Config.mapshowviewdist && m.gobid == MapView.plgob) {
                     // view radius is 9x9 "server" grids
                     Coord rc = p2c(mc.div(MCache.sgridsz).sub(4, 4).mul(MCache.sgridsz)).sub(off);
-                    Coord rs = MCache.sgridsz.mul(9).div(tilesz);
+                    Coord rs = MCache.sgridsz.mul(9).div(MCache.tilesz2);
                     g.chcolor(255, 255, 255, 60);
                     g.frect(rc, rs);
                     g.chcolor(0, 0, 0, 128);
@@ -587,9 +585,9 @@ public class LocalMiniMap extends Widget {
                     return false;
                 Gob gob = findicongob(c.sub(delta));
                 if (gob == null) {
-                    mv.wdgmsg("click", rootpos().add(c.sub(delta)), c2p(c.sub(delta)), button, ui.modflags());
+                    mv.wdgmsg("click", rootpos().add(c.sub(delta)), c2p(c.sub(delta)).floor(posres), button, ui.modflags());
                 } else {
-                    mv.wdgmsg("click", rootpos().add(c.sub(delta)), c2p(c.sub(delta)), button, ui.modflags(), 0, (int) gob.id, gob.rc, 0, -1);
+                    mv.wdgmsg("click", rootpos().add(c.sub(delta)), c2p(c.sub(delta)).floor(posres), button, ui.modflags(), 0, (int) gob.id, gob.rc.floor(posres), 0, -1);
                     if (Config.autopickmussels)
                         mv.startMusselsPicker(gob);
                 }
@@ -603,9 +601,9 @@ public class LocalMiniMap extends Widget {
                     return false;
                 Gob gob = findicongob(c.sub(delta));
                 if (gob == null) {
-                    mv.wdgmsg("click", rootpos().add(c.sub(delta)), c2p(c.sub(delta)), 1, ui.modflags());
+                    mv.wdgmsg("click", rootpos().add(c.sub(delta)), c2p(c.sub(delta)).floor(posres), 1, ui.modflags());
                 } else {
-                    mv.wdgmsg("click", rootpos().add(c.sub(delta)), c2p(c.sub(delta)), button, ui.modflags(), 0, (int) gob.id, gob.rc, 0, -1);
+                    mv.wdgmsg("click", rootpos().add(c.sub(delta)), c2p(c.sub(delta)).floor(posres), button, ui.modflags(), 0, (int) gob.id, gob.rc.floor(posres), 0, -1);
                     if (Config.autopickmussels)
                         mv.startMusselsPicker(gob);
                 }
@@ -631,5 +629,9 @@ public class LocalMiniMap extends Widget {
             dragging = null;
         }
         return (true);
+    }
+
+    public void clearmap() {
+        maptiles.clear();
     }
 }

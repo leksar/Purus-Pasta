@@ -1,5 +1,7 @@
 package haven;
 
+import static haven.MCache.tilesz;
+
 import java.nio.BufferOverflowException;
 import java.nio.FloatBuffer;
 
@@ -18,7 +20,6 @@ public class TileOutline implements Rendered {
         this.map = map;
         this.area = (MCache.cutsz.x * 5) * (MCache.cutsz.y * 5);
         this.color = new States.ColState(255, 255, 255, 64);
-
         // double-buffer to prevent flickering
         vertexBuffers = new FloatBuffer[2];
         vertexBuffers[0] = Utils.mkfbuf(this.area * 3 * 4);
@@ -51,7 +52,7 @@ public class TileOutline implements Rendered {
     public void update(Coord ul) {
         try {
             this.ul = ul;
-            this.location = Location.xlate(new Coord3f((float) (ul.x * MCache.tilesz.x), (float) (-ul.y * MCache.tilesz.y), 0.0F));
+            this.location = Location.xlate(new Coord3f((float) (ul.x * tilesz.x), (float) (-ul.y * tilesz.y), 0.0F));
             swapBuffers();
             Coord c = new Coord();
             Coord size = ul.add(MCache.cutsz.mul(5));
@@ -63,7 +64,7 @@ public class TileOutline implements Rendered {
     }
 
     private Coord3f mapToScreen(Coord c) {
-        return new Coord3f((float) ((c.x - ul.x) * MCache.tilesz.x), (float) (-(c.y - ul.y) * MCache.tilesz.y), map.getz(c));
+        return new Coord3f((float) ((c.x - ul.x) * tilesz.x), (float) (-(c.y - ul.y) * tilesz.y), map.getz(c));
     }
 
     private void addLineStrip(Coord3f... vertices) {

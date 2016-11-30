@@ -10,6 +10,7 @@ import java.util.regex.Pattern;
 import haven.Button;
 import haven.Charlist;
 import haven.Coord;
+import haven.Coord2d;
 import haven.Equipory;
 import haven.FlowerMenu;
 import haven.FlowerMenu.Petal;
@@ -187,8 +188,11 @@ public class BotUtils {
     }
     
 	// Move to coords with pathfinder, 2nd argument for modifier (null to just move)
-	public void pfLeftClick(Coord c, String mod) {
+	public void pfLeftClick(Coord2d c, String mod) {
+		/* TODO: FIXIT
+		 Disabled for now!!
 		gui().map.pfLeftClick(c, mod);
+		*/
 	}
     
     // Drinks water/tea from containers in inventory
@@ -297,7 +301,7 @@ public class BotUtils {
 
 	// Finds nearest crop with x stage
 		 public Gob findNearestStageCrop(int radius, int stage, String... names) {
-		        Coord plc = player().rc;
+		        Coord2d plc = player().rc;
 		        double min = radius;
 		        Gob nearest = null;
 		        synchronized (ui.sess.glob.oc) {
@@ -326,7 +330,7 @@ public class BotUtils {
 		 
 	// Finds objects by name, returns list of them
 	public List<Gob> findObjectsByNames(int radius, String... names) {
-		 Coord plc = player().rc;
+		 Coord2d plc = player().rc;
 	        double min = radius;
 	        List<Gob> gobs = new ArrayList<Gob>();
 	        synchronized (ui.sess.glob.oc) {
@@ -346,7 +350,7 @@ public class BotUtils {
 	
 	// Finds nearest objects and returns closest one
 	 public Gob findNearestTree(int radius) {
-	        Coord plc = player().rc;
+	        Coord2d plc = player().rc;
 	        double min = radius;
 	        Gob nearest = null;
 	        synchronized (ui.sess.glob.oc) {
@@ -369,7 +373,7 @@ public class BotUtils {
 		 
 	// Finds nearest objects and returns closest one
 	 public Gob findObjectByNames(int radius, String... names) {
-	        Coord plc = player().rc;
+	        Coord2d plc = player().rc;
 	        double min = radius;
 	        Gob nearest = null;
 	        synchronized (ui.sess.glob.oc) {

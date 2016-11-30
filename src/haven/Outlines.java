@@ -64,6 +64,7 @@ import java.awt.Color;
 import haven.glsl.Expression;
 import haven.glsl.For;
 import haven.glsl.Function;
+import haven.glsl.Function.PDir;
 import haven.glsl.If;
 import haven.glsl.LValue;
 import haven.glsl.Macro1;

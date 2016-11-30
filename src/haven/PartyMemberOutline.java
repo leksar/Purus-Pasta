@@ -10,9 +10,9 @@ public class PartyMemberOutline extends Sprite {
     private final GLState mat;
     private final VertexBuf.VertexArray posa;
     private final VertexBuf.NormalArray nrma;
-    private final ShortBuffer eidx; 
-    private final Float height;
-    private Coord lc;
+    private final ShortBuffer eidx;
+	private final Float height;
+    private Coord2d lc;
 
 
     protected PartyMemberOutline(Owner owner, Color color, Float height) {
@@ -60,22 +60,20 @@ public class PartyMemberOutline extends Sprite {
 
     @Override
     public boolean tick(int dt) {
-        Coord c = ((Gob)this.owner).rc;
-        if ((this.lc == null) || (!this.lc.equals(c)))
-        {
+        Coord2d c = ((Gob) this.owner).rc;
+        if ((this.lc == null) || (!this.lc.equals(c))) {
             setz(this.owner.glob(), c);
             this.lc = c;
         }
         return false;
     }
 
-    private void setz(Glob glob, Coord c)
-    {
+    private void setz(Glob glob, Coord2d c) {
         FloatBuffer posa = this.posa.data;
         try {
-            float z = glob.map.getcz(c.x, c.y);
+            double z = glob.map.getcz(c);
             for (int j = 0; j < this.posa.size(); j++) {
-                float tz = glob.map.getcz(c.x + posa.get(j * 3), c.y - posa.get(j * 3 + 1)) - z;
+                float tz = (float)(glob.map.getcz(c.x + posa.get(j * 3), c.y - posa.get(j * 3 + 1)) - z);
                 posa.put(j * 3 + 2, tz + height);
             }
         }

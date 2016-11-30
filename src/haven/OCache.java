@@ -38,6 +38,7 @@ import java.util.TreeMap;
 import haven.pathfinder.Pathfinder;
 
 public class OCache implements Iterable<Gob> {
+    public static final Coord2d posres = new Coord2d(0x1.0p-10, 0x1.0p-10).mul(11, 11);
     /* XXX: Use weak refs */
     private Collection<Collection<Gob>> local = new LinkedList<Collection<Gob>>();
     private Map<Long, Gob> objs = new TreeMap<Long, Gob>();
@@ -149,7 +150,7 @@ public class OCache implements Iterable<Gob> {
             if (r) {
                 return (null);
             } else {
-                Gob g = new Gob(glob, Coord.z, id, frame);
+                Gob g = new Gob(glob, Coord2d.z, id, frame);
                 objs.put(id, g);
                 return (g);
             }
@@ -166,7 +167,7 @@ public class OCache implements Iterable<Gob> {
     private long nextvirt = -1;
 
     public class Virtual extends Gob {
-        public Virtual(Coord c, double a) {
+        public Virtual(Coord2d c, double a) {
             super(OCache.this.glob, c, nextvirt--, 0);
             this.a = a;
             virtual = true;
@@ -177,7 +178,7 @@ public class OCache implements Iterable<Gob> {
         }
     }
 
-    public synchronized void move(Gob g, Coord c, double a) {
+    public synchronized void move(Gob g, Coord2d c, double a) {
         g.move(c, a);
         changed(g);
     }
@@ -195,28 +196,33 @@ public class OCache implements Iterable<Gob> {
         changed(g);
     }
 
-    public synchronized void linbeg(Gob g, Coord s, Coord t, int c) {
-        LinMove lm = new LinMove(g, s, t, c);
-        g.setattr(lm);
-        if (pf != null && g.isplayer())
-            pf.moveCount(c);
-        changed(g);
+    public synchronized void linbeg(Gob g, Coord2d s, Coord2d v) {
+        LinMove lm = g.getattr(LinMove.class);
+        if((lm == null) || !lm.s.equals(s) || !lm.v.equals(v)) {
+            g.setattr(new LinMove(g, s, v));
+            changed(g);
+        }
+        //if (pf != null && g.isplayer())
+           // pf.moveCount(c);
     }
 
-    public synchronized void linstep(Gob g, int l) {
+    public synchronized void linstep(Gob g, double t, double e) {
         Moving m = g.getattr(Moving.class);
         if ((m == null) || !(m instanceof LinMove))
             return;
         LinMove lm = (LinMove) m;
-        if ((l < 0) || (l >= lm.c)) {
+        if(t < 0) {
             g.delattr(Moving.class);
-            if (pf != null && g.isplayer() && l < 0)
-                pf.moveStop(l);
+           // if (pf != null && g.isplayer() && l < 0)
+           //     pf.moveStop(l);
         } else {
-            lm.setl(l);
-            if (pf != null && g.isplayer())
-                pf.moveStep(l);
+            lm.sett(t);
+           // if (pf != null && g.isplayer())
+          //      pf.moveStep(l);
         }
+
+        if(e >= 0)
+            lm.e = e;
     }
 
     public synchronized void speak(Gob g, float zo, String text) {
@@ -324,17 +330,15 @@ public class OCache implements Iterable<Gob> {
         changed(g);
     }
 
-    public synchronized void homing(Gob g, long oid, Coord tc, int v) {
-        g.setattr(new Homing(g, oid, tc, v));
-        changed(g);
-    }
-
-    public synchronized void homocoord(Gob g, Coord tc, int v) {
+    public synchronized void homing(Gob g, long oid, Coord2d tc, double v) {
         Homing homo = g.getattr(Homing.class);
-        if (homo != null) {
+        if((homo == null) || (homo.tgt != oid)) {
+            g.setattr(new Homing(g, oid, tc, v));
+        } else {
             homo.tc = tc;
             homo.v = v;
         }
+        changed(g);
     }
 
     public synchronized void overlay(Gob g, int olid, boolean prs, Indir<Resource> resid, Message sdt) {

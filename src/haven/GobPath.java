@@ -2,8 +2,6 @@ package haven;
 
 import java.awt.Color;
 
-import javax.media.opengl.GL2;
-
 public class GobPath extends Sprite {
     private static final Color plclr = new Color(233, 185, 110);
     public LinMove lm;
@@ -36,11 +34,11 @@ public class GobPath extends Sprite {
     public void draw(GOut g) {
         if (lm == null)
             return;
-        Gob gob = (Gob) owner;
+      /*  Gob gob = (Gob) owner;
         Coord3f pc = gob.getc();
-        float x = lm.t.x - pc.x;
-        float y = -lm.t.y + pc.y;
-        float z = Math.sqrt(x * x + y * y) >= vd ? 0 : gob.glob.map.getcz(lm.t.x, lm.t.y) - pc.z;
+        double x = lm.t - pc.x;
+        double y = -lm.t.y + pc.y;
+        double z = Math.sqrt(x * x + y * y) >= vd ? 0 : gob.glob.map.getcz(lm.t.x, lm.t.y) - pc.z;
         g.apply();
         BGL gl = g.gl;
         gl.glLineWidth(2.0F);
@@ -50,8 +48,8 @@ public class GobPath extends Sprite {
         gl.glHint(GL2.GL_LINE_SMOOTH_HINT, GL2.GL_NICEST);
         gl.glBegin(GL2.GL_LINES);
         gl.glVertex3f(0, 0, 0);
-        gl.glVertex3f(x, y, z);
+        gl.glVertex3f((float)x, (float)y, (float)z); // FIXME: lossy conversion
         gl.glEnd();
-        gl.glDisable(GL2.GL_LINE_SMOOTH);
+        gl.glDisable(GL2.GL_LINE_SMOOTH);*/
     }
 }
