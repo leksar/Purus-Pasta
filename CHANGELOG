@@ -1,3 +1,11 @@
+Version 1.43.1
+    Fixed:
+        * Movement vectors.
+        * Tile centering.
+        * Crash while clearing up minimap cache.
+        * Mussel picker, branch/coal fuelers.
+
+
 Version 1.43.0
     Misc:
         * Upstream merge.

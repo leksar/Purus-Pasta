@@ -66,6 +66,7 @@ import purus.farmer.Farmer;
 public class MapView extends PView implements DTarget, Console.Directory, PFListener {
     public static boolean clickdb = false;
     public static long plgob = -1;
+    public static Coord2d pllastcc;
     public Coord2d cc;
     public final Glob glob;
     private int view = 2;
@@ -1776,6 +1777,8 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
         }
 
         protected void hit(Coord pc, Coord2d mc, ClickInfo inf) {
+            pllastcc = mc;
+
             Resource curs = ui.root.getcurs(c);
 
             if (musselPicker != null) {
@@ -1792,8 +1795,8 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
 
             if (inf == null) {
                 if (Config.tilecenter && clickb == 1) {
-                    mc.x = mc.x / 11 * 11 + Integer.signum((int)mc.x) * 5;
-                    mc.y = mc.y / 11 * 11 + Integer.signum((int)mc.y) * 5;
+                    mc.x = ((int)mc.x / 11) * 11 + Integer.signum((int)mc.x) * 5;
+                    mc.y = ((int)mc.y / 11) * 11 + Integer.signum((int)mc.y) * 5;
                 }
 
                 if (Config.pf && clickb == 1 && curs != null && !curs.name.equals("gfx/hud/curs/study")) {
@@ -2091,8 +2094,8 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
             public void hit(Coord pc, Coord2d mc, ClickInfo inf) {
                 if (inf == null) {
                     if (Config.tilecenter) {
-                        mc.x = mc.x / 11 * 11 + Integer.signum((int)mc.x) * 5;
-                        mc.y = mc.y / 11 * 11 + Integer.signum((int)mc.y) * 5;
+                        mc.x = ((int)mc.x / 11) * 11 + Integer.signum((int)mc.x) * 5;
+                        mc.y = ((int)mc.y / 11) * 11 + Integer.signum((int)mc.y) * 5;
                     }
                     wdgmsg("itemact", pc, mc.floor(posres), ui.modflags());
                 } else {

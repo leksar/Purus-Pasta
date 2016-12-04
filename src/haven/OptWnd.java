@@ -732,17 +732,6 @@ public class OptWnd extends Window {
                 a = val;
             }
         });
-        appender.add(new CheckBox("Show animal paths") {
-            {
-                a = Config.showanimalpaths;
-            }
-
-            public void set(boolean val) {
-                Utils.setprefb("showanimalpaths", val);
-                Config.showanimalpaths = val;
-                a = val;
-            }
-        });
         appender.add(new CheckBox("Show study remaining time") {
             {
                 a = Config.showstudylefttime;
@@ -1892,6 +1881,39 @@ public class OptWnd extends Window {
             public void set(boolean val) {
                 Utils.setprefb("autoslice", val);
                 Config.autoslice = val;
+                a = val;
+            }
+        });
+        appender.add(new CheckBox("Automatically select 'Pluck' action") {
+            {
+                a = Config.autopluck;
+            }
+
+            public void set(boolean val) {
+                Utils.setprefb("autopluck", val);
+                Config.autopluck = val;
+                a = val;
+            }
+        });
+        appender.add(new CheckBox("Automatically select 'Clean' action") {
+            {
+                a = Config.autoclean;
+            }
+
+            public void set(boolean val) {
+                Utils.setprefb("autoclean", val);
+                Config.autoclean = val;
+                a = val;
+            }
+        });
+        appender.add(new CheckBox("Automatically select 'Butcher' action") {
+            {
+                a = Config.autobutcher;
+            }
+
+            public void set(boolean val) {
+                Utils.setprefb("autobutcher", val);
+                Config.autobutcher = val;
                 a = val;
             }
         });

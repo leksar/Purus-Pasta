@@ -318,22 +318,10 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
         Class<? extends GAttrib> ac = attrclass(a.getClass());
         attr.put(ac, a);
 
-        if (Config.showplayerpaths || Config.showanimalpaths) {
-            try {
-                Resource res = getres();
-                if (res != null && a.getClass() == LinMove.class) {
-                    boolean isplayer = "body".equals(res.basename());
-                    if (isplayer && Config.showplayerpaths || !isplayer && Config.showanimalpaths) {
-                        if (gobpath == null) {
-                            gobpath = new Overlay(new GobPath(this));
-                            ols.add(gobpath);
-                        }
-                        ((GobPath) gobpath.spr).lm = (LinMove) a;
-                    }
-                }
-
-            } catch (Exception e) { // fail silently
-            }
+        if (Config.showplayerpaths && isplayer() && gobpath == null &&
+                (a.getClass() == LinMove.class || a.getClass() == Following.class)) {
+            gobpath = new Overlay(new GobPath(this));
+            ols.add(gobpath);
         }
     }
 

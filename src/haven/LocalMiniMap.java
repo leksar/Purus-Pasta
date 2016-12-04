@@ -442,29 +442,23 @@ public class LocalMiniMap extends Widget {
             if (cur == null || plg != cur.grid || seq != cur.seq) {
                 Defer.Future<MapTile> f;
                 synchronized (cache) {
-                    f = cache.get(new Pair<MCache.Grid, Integer>(plg, seq));
+                    f = cache.get(new Pair<>(plg, seq));
                     if (f == null) {
-                        f = Defer.later(new Defer.Callable<MapTile>() {
-                            public MapTile call() {
-                                // clear tiles on teleports
-                                if (cur != null && seq == cur.seq && plg.gc.dist(cur.grid.gc) > 1.5)
-                                    maptiles.clear();
-
-                                Coord ul = plg.ul;
-                                Coord gc = plg.gc;
-                                maptiles.put(gc.add(-1, -1), drawmap(ul.add(-100, -100), cmaps));
-                                maptiles.put(gc.add(0, -1), drawmap(ul.add(0, -100), cmaps));
-                                maptiles.put(gc.add(1, -1), drawmap(ul.add(100, -100), cmaps));
-                                maptiles.put(gc.add(-1, 0), drawmap(ul.add(-100, 0), cmaps));
-                                maptiles.put(gc, drawmap(ul, cmaps));
-                                maptiles.put(gc.add(1, 0), drawmap(ul.add(100, 0), cmaps));
-                                maptiles.put(gc.add(-1, 1), drawmap(ul.add(-100, 100), cmaps));
-                                maptiles.put(gc.add(0, 1), drawmap(ul.add(0, 100), cmaps));
-                                maptiles.put(gc.add(1, 1), drawmap(ul.add(100, 100), cmaps));
-                                return new MapTile(plg, seq);
-                            }
+                        f = Defer.later(() -> {
+                            Coord ul = plg.ul;
+                            Coord gc = plg.gc;
+                            maptiles.put(gc.add(-1, -1), drawmap(ul.add(-100, -100), cmaps));
+                            maptiles.put(gc.add(0, -1), drawmap(ul.add(0, -100), cmaps));
+                            maptiles.put(gc.add(1, -1), drawmap(ul.add(100, -100), cmaps));
+                            maptiles.put(gc.add(-1, 0), drawmap(ul.add(-100, 0), cmaps));
+                            maptiles.put(gc, drawmap(ul, cmaps));
+                            maptiles.put(gc.add(1, 0), drawmap(ul.add(100, 0), cmaps));
+                            maptiles.put(gc.add(-1, 1), drawmap(ul.add(-100, 100), cmaps));
+                            maptiles.put(gc.add(0, 1), drawmap(ul.add(0, 100), cmaps));
+                            maptiles.put(gc.add(1, 1), drawmap(ul.add(100, 100), cmaps));
+                            return new MapTile(plg, seq);
                         });
-                        cache.put(new Pair<MCache.Grid, Integer>(plg, seq), f);
+                        cache.put(new Pair<>(plg, seq), f);
                     }
                 }
                 if (f.done()) {
@@ -578,16 +572,18 @@ public class LocalMiniMap extends Widget {
         off = Coord.z;
     }
 
+    // TODO: drop alternative controls. option for this was deprecated a while ago...
     public boolean mousedown(Coord c, int button) {
         if (Config.alternmapctrls) {
             if (button != 2) {
                 if (cc == null)
                     return false;
+                Coord2d mc = MapView.pllastcc = c2p(c.sub(delta));
                 Gob gob = findicongob(c.sub(delta));
                 if (gob == null) {
-                    mv.wdgmsg("click", rootpos().add(c.sub(delta)), c2p(c.sub(delta)).floor(posres), button, ui.modflags());
+                    mv.wdgmsg("click", rootpos().add(c.sub(delta)), mc.floor(posres), button, ui.modflags());
                 } else {
-                    mv.wdgmsg("click", rootpos().add(c.sub(delta)), c2p(c.sub(delta)).floor(posres), button, ui.modflags(), 0, (int) gob.id, gob.rc.floor(posres), 0, -1);
+                    mv.wdgmsg("click", rootpos().add(c.sub(delta)), mc.floor(posres), button, ui.modflags(), 0, (int) gob.id, gob.rc.floor(posres), 0, -1);
                     if (Config.autopickmussels)
                         mv.startMusselsPicker(gob);
                 }
@@ -599,11 +595,12 @@ public class LocalMiniMap extends Widget {
             if (button == 3) {
                 if (cc == null)
                     return false;
+                Coord2d mc = MapView.pllastcc = c2p(c.sub(delta));
                 Gob gob = findicongob(c.sub(delta));
                 if (gob == null) {
-                    mv.wdgmsg("click", rootpos().add(c.sub(delta)), c2p(c.sub(delta)).floor(posres), 1, ui.modflags());
+                    mv.wdgmsg("click", rootpos().add(c.sub(delta)), mc.floor(posres), 1, ui.modflags());
                 } else {
-                    mv.wdgmsg("click", rootpos().add(c.sub(delta)), c2p(c.sub(delta)).floor(posres), button, ui.modflags(), 0, (int) gob.id, gob.rc.floor(posres), 0, -1);
+                    mv.wdgmsg("click", rootpos().add(c.sub(delta)), mc.floor(posres), button, ui.modflags(), 0, (int) gob.id, gob.rc.floor(posres), 0, -1);
                     if (Config.autopickmussels)
                         mv.startMusselsPicker(gob);
                 }

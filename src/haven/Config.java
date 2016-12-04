@@ -130,7 +130,6 @@ public class Config {
     public static boolean servertime = Utils.getprefb("servertime", false);
     public static boolean servertimesyslog = Utils.getprefb("servertimesyslog", false);
     public static boolean showplayerpaths = Utils.getprefb("showplayerpaths", false);
-    public static boolean showanimalpaths = Utils.getprefb("showanimalpaths", false);
     public static boolean showstudylefttime = Utils.getprefb("showstudylefttime", false);
     public static boolean showinvonlogin = Utils.getprefb("showinvonlogin", false);
     public static boolean autopick = Utils.getprefb("autopick", false);
@@ -147,6 +146,9 @@ public class Config {
     public static boolean autoeat = Utils.getprefb("autoeat", false);
     public static boolean autokill = Utils.getprefb("autokill", false);
     public static boolean autoslice = Utils.getprefb("autoslice", false);
+    public static boolean autoclean = Utils.getprefb("autoclean", false);
+    public static boolean autopluck = Utils.getprefb("autopluck", false);
+    public static boolean autobutcher = Utils.getprefb("autobutcher", false);
     public static boolean runonlogin = Utils.getprefb("runonlogin", false);
     public static Coord chatsz = Utils.getprefc("chatsz", new Coord(683, 111));
     public static boolean alternmapctrls = Utils.getprefb("alternmapctrls", true);

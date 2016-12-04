@@ -110,7 +110,10 @@ public class FlowerMenu extends Widget {
                         Config.autoeat && p.name.equals("Eat") ||
                         Config.autosplit && p.name.equals("Split") ||
                         Config.autokill && p.name.equals("Kill") ||
-                        Config.autoslice && p.name.equals("Slice"))) {
+                        Config.autoslice && p.name.equals("Slice") ||
+                        Config.autopluck && p.name.equals("Pluck") ||
+                        Config.autoclean && p.name.equals("Clean") ||
+                        Config.autobutcher && p.name.equals("Butcher"))) {
                     choose(p);
                     break;
                 }
