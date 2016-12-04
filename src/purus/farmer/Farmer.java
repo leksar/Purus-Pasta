@@ -27,7 +27,7 @@ public class Farmer extends Window implements AreaSelectRc {
 		// This is main place to select farming bots 
 	
 	public Farmer(UI ui, Widget w, Inventory i) {
-        super(new Coord(180, 370), "Farming Bots");
+        super(new Coord(180, 475), "Farming Bots");
 		this.ui = ui;
 		this.w = w;
 		this.i = i;
@@ -196,6 +196,58 @@ public class Farmer extends Window implements AreaSelectRc {
             }
         };
         add(hempBtn, new Coord(20, y));
+        y += 35;
+        
+        
+        Button trelHarBtn = new Button(140, "Trellis harvest") {
+            @Override
+            public void click() {
+            	if(rc1!=null && rc2!=null) {
+                	// Start yellow onion farmer and close this window
+            		TrellisFarmer bf = new TrellisFarmer(rc1, rc2, BotUtils, true, false, false);
+                	GameUI gui = BotUtils.gui();
+                	gui.add(bf, new Coord(gui.sz.x / 2 - bf.sz.x / 2, gui.sz.y / 2 - bf.sz.y / 2 - 200));
+                	new Thread(bf).start();
+                	this.parent.destroy();
+            	} else 
+            		BotUtils.sysMsg("Area not selected!", Color.WHITE);
+            }
+        };
+        add(trelHarBtn, new Coord(20, y));
+        y += 35;
+        
+        Button trelDesBtn = new Button(140, "Trellis destroy") {
+            @Override
+            public void click() {
+            	if(rc1!=null && rc2!=null) {
+                	// Start yellow onion farmer and close this window
+            		TrellisFarmer bf = new TrellisFarmer(rc1, rc2, BotUtils, false, true, false);
+                	GameUI gui = BotUtils.gui();
+                	gui.add(bf, new Coord(gui.sz.x / 2 - bf.sz.x / 2, gui.sz.y / 2 - bf.sz.y / 2 - 200));
+                	new Thread(bf).start();
+                	this.parent.destroy();
+            	} else 
+            		BotUtils.sysMsg("Area not selected!", Color.WHITE);
+            }
+        };
+        add(trelDesBtn, new Coord(20, y));
+        y += 35;
+        
+        Button trelPlantBtn = new Button(140, "Trellis plant") {
+            @Override
+            public void click() {
+            	if(rc1!=null && rc2!=null) {
+                	// Start yellow onion farmer and close this window
+            		TrellisFarmer bf = new TrellisFarmer(rc1, rc2, BotUtils, false, false, true);
+                	GameUI gui = BotUtils.gui();
+                	gui.add(bf, new Coord(gui.sz.x / 2 - bf.sz.x / 2, gui.sz.y / 2 - bf.sz.y / 2 - 200));
+                	new Thread(bf).start();
+                	this.parent.destroy();
+            	} else 
+            		BotUtils.sysMsg("Area not selected!", Color.WHITE);
+            }
+        };
+        add(trelPlantBtn, new Coord(20, y));
         y += 35;
         
         Button areaSelBtn = new Button(140, "Select Area") {

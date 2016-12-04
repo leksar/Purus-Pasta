@@ -257,6 +257,11 @@ public class BotUtils {
 		 ui.gui.map.wdgmsg("itemact", getCenterScreenCoord(), player().rc.floor(posres), 3, ui.modflags());
 	}
 	
+	public void destroyGob(Gob gob) {
+		gui().menu.wdgmsg("act", new Object[]{"destroy"});
+		doClick(gob, 1, 0);
+	}
+	
 	// return center of screen
 		public Coord getCenterScreenCoord() {
 			Coord sc, sz;
