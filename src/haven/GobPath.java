@@ -19,13 +19,14 @@ public class GobPath extends Sprite {
     }
 
     public void draw(GOut g) {
-        if (MapView.pllastcc == null)
+        Coord2d mc = MapView.pllastcc;
+        if (mc == null)
             return;
-
+        
         Gob gob = (Gob) owner;
         Coord3f pc = gob.getc();
-        double lcx = MapView.pllastcc.x;
-        double lcy = MapView.pllastcc.y;
+        double lcx = mc.x;
+        double lcy = mc.y;
         double x = lcx - pc.x;
         double y = -lcy + pc.y;
         double z = Math.sqrt(x * x + y * y) >= 44 * 11 ? 0 : gob.glob.map.getcz(lcx, lcy) - pc.z;

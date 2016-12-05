@@ -1969,16 +1969,6 @@ public class Resource implements Serializable {
         return ll != null ? ll : def;
     }
 
-    public static String getLocStringOrNull(String bundle, String key) {
-        Map<String, String> map = l10nBundleMap.get(bundle);
-        if (map == null)
-            return null;
-        if (Resource.L10N_DEBUG)
-            Resource.saveStrings(bundle, key, key);
-        String ll = map.get(key);
-        return ll != null ? ll : null;
-    }
-
     public static String getLocContent(String str) {
         String loc;
         if ((loc = Resource.locContent(str, " l of ")) != null)
@@ -1993,8 +1983,13 @@ public class Resource implements Serializable {
     private static String locContent(String str, String type) {
         int i = str.indexOf(type);
         if (i > 0) {
+            Map<String, String> map = l10nBundleMap.get(Resource.BUNDLE_LABEL);
+            if (map == null)
+                return str;
             String contName = str.substring(i);
-            String locContName = Resource.getLocStringOrNull(Resource.BUNDLE_LABEL, contName);
+            if (Resource.L10N_DEBUG)
+                Resource.saveStrings(Resource.BUNDLE_LABEL, contName, contName);
+            String locContName = map.get(contName);
             if (locContName != null)
                 return str.substring(0, i) + locContName + " (" + str.substring(i + type.length()) + ")";
             return str;

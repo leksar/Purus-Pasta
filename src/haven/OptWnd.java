@@ -113,7 +113,9 @@ public class OptWnd extends Window {
                             try {
                                 cf.flight.set(true);
                             } catch (GLSettings.SettingException e) {
-                                getparent(GameUI.class).error(e.getMessage());
+                                GameUI gui = getparent(GameUI.class);
+                                if (gui != null)
+                                    gui.error(e.getMessage());
                                 return;
                             }
                         } else {
@@ -133,7 +135,9 @@ public class OptWnd extends Window {
                             try {
                                 cf.lshadow.set(true);
                             } catch (GLSettings.SettingException e) {
-                                getparent(GameUI.class).error(e.getMessage());
+                                GameUI gui = getparent(GameUI.class);
+                                if (gui != null)
+                                    gui.error(e.getMessage());
                                 return;
                             }
                         } else {
@@ -152,7 +156,9 @@ public class OptWnd extends Window {
                         try {
                             cf.fsaa.set(val);
                         } catch (GLSettings.SettingException e) {
-                            getparent(GameUI.class).error(e.getMessage());
+                            GameUI gui = getparent(GameUI.class);
+                            if (gui != null)
+                                gui.error(e.getMessage());
                             return;
                         }
                         a = val;

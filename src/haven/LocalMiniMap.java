@@ -572,42 +572,25 @@ public class LocalMiniMap extends Widget {
         off = Coord.z;
     }
 
-    // TODO: drop alternative controls. option for this was deprecated a while ago...
     public boolean mousedown(Coord c, int button) {
-        if (Config.alternmapctrls) {
-            if (button != 2) {
-                if (cc == null)
-                    return false;
-                Coord2d mc = MapView.pllastcc = c2p(c.sub(delta));
-                Gob gob = findicongob(c.sub(delta));
-                if (gob == null) {
-                    mv.wdgmsg("click", rootpos().add(c.sub(delta)), mc.floor(posres), button, ui.modflags());
-                } else {
-                    mv.wdgmsg("click", rootpos().add(c.sub(delta)), mc.floor(posres), button, ui.modflags(), 0, (int) gob.id, gob.rc.floor(posres), 0, -1);
-                    if (Config.autopickmussels)
-                        mv.startMusselsPicker(gob);
-                }
-            } else if (button == 2 && !Config.maplocked) {
-                doff = c;
-                dragging = ui.grabmouse(this);
+        if (button != 2) {
+            if (cc == null)
+                return false;
+            Coord csd = c.sub(delta);
+            Coord2d mc = c2p(csd);
+            if (button == 1)
+                MapView.pllastcc = mc;
+            Gob gob = findicongob(csd);
+            if (gob == null) {
+                mv.wdgmsg("click", rootpos().add(csd), mc.floor(posres), button, ui.modflags());
+            } else {
+                mv.wdgmsg("click", rootpos().add(csd), mc.floor(posres), button, ui.modflags(), 0, (int) gob.id, gob.rc.floor(posres), 0, -1);
+                if (Config.autopickmussels)
+                    mv.startMusselsPicker(gob);
             }
-        } else {
-            if (button == 3) {
-                if (cc == null)
-                    return false;
-                Coord2d mc = MapView.pllastcc = c2p(c.sub(delta));
-                Gob gob = findicongob(c.sub(delta));
-                if (gob == null) {
-                    mv.wdgmsg("click", rootpos().add(c.sub(delta)), mc.floor(posres), 1, ui.modflags());
-                } else {
-                    mv.wdgmsg("click", rootpos().add(c.sub(delta)), mc.floor(posres), button, ui.modflags(), 0, (int) gob.id, gob.rc.floor(posres), 0, -1);
-                    if (Config.autopickmussels)
-                        mv.startMusselsPicker(gob);
-                }
-            } else if (button == 1 && !Config.maplocked) {
-                doff = c;
-                dragging = ui.grabmouse(this);
-            }
+        } else if (button == 2 && !Config.maplocked) {
+            doff = c;
+            dragging = ui.grabmouse(this);
         }
         return true;
     }

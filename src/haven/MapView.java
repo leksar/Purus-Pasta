@@ -1777,7 +1777,8 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
         }
 
         protected void hit(Coord pc, Coord2d mc, ClickInfo inf) {
-            pllastcc = mc;
+            if (clickb == 1)
+                pllastcc = mc;
 
             Resource curs = ui.root.getcurs(c);
 

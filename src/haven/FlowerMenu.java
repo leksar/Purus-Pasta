@@ -287,6 +287,7 @@ public class FlowerMenu extends Widget {
             wdgmsg("cl", -1);
         } else {
             wdgmsg("cl", option.num, ui.modflags());
+            MapView.pllastcc = null;
         }
     }
 }
