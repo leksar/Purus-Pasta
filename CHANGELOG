@@ -1,3 +1,50 @@
+Version 1.45.1
+    Fixed:
+        * Craft/build window issues: actions not being saved to history bar, list of actions not 
+          updating when discovering new items.
+        * Auto-leveler.
+        * Auto-miner not working under certain conditions.
+
+    Misc:
+        * Updated Russian localization.
+
+
+Version 1.45.0
+    New:
+        * Craft/Build search window.
+        * Visited charter stones list.
+        * Added Skin option to Menu Settings.
+
+    Fixed:
+        * Client locking up during "Waiting for map data..." under certain conditions.
+        * Auto-miner.
+        * Multiple player's movement vector issues.
+        * Local minimap disappearing while using cross-roads/charters under certain conditions.
+        * Remaining study time erroneously displayed instead of percentage for curios placed in cauldrons etc.
+        * kbd console command not being preserved across client restarts.
+
+    Misc:
+        * Extended localization support.
+        * Updated Russian localization.
+
+
+Version 1.44.0
+    New:
+        * Added pluck, clean, and butcher options to Menu Settings.
+        * Wound description now shows remedies which can be used to cure it.
+
+    Fixed:
+        * Crash when changing some video related settings before loging into a character.
+
+    Misc:
+        * Option to show animals paths was removed and option to show other players paths was changed 
+          to show only the path of your character.
+        * Removed "Alternative" minimap controls option.
+        * Alt+click to transfer all items from stockpile instead of shift+rmb.
+        * Toned-down drying rack highlight colors.
+        * Updated Russian localization.
+
+
 Version 1.43.1
     Fixed:
         * Movement vectors.
