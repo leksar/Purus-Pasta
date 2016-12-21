@@ -28,7 +28,8 @@ public class LightWithTorch implements Runnable {
                         (res.name.equals("gfx/terobjs/oven") ||
                         res.name.equals("gfx/terobjs/smelter") ||
                         res.name.equals("gfx/terobjs/steelcrucible") ||
-                        res.name.equals("gfx/terobjs/kiln"))) {
+                        res.name.equals("gfx/terobjs/kiln") ||
+                        res.name.equals("gfx/terobjs/cauldron"))) {
                     if (this.gob == null)
                         this.gob = gob;
                     else if (gob.rc.dist(gui.map.player().rc) < this.gob.rc.dist(gui.map.player().rc))

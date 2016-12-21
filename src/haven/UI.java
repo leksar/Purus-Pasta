@@ -79,6 +79,11 @@ public class UI {
         {
             setcmd("q", (cons1, args) -> HackThread.tg().interrupt());
             setcmd("lo", (cons1, args) -> sess.close());
+            setcmd("kbd", (cons1, args) -> {
+                Config.zkey = args[1].toString().equals("z") ? KeyEvent.VK_Y : KeyEvent.VK_Z;
+                Utils.setprefi("zkey", Config.zkey);
+            });
+            setcmd("charter", (cons1, args) -> CharterList.addCharter(args[1]));
         }
 
         private void findcmds(Map<String, Command> map, Widget wdg) {
@@ -213,6 +218,9 @@ public class UI {
                 };
                 pwdg.add(btn, new Coord(0, wdg.sz.y + 5));
                 pwdg.add(entry, new Coord(btn.sz.x + 5, wdg.sz.y + 5 + 2));
+            } else if (wdg instanceof Window && (((Window) wdg).origcap.equals("Charter Stone") || ((Window) wdg).origcap.equals("Sublime Portico"))) {
+                wdg.add(new CharterList(150, 5), new Coord(0, 50));
+                wdg.presize();
             }
             bind(wdg, id);
 

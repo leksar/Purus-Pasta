@@ -150,8 +150,8 @@ public class Map {
         Coord bboxb = bbox.b;
 
         // gob coordinate relative to the origin (player's location)
-        int gcx = 0;//origin - (plc.x - gob.rc.x);
-        int gcy = 0;//origin - (plc.y - gob.rc.y);
+        int gcx = origin - (plc.x - gob.rc.floor().x);
+        int gcy = origin - (plc.y - gob.rc.floor().y);
 
         // since non 90 degrees incremental rotation is wonky we slightly increase the bounding box for such gobs
         // FIXME: but really should rotate around pixel's center
@@ -239,8 +239,8 @@ public class Map {
         Coord bboxb = bbox.b;
 
         // gob coordinate relative to the origin (player's location)
-        int gcx = 0;//origin - (plc.x - gob.rc.x);
-        int gcy = 0;//origin - (plc.y - gob.rc.y);
+        int gcx = origin - (plc.x - gob.rc.floor().x);
+        int gcy = origin - (plc.y - gob.rc.floor().y);
 
         // rotate the bounding box.
         // FIXME: should rotate around pixel's center

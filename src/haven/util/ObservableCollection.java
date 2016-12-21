@@ -13,6 +13,10 @@ public class ObservableCollection<T> implements Iterable<T> {
         this.base = base;
         this.listeners = new HashSet<CollectionListener<T>>();
     }
+    
+    public int size() {
+    	return base.size();
+    }
 
     public boolean add(T t) {
         if (base.add(t)) {

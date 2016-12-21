@@ -29,6 +29,14 @@ import haven.WItem;
 import haven.Widget;
 import haven.Window;
 
+import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.lang.reflect.Field;
+import java.util.*;
+import java.util.List;
+
+import static haven.OCache.posres;
+
 
 public class AutoLeveler extends Window implements GobSelectCallback, ErrorSysMsgCallback {
     private static final Text.Foundry infof = new Text.Foundry(Text.sans, 10).aa(true);
@@ -300,7 +308,7 @@ public class AutoLeveler extends Window implements GobSelectCallback, ErrorSysMs
 
             // drop any soil we got on hands
             if (!gui.hand.isEmpty()) {
-                gui.map.wdgmsg("drop", Coord.z, gui.map.player().rc, 0);
+                gui.map.wdgmsg("drop", Coord.z, gui.map.player().rc.floor(posres), 0);
                 int timeout = 0;
                 while (gui.hand.isEmpty()) {
                     timeout += HAND_DELAY;
@@ -379,7 +387,7 @@ public class AutoLeveler extends Window implements GobSelectCallback, ErrorSysMs
             }
 
             // put into stockpile
-            gui.map.wdgmsg("itemact", Coord.z, s.rc, 1, 0, (int) s.id, s.rc, 0, -1);
+            gui.map.wdgmsg("itemact", Coord.z, s.rc.floor(posres), 1, 0, (int) s.id, s.rc.floor(posres), 0, -1);
             timeout = 0;
             while (!gui.hand.isEmpty()) {
                 timeout += HAND_DELAY;
@@ -470,7 +478,7 @@ public class AutoLeveler extends Window implements GobSelectCallback, ErrorSysMs
             runner.interrupt();
         try {
             if (running)
-                gameui().map.wdgmsg("click", Coord.z, gameui().map.player().rc, 1, 0);
+                gameui().map.wdgmsg("gk", 27);
         } catch (Exception e) { // ignored
         }
         if (gameui().map.pfthread != null) {

@@ -26,8 +26,7 @@ o *  This file is part of the Haven & Hearth game client.
 
 package haven;
 
-import static haven.Utils.getprop;
-
+import java.awt.event.KeyEvent;
 import java.io.InputStream;
 import java.io.PrintStream;
 import java.io.PrintWriter;
@@ -46,6 +45,8 @@ import org.json.JSONObject;
 
 import haven.error.ErrorHandler;
 
+import static haven.Utils.getprop;
+
 public class Config {
     public static final boolean iswindows = System.getProperty("os.name").startsWith("Windows");
     public static String authuser = null;
@@ -55,7 +56,6 @@ public class Config {
     public static boolean dbtext = false;
     public static boolean profile = false;
     public static boolean profilegpu = false;
-    public static String resdir = null;
     public static boolean nopreload = false;
     public static int mainport = 1870;
     public static int authport = 1871;
@@ -148,7 +148,9 @@ public class Config {
     public static boolean autoslice = Utils.getprefb("autoslice", false);
     public static boolean autoclean = Utils.getprefb("autoclean", false);
     public static boolean autopluck = Utils.getprefb("autopluck", false);
+    public static boolean autoskin = Utils.getprefb("autoskin", false);
     public static boolean autobutcher = Utils.getprefb("autobutcher", false);
+    public static boolean autoflay = Utils.getprefb("autoflay", false);
     public static boolean runonlogin = Utils.getprefb("runonlogin", false);
     public static Coord chatsz = Utils.getprefc("chatsz", new Coord(683, 111));
     public static boolean autostudy = Utils.getprefb("autostudy", true);
@@ -210,6 +212,7 @@ public class Config {
     public static boolean combaltopenings =  Utils.getprefb("combaltopenings", false);
     public static boolean studyhist =  Utils.getprefb("studyhist", false);
     public static boolean studybuff =  Utils.getprefb("studybuff", false);
+    public static int zkey =  Utils.getprefi("zkey", KeyEvent.VK_Z);
 
     public static int avgmode = Utils.getprefi("avgmode", 0);
     private final static Map<String, Integer> defFontSzGlobal =  new HashMap<String, Integer>(3) {{
@@ -341,7 +344,7 @@ public class Config {
         put("planetree", new CheckListboxItem("Plane Tree"));
     }};
 
-    public final static HashMap<String, CheckListboxItem> icons = new HashMap<String, CheckListboxItem>(20) {{
+    public final static HashMap<String, CheckListboxItem> icons = new HashMap<String, CheckListboxItem>(21) {{
         put("dandelion", new CheckListboxItem("Dandelion"));
         put("chantrelle", new CheckListboxItem("Chantrelle"));
         put("blueberry", new CheckListboxItem("Blueberry"));
@@ -363,6 +366,7 @@ public class Config {
         put("wball", new CheckListboxItem("Wrecking Ball"));
         put("windweed", new CheckListboxItem("Wild Windsown Weed"));
         put("mussels", new CheckListboxItem("Mussels"));
+        put("mallard", new CheckListboxItem("Duck"));
     }};
 
     public final static Map<String, Tex> additonalicons = new HashMap<String, Tex>(25) {{
@@ -415,7 +419,7 @@ public class Config {
             "gfx/terobjs/caveorgan",
             "gfx/terobjs/crystalpatch"));
 
-    public final static ArrayList<Pair<String, String>> disableanim = new ArrayList<Pair<String, String>>() {{
+    public final static ArrayList<Pair<String, String>> disableanim = new ArrayList<Pair<String, String>>(4) {{
         add(new Pair<String, String>("Beehives", "gfx/terobjs/beehive"));
         add(new Pair<String, String>("Fires", "gfx/terobjs/pow"));
         add(new Pair<String, String>("Full trash stockpiles", "gfx/terobjs/stockpile-trash"));
@@ -423,59 +427,59 @@ public class Config {
     }};
     public final static Set<String> disableanimSet = new HashSet<String>(disableanim.size());
 
-    public static HashMap<String, List<String>> cures = new HashMap<String, List<String>>(14) {{
-        put("paginae/wound/antburn", new ArrayList<String>() {{
-            add("gfx/invobjs/herbs/yarrow");
-        }});
-        put("paginae/wound/blunttrauma", new ArrayList<String>() {{
-            add("gfx/invobjs/leech");
-            add("gfx/invobjs/gauze");
-        }});
-        put("paginae/wound/bruise", new ArrayList<String>() {{
-            add("gfx/invobjs/herbs/leech");
-        }});
-        put("paginae/wound/concussion", new ArrayList<String>() {{
-            add("gfx/invobjs/coldcompress");
-        }});
-        put("paginae/wound/cruelincision", new ArrayList<String>() {{
-            add("gfx/invobjs/gauze");
-            add("gfx/invobjs/stitchpatch");
-            add("gfx/invobjs/rootfill");
-        }});
-        put("paginae/wound/deepcut", new ArrayList<String>() {{
-            add("gfx/invobjs/gauze");
-            add("gfx/invobjs/stingingpoultice");
-            add("gfx/invobjs/rootfill");
-            add("gfx/invobjs/herbs/waybroad");
-        }});
-        put("paginae/wound/fellslash", new ArrayList<String>() {{
-            add("gfx/invobjs/gauze");
-        }});
-        put("paginae/wound/nicksnknacks", new ArrayList<String>() {{
-            add("gfx/invobjs/herbs/yarrow");
-        }});
-        put("paginae/wound/punchsore", new ArrayList<String>() {{
-            add("gfx/invobjs/mudointment");
-        }});
-        put("paginae/wound/scrapesncuts", new ArrayList<String>() {{
-            add("gfx/invobjs/herbs/yarrow");
-            add("gfx/invobjs/mudointment");
-        }});
-        put("paginae/wound/severemauling", new ArrayList<String>() {{
-            add("gfx/invobjs/hartshornsalve");
-        }});
-        put("paginae/wound/swollenbump", new ArrayList<String>() {{
-            add("gfx/invobjs/coldcompress");
-            add("gfx/invobjs/leech");
-            add("gfx/invobjs/stingingpoultice");
-        }});
-        put("paginae/wound/unfaced", new ArrayList<String>() {{
-            add("gfx/invobjs/leech");
-            add("gfx/invobjs/mudointment");
-        }});
-        put("paginae/wound/wretchedgore", new ArrayList<String>() {{
-            add("gfx/invobjs/stitchpatch");
-        }});
+    public final static HashMap<String, String[]> cures = new HashMap<String, String[]>(14) {{
+        put("paginae/wound/antburn", new String[]{
+                "gfx/invobjs/herbs/yarrow"
+        });
+        put("paginae/wound/blunttrauma", new String[]{
+                "gfx/invobjs/leech",
+                "gfx/invobjs/gauze"
+        });
+        put("paginae/wound/bruise", new String[]{
+                "gfx/invobjs/herbs/leech"
+        });
+        put("paginae/wound/concussion", new String[]{
+                "gfx/invobjs/coldcompress"
+        });
+        put("paginae/wound/cruelincision", new String[]{
+                "gfx/invobjs/gauze",
+                "gfx/invobjs/stitchpatch",
+                "gfx/invobjs/rootfill"
+        });
+        put("paginae/wound/deepcut", new String[]{
+                "gfx/invobjs/gauze",
+                "gfx/invobjs/stingingpoultice",
+                "gfx/invobjs/rootfill",
+                "gfx/invobjs/herbs/waybroad"
+        });
+        put("paginae/wound/fellslash", new String[]{
+                "gfx/invobjs/gauze"
+        });
+        put("paginae/wound/nicksnknacks", new String[]{
+                "gfx/invobjs/herbs/yarrow"
+        });
+        put("paginae/wound/punchsore", new String[]{
+                "gfx/invobjs/mudointment"
+        });
+        put("paginae/wound/scrapesncuts", new String[]{
+                "gfx/invobjs/herbs/yarrow",
+                "gfx/invobjs/mudointment"
+        });
+        put("paginae/wound/severemauling", new String[]{
+                "gfx/invobjs/hartshornsalve"
+        });
+        put("paginae/wound/swollenbump", new String[]{
+                "gfx/invobjs/coldcompress",
+                "gfx/invobjs/leech",
+                "gfx/invobjs/stingingpoultice"
+        });
+        put("paginae/wound/unfaced", new String[]{
+                "gfx/invobjs/leech",
+                "gfx/invobjs/mudointment"
+        });
+        put("paginae/wound/wretchedgore", new String[]{
+                "gfx/invobjs/stitchpatch"
+        });
     }};
 
     static {
@@ -556,7 +560,6 @@ public class Config {
         out.println("  -G                 Enable GPU profiling");
         out.println("  -p FILE            Write player position to a memory mapped file");
         out.println("  -U URL             Use specified external resource URL");
-        out.println("  -r DIR             Use specified resource directory (or HAVEN_RESDIR)");
         out.println("  -A AUTHSERV[:PORT] Use specified authentication server");
         out.println("  -u USER            Authenticate as USER (together with -C)");
         out.println("  -C HEXCOOKIE       Authenticate with specified hex-encoded cookie");
@@ -582,9 +585,6 @@ public class Config {
                     break;
                 case 'G':
                     profilegpu = true;
-                    break;
-                case 'r':
-                    resdir = opt.arg;
                     break;
                 case 'A':
                     int p = opt.arg.indexOf(':');

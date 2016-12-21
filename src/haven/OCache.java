@@ -34,9 +34,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-
-import haven.pathfinder.Pathfinder;
-
+ 
 public class OCache implements Iterable<Gob> {
     public static final Coord2d posres = new Coord2d(0x1.0p-10, 0x1.0p-10).mul(11, 11);
     /* XXX: Use weak refs */
@@ -46,7 +44,6 @@ public class OCache implements Iterable<Gob> {
     private Glob glob;
     private Map<Long, DamageSprite> gobdmgs = new HashMap<Long, DamageSprite>();
     public boolean isfight = false;
-    private Pathfinder pf;
     private final Collection<ChangeCallback> cbs = new WeakList<ChangeCallback>();
 
     public interface ChangeCallback {
@@ -198,30 +195,23 @@ public class OCache implements Iterable<Gob> {
 
     public synchronized void linbeg(Gob g, Coord2d s, Coord2d v) {
         LinMove lm = g.getattr(LinMove.class);
-        if((lm == null) || !lm.s.equals(s) || !lm.v.equals(v)) {
+        if (lm == null || !lm.s.equals(s) || !lm.v.equals(v)) {
             g.setattr(new LinMove(g, s, v));
             changed(g);
         }
-        //if (pf != null && g.isplayer())
-           // pf.moveCount(c);
     }
 
     public synchronized void linstep(Gob g, double t, double e) {
         Moving m = g.getattr(Moving.class);
-        if ((m == null) || !(m instanceof LinMove))
+        if (m == null || !(m instanceof LinMove))
             return;
         LinMove lm = (LinMove) m;
-        if(t < 0) {
+        if (t < 0)
             g.delattr(Moving.class);
-           // if (pf != null && g.isplayer() && l < 0)
-           //     pf.moveStop(l);
-        } else {
+        else
             lm.sett(t);
-           // if (pf != null && g.isplayer())
-          //      pf.moveStep(l);
-        }
 
-        if(e >= 0)
+        if (e >= 0)
             lm.e = e;
     }
 
@@ -446,10 +436,6 @@ public class OCache implements Iterable<Gob> {
         else
             g.setattr(new GobIcon(g, res));
         changed(g);
-    }
-
-    public void setPathfinder(Pathfinder pf) {
-        this.pf = pf;
     }
 
     public synchronized void resattr(Gob g, Indir<Resource> resid, Message dat) {

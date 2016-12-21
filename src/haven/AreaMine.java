@@ -1,6 +1,6 @@
 package haven;
 
-import static haven.OCache.posres;
+import static haven.MCache.tilesz;
 
 public class AreaMine implements Runnable {
     private MapView mv;
@@ -26,7 +26,7 @@ public class AreaMine implements Runnable {
         }
         mv.enol(18);
 
-        Coord pc = mv.player().rc.floor(posres);
+        Coord pc = mv.player().rc.floor(tilesz);
 
         // mining direction
         boolean xaxis = pc.y <= a.y && pc.y >= b.y || pc.y <= b.y && pc.y >= a.y;

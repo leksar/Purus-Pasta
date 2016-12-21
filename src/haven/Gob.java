@@ -318,10 +318,16 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
         Class<? extends GAttrib> ac = attrclass(a.getClass());
         attr.put(ac, a);
 
-        if (Config.showplayerpaths && isplayer() && gobpath == null &&
-                (a.getClass() == LinMove.class || a.getClass() == Following.class)) {
-            gobpath = new Overlay(new GobPath(this));
-            ols.add(gobpath);
+        if (Config.showplayerpaths && gobpath == null && a instanceof LinMove) {
+            Gob pl = glob.oc.getgob(MapView.plgob);
+            if (pl != null) {
+                Following follow = pl.getattr(Following.class);
+                if (pl == this ||
+                        (follow != null && follow.tgt() == this)) {
+                    gobpath = new Overlay(new GobPath(this));
+                    ols.add(gobpath);
+                }
+            }
         }
     }
 
@@ -334,7 +340,7 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
 
     public void delattr(Class<? extends GAttrib> c) {
         attr.remove(attrclass(c));
-        if (attrclass(c) == Moving.class) {
+        if (attrclass(c) == Moving.class && gobpath != null) {
             ols.remove(gobpath);
             gobpath = null;
             MapView.pllastcc = null;
@@ -804,6 +810,29 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
 
     public boolean isplayer() {
         return MapView.plgob == id;
+    }
+
+    public boolean isMoving() {
+        if (getattr(LinMove.class) != null)
+            return true;
+
+        Following follow = getattr(Following.class);
+        if (follow != null && follow.tgt().getattr(LinMove.class) != null)
+            return true;
+
+        return false;
+    }
+
+    public LinMove getLinMove() {
+        LinMove lm = getattr(LinMove.class);
+        if (lm != null)
+            return lm;
+
+        Following follow = getattr(Following.class);
+        if (follow != null)
+            return follow.tgt().getattr(LinMove.class);
+
+        return null;
     }
 
     public boolean isFriend() {

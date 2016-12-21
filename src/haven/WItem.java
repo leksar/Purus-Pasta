@@ -296,7 +296,7 @@ public class WItem extends Widget implements DTarget {
             }
 
             boolean studylefttimedisplayed = false;
-            if (Config.showstudylefttime && quality != null && quality.curio && item.meter > 0) {
+            if (Config.showstudylefttime && quality != null && quality.curio && item.meter > 0 && parent instanceof InventoryStudy) {
                 if (item.timelefttex == null) {
                     item.updatetimelefttex();
                 }

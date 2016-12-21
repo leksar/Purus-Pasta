@@ -209,7 +209,7 @@ public class GItem extends AWidget implements ItemInfo.SpriteOwner, GSprite.Owne
         int hoursleft = timeleft / 60;
         int minutesleft = timeleft - hoursleft * 60;
 
-        timelefttex = Text.renderstroked(String.format("%d:%d", hoursleft, minutesleft), Color.WHITE, Color.BLACK, Text.numfnd).tex();
+        timelefttex = Text.renderstroked(String.format("%d:%02d", hoursleft, minutesleft), Color.WHITE, Color.BLACK, Text.numfnd).tex();
         return true;
     }
 

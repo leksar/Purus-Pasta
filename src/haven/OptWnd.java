@@ -727,7 +727,7 @@ public class OptWnd extends Window {
                 }
             }
         });
-        appender.add(new CheckBox("Show player paths") {
+        appender.add(new CheckBox("Show player's path") {
             {
                 a = Config.showplayerpaths;
             }
@@ -1912,6 +1912,17 @@ public class OptWnd extends Window {
                 a = val;
             }
         });
+        appender.add(new CheckBox("Automatically select 'Skin' action") {
+            {
+                a = Config.autoskin;
+            }
+
+            public void set(boolean val) {
+                Utils.setprefb("autoskin", val);
+                Config.autoskin = val;
+                a = val;
+            }
+        });
         appender.add(new CheckBox("Automatically select 'Butcher' action") {
             {
                 a = Config.autobutcher;
@@ -1920,6 +1931,17 @@ public class OptWnd extends Window {
             public void set(boolean val) {
                 Utils.setprefb("autobutcher", val);
                 Config.autobutcher = val;
+                a = val;
+            }
+        });
+        appender.add(new CheckBox("Automatically select 'Flay' action") {
+            {
+                a = Config.autoflay;
+            }
+
+            public void set(boolean val) {
+                Utils.setprefb("autoflay", val);
+                Config.autoflay = val;
                 a = val;
             }
         });
@@ -2224,7 +2246,6 @@ public class OptWnd extends Window {
             @Override
             public void change(Locale item) {
                 super.change(item);
-                Resource.language = item.toString();
                 Utils.setpref("language", item.toString());
             }
         };

@@ -113,8 +113,8 @@ public class LocalMiniMap extends Widget {
         return (img);
     }
 
-    public Tex drawmap(Coord ul, Coord sz) {
-        BufferedImage[] texes = new BufferedImage[256];
+    public Tex drawmap(Coord ul, BufferedImage[] texes) {
+        Coord sz = cmaps;
         MCache m = ui.sess.glob.map;
         BufferedImage buf = TexI.mkbuf(sz);
         Coord c = new Coord();
@@ -447,15 +447,16 @@ public class LocalMiniMap extends Widget {
                         f = Defer.later(() -> {
                             Coord ul = plg.ul;
                             Coord gc = plg.gc;
-                            maptiles.put(gc.add(-1, -1), drawmap(ul.add(-100, -100), cmaps));
-                            maptiles.put(gc.add(0, -1), drawmap(ul.add(0, -100), cmaps));
-                            maptiles.put(gc.add(1, -1), drawmap(ul.add(100, -100), cmaps));
-                            maptiles.put(gc.add(-1, 0), drawmap(ul.add(-100, 0), cmaps));
-                            maptiles.put(gc, drawmap(ul, cmaps));
-                            maptiles.put(gc.add(1, 0), drawmap(ul.add(100, 0), cmaps));
-                            maptiles.put(gc.add(-1, 1), drawmap(ul.add(-100, 100), cmaps));
-                            maptiles.put(gc.add(0, 1), drawmap(ul.add(0, 100), cmaps));
-                            maptiles.put(gc.add(1, 1), drawmap(ul.add(100, 100), cmaps));
+                            BufferedImage[] texes = new BufferedImage[256];
+                            maptiles.put(gc.add(-1, -1), drawmap(ul.add(-100, -100), texes));
+                            maptiles.put(gc.add(0, -1), drawmap(ul.add(0, -100), texes));
+                            maptiles.put(gc.add(1, -1), drawmap(ul.add(100, -100), texes));
+                            maptiles.put(gc.add(-1, 0), drawmap(ul.add(-100, 0), texes));
+                            maptiles.put(gc, drawmap(ul, texes));
+                            maptiles.put(gc.add(1, 0), drawmap(ul.add(100, 0), texes));
+                            maptiles.put(gc.add(-1, 1), drawmap(ul.add(-100, 100), texes));
+                            maptiles.put(gc.add(0, 1), drawmap(ul.add(0, 100), texes));
+                            maptiles.put(gc.add(1, 1), drawmap(ul.add(100, 100), texes));
                             return new MapTile(plg, seq);
                         });
                         cache.put(new Pair<>(plg, seq), f);
