@@ -1,3 +1,24 @@
+Version 1.46.1
+    Fixed:
+        * Crash when storing resource and the destination file is locked. 
+
+
+Version 1.46.0
+    New:
+        * Object marking.
+        * Added Flay action to Menu Settings.
+        * Added ducks to hide icons list.
+        * Added cauldron to the objects which can be lighted using torch extension.
+        * Ctlr+A for opening the world map window.
+
+    Fixed:
+        * Wound description for bruises not showing.
+        * Remaining time formatting.
+
+    Misc:
+        * Updated Russian localization.
+
+
 Version 1.45.1
     Fixed:
         * Craft/build window issues: actions not being saved to history bar, list of actions not 

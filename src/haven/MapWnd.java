@@ -422,7 +422,7 @@ public class MapWnd extends Window {
     @Override
     public void wdgmsg(Widget sender, String msg, Object... args) {
         if (sender == cbtn)
-            reqdestroy();
+            show(false);
         else
             super.wdgmsg(sender, msg, args);
     }
@@ -431,7 +431,7 @@ public class MapWnd extends Window {
     public boolean type(char key, KeyEvent ev) {
         if (key == 27) {
             if (cbtn.visible)
-                reqdestroy();
+                show(false);
             return true;
         }
         return super.type(key, ev);

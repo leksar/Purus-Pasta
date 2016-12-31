@@ -112,6 +112,9 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
     
     private AreaSelectRc areaSelectRc;
     private Thread musselPicker;
+    public static final Set<Long> markedGobs = new HashSet<>();
+    public static final Material.Colors markedFx = new Material.Colors(new Color(21, 127, 208, 255));
+
     public interface Delayed {
         public void run(GOut g);
     }
@@ -535,6 +538,7 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
         this.gridol = new TileOutline(glob.map);
         this.partyHighlight = new PartyHighlight(glob.party, plgob);
         setcanfocus(true);
+        markedGobs.clear();
     }
 
     public boolean visol(int ol) {
@@ -1809,7 +1813,14 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
                     wdgmsg("click", pc, mc.floor(posres), clickb, modflags);
                 }
             } else {
-                if (ui.modmeta && clickb == 1) {
+                if (ui.modmeta && ui.modctrl && clickb == 1) {
+                    if (markedGobs.contains(inf.gob.id))
+                        markedGobs.remove(inf.gob.id);
+                    else
+                        markedGobs.add(inf.gob.id);
+
+                    glob.oc.changed(inf.gob);
+                } else if (ui.modmeta && clickb == 1) {
                     if (gobselcb != null)
                         gobselcb.gobselect(inf.gob);
 
@@ -1825,6 +1836,7 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
                         }
                     }
                 }
+
                 if (inf.ol == null) {
                     if (Config.pf && curs != null && !curs.name.equals("gfx/hud/curs/study")) {
                         pfRightClick(inf.gob, inf.clickid(), clickb, 0, null);

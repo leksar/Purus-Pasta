@@ -1881,6 +1881,11 @@ public class Resource implements Serializable {
             "Affair with %s",
             "%s's Catch",
             "As %s Wishes",
+            "Poaching for %s",
+            "Crazy Old %s",
+            "Flowers for %s",
+            "Silly %s",
+            "%s's Gathering",
             "%s has invited you to join his party. Do you wish to do so?",
             "%s has requested to spar with you. Do you accept?",
             "Experience points gained: %s"

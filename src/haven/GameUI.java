@@ -1085,6 +1085,11 @@ public class GameUI extends ConsoleHost implements Console.Directory {
                 Config.showqualitymode = 2;
             }
             return true;
+        } else if (ev.isControlDown() && ev.getKeyCode() == KeyEvent.VK_A) {
+            if (mapfile != null && mapfile.show(!mapfile.visible)) {
+                mapfile.raise();
+                fitwdg(mapfile);
+            }
         }
 
         return (super.globtype(key, ev));

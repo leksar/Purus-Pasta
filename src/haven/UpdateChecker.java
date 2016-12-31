@@ -10,7 +10,11 @@ import java.nio.charset.Charset;
 import org.json.JSONObject;
 
 public class UpdateChecker extends Thread {
-    private final String url = "https://api.github.com/repos/puruscor/purus-pasta/releases/latest";
+    private static final String url = "https://api.github.com/repos/puruscor/purus-pasta/releases/latest";
+
+    public UpdateChecker() {
+        super("Update Checker");
+    }
 
     public void run() { 
     	

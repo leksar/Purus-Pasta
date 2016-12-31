@@ -449,6 +449,9 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
         if (hlt != null)
             rl.prepc(hlt.getfx());
 
+        if (MapView.markedGobs.contains(id))
+            rl.prepc(MapView.markedFx);
+
         Resource res = null;
         try {
             res = getres();
