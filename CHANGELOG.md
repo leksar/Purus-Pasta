@@ -1,5 +1,13 @@
 ## Changelog
 
+### 2.26.0
+	- Added hotkeys to change movement speed (Alt+Q or W or E or R)
+	- Added red onion and wheat for farming bot
+	- Added utility to right click items while holding ctrl + i for resname
+	- Merged latest changes from Amber & Default client
+	- Fixed farming bot
+	- Fixed through filler
+	- Various minor fixes
 ### 2.25.0
 	- Merged latest changes from Amber & Default client
 	- Fixed minor text issues
