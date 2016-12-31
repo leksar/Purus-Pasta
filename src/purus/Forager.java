@@ -1,5 +1,7 @@
 package purus;
 
+import static haven.OCache.posres;
+
 import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -12,7 +14,6 @@ import haven.Audio;
 import haven.Button;
 import haven.CheckBox;
 import haven.Coord;
-import haven.Coord2d;
 import haven.FlowerMenu;
 import haven.Gob;
 import haven.Inventory;
@@ -89,7 +90,7 @@ public class Forager  {
 					int x = startCoord.x - route.get(i).x;
 					int y = startCoord.y - route.get(i).y;
 					System.out.println("Forager: Moving to: " + x + ", " + y);
-					BotUtils.pfLeftClick(new Coord2d(x, y), null);
+					BotUtils.pfLeftClick(new Coord(x, y), null);
                 	BotUtils.sleep(2000);
 					int retry = 0;
 	                    while(BotUtils.player().rc.x!=x||BotUtils.player().rc.y!=y) {
@@ -102,7 +103,7 @@ public class Forager  {
 	                    		if(retry>100) {
 	                    			retry = 0;
 	                    			System.out.println("Player seems not to be moving, retrying click to: " + x + ", " + y);
-	            					BotUtils.pfLeftClick(new Coord2d(x, y), null);
+	            					BotUtils.pfLeftClick(new Coord(x, y), null);
 	                    		}
 	                    	}
 	        				BotUtils.sleep(100);
@@ -111,7 +112,7 @@ public class Forager  {
 	                boolean keepPicking = true;
 	                while(keepPicking) {
 	                	if(gobs.isEmpty()) {
-	    					BotUtils.pfLeftClick(new Coord2d(x, y), null);
+	    					BotUtils.pfLeftClick(new Coord(x, y), null);
 	    					retry = 0;
 		                    while(BotUtils.player().rc.x!=x||BotUtils.player().rc.y!=y) {
 		                        if(checkAnimals())
@@ -123,7 +124,7 @@ public class Forager  {
 		                    		if(retry>100) {
 		                    			retry = 0;
 		                    			System.out.println("Player seems not to be moving, retrying click to: " + x + ", " + y);
-		            					BotUtils.pfLeftClick(new Coord2d(x, y), null);
+		            					BotUtils.pfLeftClick(new Coord(x, y), null);
 		                    		}
 		                    	}
 		        				BotUtils.sleep(100);
@@ -131,7 +132,7 @@ public class Forager  {
 	                		keepPicking = false;
 	                		break;
 	                	}
-	                	BotUtils.pfLeftClick(gobs.get(0).rc, null);
+	                	BotUtils.pfLeftClick(gobs.get(0).rc.floor(posres), null);
 	                	System.out.println("Picking " + gobs.get(0).getres().name);
 	                	// Try moving 5 times after that just give up
 	                	int retrytimeout = 0;
@@ -153,7 +154,7 @@ public class Forager  {
 	                    			}
 	                    			retrytimeout++;
 	                    			retry = 0;
-	        	                	BotUtils.pfLeftClick(gobs.get(0).rc, null);
+	        	                	BotUtils.pfLeftClick(gobs.get(0).rc.floor(posres), null);
 	                    		}
 	                    	}
 	                    	BotUtils.sleep(100);
@@ -165,7 +166,7 @@ public class Forager  {
 	                    }
 	                    gobs.remove(0);
     					retry = 0;
-    					BotUtils.pfLeftClick(new Coord2d(x, y), null);
+    					BotUtils.pfLeftClick(new Coord(x, y), null);
 	                    while(BotUtils.player().rc.x!=x||BotUtils.player().rc.y!=y) {
 	                        if(checkAnimals())
 	                        	continue runloop;
@@ -176,7 +177,7 @@ public class Forager  {
 	                    		if(retry>100) {
 	                    			retry = 0;
 	                    			System.out.println("Player seems not to be moving, retrying click to: " + x + ", " + y);
-	            					BotUtils.pfLeftClick(new Coord2d(x, y), null);
+	            					BotUtils.pfLeftClick(new Coord(x, y), null);
 	                    		}
 	                    	}
 	        				BotUtils.sleep(100);
