@@ -1077,7 +1077,7 @@ public class GameUI extends ConsoleHost implements Console.Directory {
             }
             maininv.drink(100);
             return true;
-        } else if (ev.isAltDown() && ev.getKeyCode() == KeyEvent.VK_Q) {
+        } else if (ev.isAltDown() && ev.isControlDown() && ev.getKeyCode() == KeyEvent.VK_Q) {
             if (Config.showqualitymode == 2)  { // all
                 Config.showqualitymode = prevQualityMode;
             } else {
@@ -1090,6 +1090,22 @@ public class GameUI extends ConsoleHost implements Console.Directory {
                 mapfile.raise();
                 fitwdg(mapfile);
             }
+        } else if (ev.isAltDown() && ev.getKeyCode() == KeyEvent.VK_Q) {
+        	Speedget.setSpeed = true;
+        	Speedget.SpeedToSet = 0;
+        	return true;
+        } else if (ev.isAltDown() && ev.getKeyCode() == KeyEvent.VK_W) {
+        	Speedget.setSpeed = true;
+        	Speedget.SpeedToSet = 1;
+        	return true;
+        } else if (ev.isAltDown() && ev.getKeyCode() == KeyEvent.VK_E) {
+        	Speedget.setSpeed = true;
+        	Speedget.SpeedToSet = 2;
+        	return true;
+        } else if (ev.isAltDown() && ev.getKeyCode() == KeyEvent.VK_R) {
+        	Speedget.setSpeed = true;
+        	Speedget.SpeedToSet = 3;
+        	return true;
         }
 
         return (super.globtype(key, ev));
