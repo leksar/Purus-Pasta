@@ -288,12 +288,14 @@ public class BotUtils {
 	// Click some object with item on hand
 	// Modifier 1 - shift; 2 - ctrl; 4 alt;
     public void itemClick(Gob gob, int mod) {
+        ui.gui.map.wdgmsg("itemact", Coord.z, gob.rc.floor(posres), mod, 0, (int)gob.id, gob.rc.floor(posres), 0, -1);
     }
 	
 	// Click some object with specific button and modifier
 	// Button 1 = Left click and 3 = right click
 	// Modifier 1 - shift; 2 - ctrl; 4 - alt;
     public void doClick(Gob gob, int button, int mod) {
+    	ui.gui.map.wdgmsg("click", Coord.z, gob.rc.floor(posres), button, 0, mod, (int)gob.id, gob.rc.floor(posres), 0, -1);
     }
 
 	// Finds nearest crop with x stage
