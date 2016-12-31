@@ -30,6 +30,8 @@ import haven.WItem;
 import haven.Widget;
 import haven.Window;
 
+import static haven.OCache.posres;
+
 public class BotUtils {
 
 	private final UI ui;
@@ -188,11 +190,8 @@ public class BotUtils {
     }
     
 	// Move to coords with pathfinder, 2nd argument for modifier (null to just move)
-	public void pfLeftClick(Coord2d c, String mod) {
-		/* TODO: FIXIT
-		 Disabled for now!!
+	public void pfLeftClick(Coord c, String mod) {
 		gui().map.pfLeftClick(c, mod);
-		*/
 	}
     
     // Drinks water/tea from containers in inventory
@@ -250,12 +249,12 @@ public class BotUtils {
     
 	//Drops thing from hand 
 	public void drop_item(int mod) {
-		ui.gui.map.wdgmsg("drop", Coord.z, gui().map.player().rc, mod);
+		ui.gui.map.wdgmsg("drop", Coord.z, gui().map.player().rc.floor(posres), mod);
 	}
 	
 	// Use item in hand to ground below player, for example, plant carrot
 	public void mapInteractClick(int mod) {
-		 ui.gui.map.wdgmsg("itemact", getCenterScreenCoord(), player().rc, 3, ui.modflags());
+		 ui.gui.map.wdgmsg("itemact", getCenterScreenCoord(), player().rc.floor(posres), 3, ui.modflags());
 	}
 	
 	// return center of screen
@@ -289,14 +288,12 @@ public class BotUtils {
 	// Click some object with item on hand
 	// Modifier 1 - shift; 2 - ctrl; 4 alt;
     public void itemClick(Gob gob, int mod) {
-        ui.gui.map.wdgmsg("itemact", Coord.z, gob.rc, mod, 0, (int)gob.id, gob.rc, 0, -1);
     }
 	
 	// Click some object with specific button and modifier
 	// Button 1 = Left click and 3 = right click
 	// Modifier 1 - shift; 2 - ctrl; 4 - alt;
     public void doClick(Gob gob, int button, int mod) {
-        ui.gui.map.wdgmsg("click", Coord.z, gob.rc, button, 0, mod, (int)gob.id, gob.rc, 0, -1);
     }
 
 	// Finds nearest crop with x stage

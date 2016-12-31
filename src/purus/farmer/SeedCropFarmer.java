@@ -1,5 +1,7 @@
 package purus.farmer;
 
+import static haven.OCache.posres;
+
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -82,12 +84,15 @@ public class SeedCropFarmer extends Window implements Runnable {
 				if(stopThread)
 					return;
 				
-			 // Pathfind and right click the crop
-				BotUtils.pfLeftClick(g.rc, null);
+			 // Right click the crop
+				BotUtils.doClick(g, 1, 0);
+				BotUtils.gui().map.wdgmsg("click", Coord.z, g.rc.floor(posres), 1, 0);
 				while(BotUtils.player().rc.x!=g.rc.x||BotUtils.player().rc.y!=g.rc.y) {
 					BotUtils.sleep(10);
+					System.out.println(g.rc.y + ", " + BotUtils.player().rc.y);
 				}
-				BotUtils.doClick(g, 3, 0);
+				System.out.println("didtheclick");
+				BotUtils.pfRightClick(g, 0);
 			
 			 // Wait for harvest menu to appear and harvest the crop
 			
@@ -132,7 +137,7 @@ public class SeedCropFarmer extends Window implements Runnable {
             	BotUtils.sleep(10);
 			
 			// Plant the seed from hand
-            BotUtils.gui().ui.gui.map.wdgmsg("itemact", BotUtils.getCenterScreenCoord(), BotUtils.player().rc, 0);
+            BotUtils.mapInteractClick(0);
 			while(BotUtils.findNearestStageCrop(5, 0, cropName)==null) {
 				BotUtils.sleep(10);
 			}
@@ -206,7 +211,7 @@ public class SeedCropFarmer extends Window implements Runnable {
 		// Stops thread
 		BotUtils.sysMsg(cropName.substring(cropName.lastIndexOf("/")+1).substring(0, 1).toUpperCase()+
         		cropName.substring(cropName.lastIndexOf("/")+1).substring(1)+" Farmer stopped!", Color.white);
-                gameui().map.wdgmsg("click", Coord.z, gameui().map.player().rc, 1, 0);
+                gameui().map.wdgmsg("click", Coord.z, gameui().map.player().rc.floor(posres), 1, 0);
         if (gameui().map.pfthread != null) {
             gameui().map.pfthread.interrupt();
         }

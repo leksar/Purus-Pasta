@@ -27,7 +27,7 @@ public class Farmer extends Window implements AreaSelectRc {
 		// This is main place to select farming bots 
 	
 	public Farmer(UI ui, Widget w, Inventory i) {
-        super(new Coord(180, 300), "Farming Bots");
+        super(new Coord(180, 370), "Farming Bots");
 		this.ui = ui;
 		this.w = w;
 		this.i = i;

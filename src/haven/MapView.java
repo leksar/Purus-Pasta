@@ -2256,7 +2256,6 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
                     ol.destroy();
                     mgrab.remove();
                 }
-                rc1 = (mc.div(MCache.tilesz2).mul(MCache.tilesz2).add(MCache.tilesz2.div(2)));
                 sc = mc.div(MCache.tilesz2);
                 modflags = ui.modflags();
                 xl.mv = true;
@@ -2271,7 +2270,8 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
         public boolean mmouseup(Coord mc, int button) {
             synchronized (MapView.this) {
                 if (sc != null) {
-                    rc2 = (mc.div(MCache.tilesz2).mul(MCache.tilesz2).add(MCache.tilesz2.div(2)));
+                    rc1 = ol.getc1().mul(MCache.tilesz2);
+                    rc2 = ol.getc2().mul(MCache.tilesz2).add(11, 11);
                     Coord ec = mc.div(MCache.tilesz2);
                     xl.mv = false;
                     tt = null;
