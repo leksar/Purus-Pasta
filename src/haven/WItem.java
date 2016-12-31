@@ -30,6 +30,7 @@ import static haven.Inventory.sqsz;
 
 import java.awt.Color;
 import java.awt.Desktop;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.net.URL;
 import java.util.List;
@@ -370,6 +371,10 @@ public class WItem extends Widget implements DTarget {
     }
 
     public boolean mousedown(Coord c, int btn) {
+    	if (btn == 3 && ui.modctrl && ui.keycode == KeyEvent.VK_I) {
+        	ui.message(item.getres().name, Color.WHITE);
+        	return true;
+    	}
         if (btn == 1) {
             if (ui.modctrl && ui.modmeta)
                 wdgmsg("drop-identical", this.item);
