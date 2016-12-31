@@ -58,7 +58,6 @@ import purus.Forager;
 import purus.GlobalChat;
 import purus.KoordMaker;
 import purus.MusselPicker;
-import purus.OvenFueler;
 import purus.TreeChop;
 import purus.TroughFiller;
 import purus.farmer.Farmer;
@@ -504,8 +503,6 @@ public class MenuGrid extends Widget {
         	new KoordMaker(ui, w, i).start();
         } else if (ad[1].equals("forage")) {
         	new Forager(ui,w,i).Run();
-        } else if (ad[1].equals("oven")) {
-        	new OvenFueler(ui,w,i).Run();
         } else if (ad[1].equals("treechop")) {
         	new TreeChop(ui,w,i).Run();
         } else if (ad[1].equals("drink")) {
