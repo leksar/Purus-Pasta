@@ -206,7 +206,17 @@ public class OptWnd extends Window {
                         a = val;
                     }
                 });
-            appender.add(new CheckBox("Disable flavor objects including ambient sounds") {
+                appender.add(new CheckBox("Disable terrain smoothing (requires logout)") {
+                    {
+                        a = Config.disableterrainsmooth;
+                    }
+                    public void set(boolean val) {
+                        Config.disableterrainsmooth = val;
+                        Utils.setprefb("disableterrainsmooth", val);
+                        a = val;
+                    }
+                });
+                appender.add(new CheckBox("Disable flavor objects including ambient sounds") {
                     {
                         a = Config.hideflocomplete;
                     }

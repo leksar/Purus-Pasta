@@ -232,6 +232,8 @@ public class Inventory extends Widget implements DTarget {
         for (WItem wi : containers) {
             ItemInfo.Contents cont = wi.item.getcontents();
             if (cont != null) {
+                FlowerMenu.setNextSelection("Drink");
+                ui.lcc = wi.rootpos();
                 wi.item.wdgmsg("iact", wi.c, 0);
                 return true;
             }

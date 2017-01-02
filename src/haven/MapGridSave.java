@@ -3,9 +3,7 @@ package haven;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.Writer;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -23,49 +21,23 @@ public class MapGridSave {
     public static Coord mgs;
     private static String session;
 
-    private static Map<Coord, Long> initgrids = new HashMap<Coord, Long>(9);
-
     public MapGridSave(MCache map, MCache.Grid g) {
         this.map = map;
         this.g = g;
-        boolean abort = false;
 
-        BufferedImage img = drawmap(MCache.cmaps);
-
-        int xd = Math.abs(g.gc.x);
-        int yd = Math.abs(g.gc.y);
-        if ((xd == 0 || xd == 1) && (yd == 0 || yd == 1)) {
-            synchronized (initgrids) {
-                boolean newsess = false;
-                Long id = initgrids.get(g.gc);
-                if (id == null) {
-                    initgrids.put(g.gc, g.id);
-                    if (initgrids.size() == 1)
-                        newsess = true;
-                } else if (id != g.id) {
-                    initgrids.clear();
-                    initgrids.put(g.gc, g.id);
-                    newsess = true;
-                }
-
-                if ((mgs == null || newsess) && img != null) {
-                    session = (new SimpleDateFormat("yyyy-MM-dd HH.mm.ss")).format(new Date(System.currentTimeMillis()));
-                    (new File("map/" + session)).mkdirs();
-                    try {
-                        Writer cursesf = new FileWriter("map/currentsession.js");
-                        cursesf.write("var currentSession = '" + session + "';\n");
-                        cursesf.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        abort = true;
-                    }
-                    mgs = g.gc;
-                    gul = g.ul;
-                }
+        int x = Math.abs(g.gc.x);
+        int y = Math.abs(g.gc.y);
+        if (x == 0 && y == 0 || x == 10 && y == 10 || mgs == null) {
+            synchronized (MapGridSave.class) {
+                session = (new SimpleDateFormat("yyyy-MM-dd HH.mm.ss")).format(new Date(System.currentTimeMillis()));
+                (new File("map/" + session)).mkdirs();
+                mgs = g.gc;
+                gul = g.ul;
             }
         }
 
-        if (!abort && img != null)
+        BufferedImage img = drawmap(MCache.cmaps);
+        if (img != null)
             save(img);
     }
 

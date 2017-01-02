@@ -444,6 +444,12 @@ public class LocalMiniMap extends Widget {
                 synchronized (cache) {
                     f = cache.get(new Pair<>(plg, seq));
                     if (f == null) {
+                        if (cur != null && plg != cur.grid) {
+                            int x = Math.abs(plg.gc.x);
+                            int y = Math.abs(plg.gc.y);
+                            if (x == 0 && y == 0 || x == 10 && y == 10)
+                                maptiles.clear();
+                        }
                         f = Defer.later(() -> {
                             Coord ul = plg.ul;
                             Coord gc = plg.gc;
@@ -610,9 +616,5 @@ public class LocalMiniMap extends Widget {
             dragging = null;
         }
         return (true);
-    }
-
-    public void clearmap() {
-        maptiles.clear();
     }
 }

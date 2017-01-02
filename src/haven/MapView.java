@@ -114,6 +114,8 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
     private Thread musselPicker;
     public static final Set<Long> markedGobs = new HashSet<>();
     public static final Material.Colors markedFx = new Material.Colors(new Color(21, 127, 208, 255));
+    public Gob lastItemactGob;
+    private int lastItemactMeshId;
 
     public interface Delayed {
         public void run(GOut g);
@@ -1644,14 +1646,7 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
         } else if (msg == "unplace") {
             placing = null;
         } else if (msg == "move") {
-            // "move" is always sent for transitions between houses, mines, and cross-road access (viewing the distention, but not the actual travel).
-            // However, unlike the houses/mines case if cross road destination is within the view distance of the source (e.g. blocked CR or a very short road)
-            // map data won't be fetched since character remains in the same grid cut, thus we need to avoid clearing the local map cache.
-            // It can be observed that plc will always (?) differ from new map cc in case of CR, while for houses/mines it will be an identical match.
             cc = ((Coord)args[0]).mul(posres);
-            Gob pl = ui.sess.glob.oc.getgob(plgob);
-            if (pl == null || cc.equals(pl.rc))
-                gameui().minimapWnd.clearmap();
         } else if (msg == "plob") {
             if (args[0] == null)
                 plgob = -1;
@@ -2097,12 +2092,6 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
         return (true);
     }
 
-    public Coord lastinterpc;
-    private Coord lastintermc;
-    private int lastintergobid;
-    private Coord lastintergobrc;
-    private int lastintermid;
-
     public boolean iteminteract(Coord cc, Coord ul) {
         delay(new Hittest(cc) {
             public void hit(Coord pc, Coord2d mc, ClickInfo inf) {
@@ -2114,12 +2103,9 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
                     wdgmsg("itemact", pc, mc.floor(posres), ui.modflags());
                 } else {
                     if (inf.ol == null) {
-                        lastinterpc = pc;
-                        lastintermc = mc.floor(posres);
-                        lastintergobid = (int) inf.gob.id;
-                        lastintergobrc = inf.gob.rc.floor(posres);
-                        lastintermid = inf.clickid();
-                        wdgmsg("itemact", pc, mc.floor(posres), ui.modflags(), 0, lastintergobid, lastintergobrc, 0, lastintermid);
+                        lastItemactGob = inf.gob;
+                        lastItemactMeshId = inf.clickid();
+                        wdgmsg("itemact", pc, mc.floor(posres), ui.modflags(), 0, (int) inf.gob.id, inf.gob.rc.floor(posres), 0, lastItemactMeshId);
                     } else {
                         wdgmsg("itemact", pc, mc.floor(posres), ui.modflags(), 1, (int) inf.gob.id, inf.gob.rc.floor(posres), inf.ol.id, inf.clickid());
                     }
@@ -2130,7 +2116,8 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
     }
 
     public void iteminteractreplay() {
-        wdgmsg("itemact", lastinterpc, lastintermc, ui.modflags(), 0, lastintergobid, lastintergobrc, 0, lastintermid);
+        Coord grc = lastItemactGob.rc.floor(posres);
+        wdgmsg("itemact", Coord.z, lastItemactGob.rc.floor(posres) , ui.modflags(), 0, (int) lastItemactGob.id, grc, 0, lastItemactMeshId);
     }
 
     public boolean keydown(KeyEvent ev) {

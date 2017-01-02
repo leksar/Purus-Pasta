@@ -360,8 +360,4 @@ public class MinimapWnd extends Widget {
             resize(szr);
         }
     }
-
-    public void clearmap() {
-        mmap.clearmap();
-    }
 }
