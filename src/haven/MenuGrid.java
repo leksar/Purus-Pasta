@@ -574,7 +574,7 @@ public class MenuGrid extends Widget {
     }
 
     public boolean globtype(char k, KeyEvent ev) {
-        if (ev.isShiftDown()) {
+        if (ev.isShiftDown() || ev.isAltDown()) {
             return false;
         } else if ((k == 27) && (this.cur != null)) {
             this.cur = null;
