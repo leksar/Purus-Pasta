@@ -172,7 +172,14 @@ public class GameUI extends ConsoleHost implements Console.Directory {
                 return (new Coord(GameUI.this.sz.x, Math.min(brpanel.c.y - 79, GameUI.this.sz.y - menupanel.sz.y)));
             }
         }, new Coord(1, 0)));
-        menu = brpanel.add(new MenuGrid(), 20, 34);
+        menu = brpanel.add(new MenuGrid() {
+                @Override
+                public boolean use(Glob.Pagina pagina) {
+                    boolean result = super.use(pagina);
+                    if (result)
+                        makewnd.setLastAction(pagina);
+                    return result;
+                }}, 20, 34);
 
         brpanel.add(new Img(Resource.loadtex("gfx/hud/brframe")), 0, 0);
         menupanel.add(new MainMenu(), 0, 0);
