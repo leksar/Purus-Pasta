@@ -1,3 +1,16 @@
+Version 1.47.0
+    New:
+        * Option to disable terrain smoothing (by ghandhikus). See Video settings.
+
+    Fixed:
+        * Map tile dumper not creating new session when entering/leaving caves.
+        * Local minimap not refreshing properly under certain conditions.
+
+    Misc:
+        * Dropped triple-quality related modifications.
+        * Upstream code merge.
+
+
 Version 1.46.1
     Fixed:
         * Crash when storing resource and the destination file is locked. 

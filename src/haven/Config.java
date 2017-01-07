@@ -67,6 +67,7 @@ public class Config {
     public static boolean savemmap = Utils.getprefb("savemmap", true);
     public static boolean studylock = Utils.getprefb("studylock", false);
     public static boolean camfree = Utils.getprefb("camfree", false);
+    public static boolean hideum = Utils.getprefb("hideum", false);
     public static boolean chatsave = Utils.getprefb("chatsave", false);
     public static boolean chattimestamp = Utils.getprefb("chattimestamp", false);
     public static boolean alarmunknown = Utils.getprefb("alarmunknown", false);
@@ -77,10 +78,7 @@ public class Config {
     public static double alarmredvol = Utils.getprefd("alarmredvol", 0.32);
     public static boolean showquality = Utils.getprefb("showquality", false);
     public static boolean nohidebox = Utils.getprefb("nohidebox", false);
-    public static int showqualitymode = Utils.getprefi("showqualitymode", 0);
     public static boolean qualitywhole = Utils.getprefb("qualitywhole", true);
-    public static boolean hideum = Utils.getprefb("hideum", false);
-    public static boolean showlpgainmult = Utils.getprefb("showlpgainmult", false);
     public static int badcamsensitivity = Utils.getprefi("badcamsensitivity", 5);
     public static List<LoginData> logins = new ArrayList<LoginData>();
     public static boolean maplocked = Utils.getprefb("maplocked", false);
@@ -214,7 +212,6 @@ public class Config {
     public static boolean studybuff =  Utils.getprefb("studybuff", false);
     public static int zkey =  Utils.getprefi("zkey", KeyEvent.VK_Z);
     public static boolean disableterrainsmooth =  Utils.getprefb("disableterrainsmooth", false);
-    public static int avgmode = Utils.getprefi("avgmode", 0);
     private final static Map<String, Integer> defFontSzGlobal =  new HashMap<String, Integer>(3) {{
         put("zh", 16);
         put("en", 11);

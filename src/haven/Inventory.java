@@ -124,9 +124,9 @@ public class Inventory extends Widget implements DTarget {
                         GItem.Quality bq = b.item.quality();
                         if (aq == null || bq == null)
                             return 0;
-                        else if (aq.avg == bq.avg)
+                        else if (aq.q == bq.q)
                             return 0;
-                        else if (aq.avg > bq.avg)
+                        else if (aq.q > bq.q)
                             return msg.endsWith("asc") ? 1 : -1;
                         else
                             return msg.endsWith("asc") ? -1 : 1;

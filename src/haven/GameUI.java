@@ -26,8 +26,6 @@
 
 package haven;
 
-import static haven.GItem.Quality.AVG_MODE_GEOMETRIC;
-import static haven.GItem.Quality.AVG_MODE_QUADRATIC;
 import static haven.Inventory.invsq;
 
 import java.awt.Color;
@@ -42,8 +40,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import haven.automation.ErrorSysMsgCallback;
 
@@ -103,7 +99,6 @@ public class GameUI extends ConsoleHost implements Console.Directory {
     public FBelt fbelt;
     public CraftHistoryBelt histbelt;
     private ErrorSysMsgCallback errmsgcb;
-    private static final Pattern esvMsgPattern = Pattern.compile("Essence: ([0-9]+), Substance: ([0-9]+), Vitality: ([0-9]+)");
 
     public abstract class Belt extends Widget {
         public Belt(Coord sz) {
@@ -969,8 +964,6 @@ public class GameUI extends ConsoleHost implements Console.Directory {
         timerswnd.raise();
     }
 
-    private int prevQualityMode = Config.showqualitymode;
-
     public boolean globtype(char key, KeyEvent ev) {
         if (key == ':') {
             entercmd();
@@ -1079,14 +1072,6 @@ public class GameUI extends ConsoleHost implements Console.Directory {
             return true;
         } else if (!Config.disabledrinkhotkey && (ev.getKeyCode() == KeyEvent.VK_BACK_QUOTE || (Config.iswindows && Utils.getScancode(ev) == 41))) {
             maininv.drink(100);
-            return true;
-        } else if (ev.isAltDown() && ev.isControlDown() && ev.getKeyCode() == KeyEvent.VK_Q) {
-            if (Config.showqualitymode == 2)  { // all
-                Config.showqualitymode = prevQualityMode;
-            } else {
-                prevQualityMode = Config.showqualitymode;
-                Config.showqualitymode = 2;
-            }
             return true;
         } else if (ev.isControlDown() && ev.getKeyCode() == KeyEvent.VK_A) {
             if (mapfile != null && mapfile.show(!mapfile.visible)) {
@@ -1209,28 +1194,9 @@ public class GameUI extends ConsoleHost implements Console.Directory {
     private static final String charterMsg = "The name of this charterstone is \"";
 
     public void msg(String msg) {
-        Matcher m = esvMsgPattern.matcher(msg);
-        if (m.find()) {
-            int e = Integer.parseInt(m.group(1));
-            int s = Integer.parseInt(m.group(2));
-            int v = Integer.parseInt(m.group(3));
-
-            double avg;
-            switch (Config.avgmode) {
-                case AVG_MODE_QUADRATIC:
-                    avg =  Math.sqrt((e * e + s * s + v * v) / 3.0);
-                    break;
-                case AVG_MODE_GEOMETRIC:
-                    avg =  Math.pow(e * s * v, 1.0 / 3.0);
-                    break;
-                default:
-                    avg =  (e + s + v) / 3.0;
-                    break;
-            }
-            msg += "  (Avg: " + Utils.fmt1DecPlace(avg) + ")";
-        } else if (msg.startsWith(charterMsg)) {
+        if (msg.startsWith(charterMsg))
             CharterList.addCharter(msg.substring(charterMsg.length(), msg.length() - 2));
-        }
+
         msg(msg, Color.WHITE, Color.WHITE);
     }
 

@@ -26,14 +26,9 @@
 
 package haven;
 
-import static haven.PUtils.blurmask2;
-import static haven.PUtils.convolvedown;
-import static haven.PUtils.imgblur;
-import static haven.PUtils.rasterimg;
+import haven.resutil.FoodInfo;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Graphics;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -44,11 +39,8 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import haven.PUtils.BlurFurn;
-import haven.PUtils.Convolution;
-import haven.PUtils.Hanning;
-import haven.PUtils.TexFurn;
-import haven.resutil.FoodInfo;
+import static haven.PUtils.*;
+
 public class CharWnd extends Window {
     public static final RichText.Foundry ifnd = new RichText.Foundry(Resource.remote(), java.awt.font.TextAttribute.FAMILY, "SansSerif", java.awt.font.TextAttribute.SIZE, Config.fontsizeglobal).aa(true);
     public static final Text.Furnace catf = new BlurFurn(new TexFurn(new Text.Foundry(Text.sans, 20).aa(true), Window.ctex), 2, 2, new Color(96, 48, 0));
@@ -1759,15 +1751,15 @@ public class CharWnd extends Window {
             y += aw.sz.y;
             skill.add(aw = sattr.add(new SAttr(glob, "masonry", other), wbox.btloff().add(x, y)));
             y += aw.sz.y;
-	    	skill.add(aw = sattr.add(new SAttr(glob, "carpentry", every), wbox.btloff().add(x, y)));
-	    	y += aw.sz.y;
-	    	skill.add(aw = sattr.add(new SAttr(glob, "cooking", other), wbox.btloff().add(x, y)));
-	    	y += aw.sz.y;
-	    	skill.add(aw = sattr.add(new SAttr(glob, "farming", every), wbox.btloff().add(x, y)));
-	    	y += aw.sz.y;
-	    	skill.add(aw = sattr.add(new SAttr(glob, "survive", other), wbox.btloff().add(x, y)));
-	    	y += aw.sz.y;
-	    	skill.add(aw = sattr.add(new SAttr(glob, "lore", every), wbox.btloff().add(x, y)));
+            skill.add(aw = sattr.add(new SAttr(glob, "carpentry", every), wbox.btloff().add(x, y)));
+            y += aw.sz.y;
+            skill.add(aw = sattr.add(new SAttr(glob, "cooking", other), wbox.btloff().add(x, y)));
+            y += aw.sz.y;
+            skill.add(aw = sattr.add(new SAttr(glob, "farming", every), wbox.btloff().add(x, y)));
+            y += aw.sz.y;
+            skill.add(aw = sattr.add(new SAttr(glob, "survive", other), wbox.btloff().add(x, y)));
+            y += aw.sz.y;
+            skill.add(aw = sattr.add(new SAttr(glob, "lore", every), wbox.btloff().add(x, y)));
             y += aw.sz.y;
             Frame.around(sattr, skill);
 
@@ -1777,7 +1769,7 @@ public class CharWnd extends Window {
             y += 35;
             y += 151;
             int rx = x + attrw + 15;
-            Frame.around(sattr, Area.sized(new Coord(x, y).add(wbox.btloff()), new Coord(attrw + 20, 101)));
+            Frame.around(sattr, Area.sized(new Coord(x, y).add(wbox.btloff()), new Coord(attrw + 20, 96)));
             sattr.add(new Label("Experience points:"), new Coord(x + 15, y + 10));
             sattr.add(new EncLabel(new Coord(rx, y + 10)));
             sattr.add(new Label("Learning points:"), new Coord(x + 15, y + 25));
@@ -1805,13 +1797,13 @@ public class CharWnd extends Window {
                     }
                     CharWnd.this.wdgmsg("sattr", args.toArray(new Object[0]));
                 }
-            }, new Coord(rx - 75, y + 75));
+            }, new Coord(rx - 75, y + 70));
             sattr.add(new Button(75, "Reset") {
                 public void click() {
                     for (SAttr attr : skill)
                         attr.reset();
                 }
-            }, new Coord(rx - 165, y + 75));
+            }, new Coord(rx - 165, y + 70));
         }
 
         Tabs.Tab skills;

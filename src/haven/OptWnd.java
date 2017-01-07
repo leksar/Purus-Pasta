@@ -26,11 +26,6 @@
 
 package haven;
 
-
-import static haven.GItem.Quality.AVG_MODE_ARITHMETIC;
-import static haven.GItem.Quality.AVG_MODE_GEOMETRIC;
-import static haven.GItem.Quality.AVG_MODE_QUADRATIC;
-
 import java.io.IOException;
 import java.net.JarURLConnection;
 import java.net.URL;
@@ -1744,43 +1739,6 @@ public class OptWnd extends Window {
                 a = val;
             }
         });
-
-        Label highest = new Label("Highest");
-        Label avgESV = new Label("Avg E/S/V");
-        Label all = new Label("All");
-        Label avgSV = new Label("Avg S/V");
-        Label lowest = new Label("Lowest");
-
-        appender.setVerticalMargin(0);
-        appender.addRow(highest, avgESV, all, avgSV, lowest);
-
-        final int showQualityWidth = HorizontalAligner.apply(Arrays.asList(highest, avgESV, all, avgSV, lowest), HORIZONTAL_MARGIN);
-
-        appender.setVerticalMargin(VERTICAL_MARGIN);
-        appender.add(new HSlider(showQualityWidth, 0, 4, 0) {
-            protected void attach(UI ui) {
-                super.attach(ui);
-                val = Config.showqualitymode;
-            }
-            public void changed() {
-                Config.showqualitymode = val;
-                Utils.setprefi("showqualitymode", val);
-            }
-        });
-        appender.add(new CheckBox("Show LP gain multiplier for curios") {
-            {
-                a = Config.showlpgainmult;
-            }
-
-            public void set(boolean val) {
-                Utils.setprefb("showlpgainmult", val);
-                Config.showlpgainmult = val;
-                a = val;
-            }
-        });
-
-        appender.addRow(new Label("Calculate Avg as (req. logout):"), avgQModeDropdown());
-
         appender.add(new CheckBox("Round item quality to a whole number") {
             {
                 a = Config.qualitywhole;
@@ -2287,42 +2245,6 @@ public class OptWnd extends Window {
         }
 
         return new ArrayList<Locale>(languages);
-    }
-
-    private static final Pair[] avgQModes = new Pair[]{
-            new Pair<>(Resource.getLocString(Resource.BUNDLE_LABEL, "Quadratic"), AVG_MODE_QUADRATIC),
-            new Pair<>(Resource.getLocString(Resource.BUNDLE_LABEL, "Geometric"), AVG_MODE_GEOMETRIC),
-            new Pair<>(Resource.getLocString(Resource.BUNDLE_LABEL, "Arithmetic"), AVG_MODE_ARITHMETIC)
-    };
-
-    @SuppressWarnings("unchecked")
-    private Dropbox<Pair<String, Integer>> avgQModeDropdown() {
-    	List<String> values = Arrays.stream(avgQModes).map(x -> x.a.toString()).collect(Collectors.toList());
-        Dropbox<Pair<String, Integer>> modes = new Dropbox<Pair<String, Integer>>(avgQModes.length, values) {
-            @Override
-            protected Pair<String, Integer> listitem(int i) {
-                return avgQModes[i];
-            }
-
-            @Override
-            protected int listitems() {
-                return avgQModes.length;
-            }
-
-            @Override
-            protected void drawitem(GOut g, Pair<String, Integer> item, int i) {
-                g.text(item.a, Coord.z);
-            }
-
-            @Override
-            public void change(Pair<String, Integer> item) {
-                super.change(item);
-                Config.avgmode = item.b;
-                Utils.setprefi("avgmode", item.b);
-            }
-        };
-        modes.change(avgQModes[Config.avgmode]);
-        return modes;
     }
 
     private static final Pair[] combatkeys = new Pair[]{
