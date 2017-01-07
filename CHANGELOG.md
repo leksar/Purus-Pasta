@@ -1,5 +1,7 @@
 ## Changelog
 
+### 2.26.3
+	- Latest merges from Amber client
 ### 2.26.2
 	- Latest merges from Default client
 ### 2.26.1
