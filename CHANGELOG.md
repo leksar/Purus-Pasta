@@ -1,5 +1,9 @@
 ## Changelog
 
+### 2.26.1
+	- Fixed crafting history tabs
+	- Few minor fixes
+	- Latest changes from Amber client
 ### 2.26.0
 	- Added hotkeys to change movement speed (Alt+Q or W or E or R)
 	- Added red onion and wheat for farming bot
