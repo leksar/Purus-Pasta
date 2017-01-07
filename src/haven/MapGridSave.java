@@ -2,17 +2,16 @@ package haven;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.imageio.ImageIO;
 
 import haven.resutil.Ridges;
-
 
 public class MapGridSave {
     private MCache map;
@@ -48,6 +47,24 @@ public class MapGridSave {
             File outputfile = new File(fileName);
             ImageIO.write(img, "png", outputfile);
         } catch (IOException e) {
+            return;
+        }
+
+        synchronized (MapGridSave.class) {
+            BufferedWriter bw = null;
+            try {
+                bw = new BufferedWriter(new FileWriter(String.format("map/%s/ids.txt", session), true));
+                bw.write(String.format("%d,%d,%d\n", normc.x, normc.y, g.id));
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                if (bw != null) {
+                    try {
+                        bw.close();
+                    } catch (IOException e) {
+                    }
+                }
+            }
         }
     }
 
