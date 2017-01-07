@@ -1,5 +1,7 @@
 ## Changelog
 
+### 2.26.2
+	- Latest merges from Default client
 ### 2.26.1
 	- Fixed crafting history tabs
 	- Few minor fixes
