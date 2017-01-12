@@ -117,6 +117,9 @@ public abstract class ErrorGui extends JFrame implements ErrorStatus {
 
     public boolean goterror(Throwable t) {
         reporter = Thread.currentThread();
+        if(t instanceof ThreadDeath) {
+        	return (true); // Shouldn't do this but it works
+        }
         java.io.StringWriter w = new java.io.StringWriter();
         t.printStackTrace(new java.io.PrintWriter(w));
         final String tr = w.toString();
