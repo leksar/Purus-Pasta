@@ -67,7 +67,7 @@ public class MapWnd extends Window {
     private int markerseq = -1;
     private boolean domark = false;
     private final Collection<Runnable> deferred = new LinkedList<>();
-    private static final Resource plx = Resource.local().loadwait("gfx/hud/mmap/x");
+    private static final Tex plx = Text.renderstroked("\u2716",  Color.red, Color.BLACK, LocalMiniMap.bld12fnd).tex();
 
     private final static Predicate<Marker> pmarkers = (m -> m instanceof PMarker);
     private final static Predicate<Marker> smarkers = (m -> m instanceof SMarker);
@@ -161,7 +161,7 @@ public class MapWnd extends Window {
                 Coord ploc = xlate(resolve(player));
                 if (ploc != null) {
                     g.chcolor(255, 0, 0, 255);
-                    g.image(plx.layer(Resource.imgc), ploc.sub(plx.layer(Resource.negc).cc));
+                    g.image(plx, ploc.sub(plx.sz().div(2)));
                     g.chcolor();
                 }
             } catch (Loading l) {

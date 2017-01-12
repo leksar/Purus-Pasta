@@ -1,3 +1,14 @@
+Version 1.47.1
+    Fixed:
+        * Map tile dumper saving tiles into wrong session under certain conditions.
+
+    Misc:
+        * Added new trees to tree list.
+        * Removed ore boulders from boulders list.
+        * Clear Search window's filter when reopening it.
+        * Updated Russian localization.
+
+
 Version 1.47.0
     New:
         * Option to disable terrain smoothing (by ghandhikus). See Video settings.

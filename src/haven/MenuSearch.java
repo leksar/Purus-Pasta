@@ -31,6 +31,13 @@ public class MenuSearch extends GameUI.Hidewnd {
         add(list, new Coord(10, 35));
     }
 
+    @Override
+    public void wdgmsg(Widget sender, String msg, Object... args) {
+        search.settext("");
+        list.changeFilter("");
+        super.wdgmsg(sender, msg, args);
+    }
+
     private static class ActionsList extends Listbox<Action> {
         private static final Coord nameoff = new Coord(34, 5);
         public List<Action> acts = new ArrayList<>(50);
