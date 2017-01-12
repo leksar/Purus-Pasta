@@ -1,5 +1,8 @@
 ## Changelog
 
+### 2.27.0
+	- Added alarm for walrusii
+	- Latest merges from Amber and Default client
 ### 2.26.3
 	- Latest merges from Amber client
 ### 2.26.2
