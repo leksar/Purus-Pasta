@@ -57,6 +57,7 @@ public class LocalMiniMap extends Widget {
     private static final Resource wreckingarmsfx = Resource.local().loadwait("sfx/alarmWBall");
     private static final Resource playeralarmWhite = Resource.local().loadwait("sfx/alarmWhite");
     private static final Resource playeralarmRed = Resource.local().loadwait("sfx/alarmRed");
+    private static final Resource walrusAlarm = Resource.local().loadwait("sfx/alarmWalrus");
     private Coord doff = Coord.z;
     private Coord delta = Coord.z;
     private Coord off = Coord.z;
@@ -334,6 +335,9 @@ public class LocalMiniMap extends Widget {
                             sgobs.add(gob.id);
                             Audio.play(trollsfx, Config.alarmtrollvol);
                         }
+                    } else if (res.name.equals("gfx/kritter/walrus/walrus") && gob.knocked == Boolean.FALSE) {
+                        sgobs.add(gob.id);
+                        Audio.play(walrusAlarm, Config.alarmbearsvol);
                     } else if (Config.alarmmammoth && res.name.equals("gfx/kritter/mammoth/mammoth") && gob.knocked == Boolean.FALSE) {
                         sgobs.add(gob.id);
                         Audio.play(mammothsfx, Config.alarmmammothvol);
