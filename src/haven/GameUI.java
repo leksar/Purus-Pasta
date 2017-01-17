@@ -27,6 +27,8 @@
 package haven;
 
 import static haven.Inventory.invsq;
+import haven.automation.ErrorSysMsgCallback;
+import haven.automation.PickForageable;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -986,10 +988,6 @@ public class GameUI extends ConsoleHost implements Console.Directory {
         } else if ((key == 27) && (map != null) && !map.hasfocus) {
             setfocus(map);
             return (true);
-        } else if (key == 17 /*ctrl+q*/) {
-            timerswnd.show(!timerswnd.visible);
-            timerswnd.raise();
-            return true;
         } else if (ev.isControlDown() && ev.getKeyCode() == KeyEvent.VK_G) {
             if (map != null)
                 map.togglegrid();
@@ -1094,8 +1092,11 @@ public class GameUI extends ConsoleHost implements Console.Directory {
         	Speedget.setSpeed = true;
         	Speedget.SpeedToSet = 3;
         	return true;
+        } else if (!ev.isShiftDown() && ev.getKeyCode() == KeyEvent.VK_Q) {
+            Thread t = new Thread(new PickForageable(this), "PickForageable");
+            t.start();
+            return true;
         }
-
         return (super.globtype(key, ev));
     }
 

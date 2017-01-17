@@ -73,7 +73,7 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
     private static final Material.Colors dframeDone = new Material.Colors(new Color(209, 42, 42, 255));
     private static final Gob.Overlay animalradius = new Gob.Overlay(new BPRadSprite(100.0F, -10.0F, BPRadSprite.smatDanger));
     private static final Set<String> dangerousanimalrad = new HashSet<String>(Arrays.asList(
-            "gfx/kritter/bear/bear", "gfx/kritter/boar/boar", "gfx/kritter/lynx/lynx", "gfx/kritter/badger/badger"));
+            "gfx/kritter/bear/bear", "gfx/kritter/boar/boar", "gfx/kritter/lynx/lynx", "gfx/kritter/badger/badger", "gfx/kritter/walrus/walrus"));
     // knocked will be null if pose update request hasn't been received yet
     public Boolean knocked = null;
 
@@ -795,6 +795,8 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
             try {
                 Coord3f c = getc();
                 c.y = -c.y;
+                if (Config.disableelev)
+                    c.z = 0;
                 if ((this.c == null) || !c.equals(this.c))
                     xl.update(Transform.makexlate(new Matrix4f(), this.c = c));
                 if (this.a != Gob.this.a)

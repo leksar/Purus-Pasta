@@ -65,8 +65,10 @@ public class GItem extends AWidget implements ItemInfo.SpriteOwner, GSprite.Owne
         public Quality(double q, boolean curio) {
             this.q = q;
             this.curio = curio;
-            qtex = Text.renderstroked(Utils.fmt1DecPlace(q), Color.WHITE, Color.BLACK, numfnd).tex();
-            qwtex = Text.renderstroked(Math.round(q) + "", Color.WHITE, Color.BLACK, numfnd).tex();
+            if (q != 0) {
+                qtex = Text.renderstroked(Utils.fmt1DecPlace(q), Color.WHITE, Color.BLACK, numfnd).tex();
+                qwtex = Text.renderstroked(Math.round(q) + "", Color.WHITE, Color.BLACK, numfnd).tex();
+            }
         }
     }
 

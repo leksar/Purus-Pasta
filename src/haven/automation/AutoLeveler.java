@@ -129,7 +129,6 @@ public class AutoLeveler extends Window implements GobSelectCallback, ErrorSysMs
         stopbtn = new Button(140, "Stop") {
             @Override
             public void click() {
-                running = false;
                 terminate = true;
                 if (gameui().map.pfthread != null)
                     gameui().map.pfthread.interrupt();
@@ -137,9 +136,10 @@ public class AutoLeveler extends Window implements GobSelectCallback, ErrorSysMs
                     runner.interrupt();
                 try {
                     if (running)
-                        gameui().map.wdgmsg("click", Coord.z, gameui().map.player().rc, 1, 0);
+                        gameui().map.wdgmsg("click", Coord.z, gameui().map.player().rc.floor(posres), 1, 0);
                 } catch (Exception e) { // ignored
                 }
+                running = false;
                 this.hide();
                 runbtn.show();
                 clearbtn.show();

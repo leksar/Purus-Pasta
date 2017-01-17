@@ -26,6 +26,7 @@
 
 package haven;
 
+
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.RenderingHints;
@@ -1245,6 +1246,16 @@ public class Utils {
     }
 
     public static float[] splice(float[] src, int off) {
+        return (splice(src, off, src.length - off));
+    }
+
+    public static double[] splice(double[] src, int off, int len) {
+        double[] dst = new double[len];
+        System.arraycopy(src, off, dst, 0, len);
+        return (dst);
+    }
+
+    public static double[] splice(double[] src, int off) {
         return (splice(src, off, src.length - off));
     }
 

@@ -1901,11 +1901,8 @@ public class Resource implements Serializable {
             "That land is owned by %s.",
             "The name of this charterstone is \"%s\".",
             "Will refill in %s days",
-            "Will refill in %s day",
             "Will refill in %s hours",
-            "Will refill in %s hour",
             "Will refill in %s minutes",
-            "Will refill in %s minute",
             "Will refill in %s seconds",
             "Will refill in %s second"
     };

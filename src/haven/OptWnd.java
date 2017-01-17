@@ -211,6 +211,16 @@ public class OptWnd extends Window {
                         a = val;
                     }
                 });
+                appender.add(new CheckBox("Disable terrain elevation (requires logout)") {
+                    {
+                        a = Config.disableelev;
+                    }
+                    public void set(boolean val) {
+                        Config.disableelev = val;
+                        Utils.setprefb("disableelev", val);
+                        a = val;
+                    }
+                });
                 appender.add(new CheckBox("Disable flavor objects including ambient sounds") {
                     {
                         a = Config.hideflocomplete;

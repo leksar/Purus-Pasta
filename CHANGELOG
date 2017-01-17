@@ -1,3 +1,49 @@
+Version 1.49.2
+    Fixed:
+        * Crash in PickForagable.
+
+    Misc:
+        * Add radius for walruses.
+        * Upstream code merge.
+        * Updated Russian localization.
+
+
+Version 1.49.1
+    Misc:
+        * Enable terrain elevation by default.
+
+
+Version 1.49.0
+    New:
+        * Option to disable terrain elevation.
+        * Pressing Q key will pick nearest forageable or the stuff from the icons list which is not currently hidden.
+
+    Fixed:
+        * Auto-lever stop button not working.
+
+
+Version 1.48.1
+    Fixed:
+        * Missing icon for dead walruses.
+
+
+Version 1.48.0
+    New:
+        * Clover feeder.
+        * Walrus sound alarm (controlled by same option as bear and lynx alarms).
+
+    Fixed:
+        * Search window filter not being cleared when closing the window with shift+s.
+        * Bush and tree icon positions being slightly off.
+
+    Misc:
+        * Updated curio timings (thanks to NicholasSavard).
+        * Added Toad Butter to relevant wound descriptions.
+        * Add timers to extensions menu.
+        * Upstream code merge.
+        * Updated Russian localization.
+
+
 Version 1.47.1
     Fixed:
         * Map tile dumper saving tiles into wrong session under certain conditions.

@@ -47,6 +47,7 @@ import haven.automation.AddBranchesToOven;
 import haven.automation.AddCoalToSmelter;
 import haven.automation.AutoLeveler;
 import haven.automation.ErrorSysMsgCallback;
+import haven.automation.FeedClover;
 import haven.automation.GobSelectCallback;
 import haven.automation.LightWithTorch;
 import haven.automation.SteelRefueler;
@@ -156,6 +157,8 @@ public class MenuGrid extends Widget {
            // p.add(glob.paginafor(Resource.local().load("paginae/amber/steel")));
             p.add(glob.paginafor(Resource.local().load("paginae/amber/autosurvey")));
             p.add(glob.paginafor(Resource.local().load("paginae/amber/torch")));
+            p.add(glob.paginafor(Resource.local().load("paginae/amber/clover")));
+            p.add(glob.paginafor(Resource.local().load("paginae/amber/timers")));
     	// Purus Cor Stuff
     	p.add(glob.paginafor(Resource.local().load("paginae/custom/timer")));
     	p.add(glob.paginafor(Resource.local().load("paginae/custom/study")));
@@ -381,6 +384,12 @@ public class MenuGrid extends Widget {
             }
         } else if (ad[1].equals("torch")) {
             Thread t = new Thread(new LightWithTorch(gui), "LightWithTorch");
+            t.start();
+        } else if (ad[1].equals("timers")) {
+            gui.timerswnd.show(!gui.timerswnd.visible);
+            gui.timerswnd.raise();
+        } else if (ad[1].equals("clover")) {
+            Thread t = new Thread(new FeedClover(gui), "FeedClover");
             t.start();
         }
     }

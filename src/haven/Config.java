@@ -212,6 +212,7 @@ public class Config {
     public static boolean studybuff =  Utils.getprefb("studybuff", false);
     public static int zkey =  Utils.getprefi("zkey", KeyEvent.VK_Z);
     public static boolean disableterrainsmooth =  Utils.getprefb("disableterrainsmooth", false);
+    public static boolean disableelev =  Utils.getprefb("disableelev", false);
     private final static Map<String, Integer> defFontSzGlobal =  new HashMap<String, Integer>(3) {{
         put("zh", 16);
         put("en", 11);
@@ -242,7 +243,7 @@ public class Config {
     public final static String chatfile = "chatlog.txt";
     public static PrintWriter chatlog = null;
 
-    public final static HashMap<String, CheckListboxItem> boulders = new HashMap<String, CheckListboxItem>(14) {{
+    public final static HashMap<String, CheckListboxItem> boulders = new HashMap<String, CheckListboxItem>(13) {{
         put("basalt", new CheckListboxItem("Basalt"));
         put("schist", new CheckListboxItem("Schist"));
         put("dolomite", new CheckListboxItem("Dolomite"));
@@ -256,7 +257,6 @@ public class Config {
         put("feldspar", new CheckListboxItem("Feldspar"));
         put("marble", new CheckListboxItem("Marble"));
         put("flint", new CheckListboxItem("Flint"));
-        put("blackcoal", new CheckListboxItem("Black Coal"));
     }};
 
     public final static HashMap<String, CheckListboxItem> bushes = new HashMap<String, CheckListboxItem>(22) {{
@@ -385,10 +385,11 @@ public class Config {
         put("gfx/kritter/moose/moose", Resource.loadtex("gfx/icons/moose"));
         put("gfx/kritter/reddeer/reddeer", Resource.loadtex("gfx/icons/reddeer"));
         put("gfx/kritter/troll/troll", Resource.loadtex("gfx/icons/troll"));
+        put("gfx/kritter/walrus/walrus", Resource.loadtex("gfx/icons/walrus"));
     }};
 
     public final static Set<String> dangerousgobres = new HashSet<String>(Arrays.asList(
-            "gfx/kritter/bat/bat", "gfx/kritter/bear/bear", "gfx/kritter/boar/boar", "gfx/kritter/lynx/lynx",
+            "gfx/kritter/bat/bat", "gfx/kritter/bear/bear", "gfx/kritter/boar/boar", "gfx/kritter/lynx/lynx", "gfx/kritter/walrus/walrus",
             "gfx/kritter/badger/badger"));
 
     public final static Set<String> foragables = new HashSet<String>(Arrays.asList(
@@ -421,6 +422,7 @@ public class Config {
                 "gfx/invobjs/herbs/yarrow"
         });
         put("paginae/wound/blunttrauma", new String[]{
+                "gfx/invobjs/toadbutter",
                 "gfx/invobjs/leech",
                 "gfx/invobjs/gauze"
         });
@@ -463,6 +465,7 @@ public class Config {
                 "gfx/invobjs/stingingpoultice"
         });
         put("paginae/wound/unfaced", new String[]{
+                "gfx/invobjs/toadbutter",
                 "gfx/invobjs/leech",
                 "gfx/invobjs/mudointment"
         });

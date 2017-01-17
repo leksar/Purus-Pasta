@@ -61,14 +61,17 @@ public class MCache {
     public int olseq = 0;
     Map<Integer, Defrag> fragbufs = new TreeMap<Integer, Defrag>();
 
-    @SuppressWarnings("serial")
-	public static class LoadingMap extends Loading {
-        public LoadingMap() {
-            super("Waiting for map data...");
-        }
+    public static class LoadingMap extends Loading {
+        public final Coord gc;
 
+        public LoadingMap(Coord gc)
+        {
+            super("Waiting for map data...");
+            this.gc = gc;
+        }
         public LoadingMap(Loading cause) {
             super(cause);
+            this.gc = null;
         }
     }
 
@@ -419,7 +422,7 @@ public class MCache {
                 cached = grids.get(gc);
                 if (cached == null) {
                     request(gc);
-                    throw (new LoadingMap());
+                    throw(new LoadingMap(gc));
                 }
             }
             return (cached);
@@ -499,8 +502,10 @@ public class MCache {
             synchronized (req) {
                 if (req.containsKey(c)) {
                     Grid g = grids.get(c);
-                    if (g == null)
+                    if(g == null) {
                         grids.put(c, g = new Grid(c));
+                        cached = null;
+                    }
                     g.fill(msg);
                     req.remove(c);
                     olseq++;
@@ -603,27 +608,29 @@ public class MCache {
                     g.dispose();
                 grids.clear();
                 req.clear();
+                cached = null;
             }
         }
     }
 
     public void trim(Coord ul, Coord lr) {
-        synchronized (grids) {
-            synchronized (req) {
-                for (Iterator<Map.Entry<Coord, Grid>> i = grids.entrySet().iterator(); i.hasNext(); ) {
+        synchronized(grids) {
+            synchronized(req) {
+                for(Iterator<Map.Entry<Coord, Grid>> i = grids.entrySet().iterator(); i.hasNext();) {
                     Map.Entry<Coord, Grid> e = i.next();
                     Coord gc = e.getKey();
                     Grid g = e.getValue();
-                    if ((gc.x < ul.x) || (gc.y < ul.y) || (gc.x > lr.x) || (gc.y > lr.y)) {
+                    if((gc.x < ul.x) || (gc.y < ul.y) || (gc.x > lr.x) || (gc.y > lr.y)) {
                         g.dispose();
                         i.remove();
                     }
                 }
-                for (Iterator<Coord> i = req.keySet().iterator(); i.hasNext(); ) {
+                for(Iterator<Coord> i = req.keySet().iterator(); i.hasNext();) {
                     Coord gc = i.next();
-                    if ((gc.x < ul.x) || (gc.y < ul.y) || (gc.x > lr.x) || (gc.y > lr.y))
+                    if((gc.x < ul.x) || (gc.y < ul.y) || (gc.x > lr.x) || (gc.y > lr.y))
                         i.remove();
                 }
+                cached = null;
             }
         }
     }

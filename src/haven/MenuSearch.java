@@ -32,10 +32,12 @@ public class MenuSearch extends GameUI.Hidewnd {
     }
 
     @Override
-    public void wdgmsg(Widget sender, String msg, Object... args) {
-        search.settext("");
-        list.changeFilter("");
-        super.wdgmsg(sender, msg, args);
+    public boolean show(boolean show) {
+        if (show) {
+            search.settext("");
+            list.changeFilter("");
+        }
+        return super.show(show);
     }
 
     private static class ActionsList extends Listbox<Action> {
