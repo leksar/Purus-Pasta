@@ -27,6 +27,7 @@
 package haven;
 
 import java.awt.Color;
+import java.awt.Desktop;
 import java.awt.event.KeyEvent;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -35,6 +36,7 @@ import java.io.InputStreamReader;
 import java.net.CookieHandler;
 import java.net.CookieManager;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
 import java.security.KeyManagementException;
@@ -56,6 +58,7 @@ public class LoginScreen extends Widget {
     Button optbtn;
     Button statusbtn;
     OptWnd opts;
+    static boolean ServerStatus;
     static Text.Foundry textf, textfs;
     static Tex bg = Resource.loadtex("gfx/loginscr");
     Text progress = null;
@@ -327,7 +330,17 @@ public class LoginScreen extends Widget {
             opts.reqdestroy();
             opts = null;
         } else if (sender == statusbtn) {
-        	// Do nothing maybe
+        	System.out.println(":(");
+        	if(!ServerStatus) {
+                Desktop desktop = Desktop.isDesktopSupported() ? Desktop.getDesktop() : null;
+                if (desktop != null && desktop.isSupported(Desktop.Action.BROWSE)) {
+                    try {
+                        desktop.browse(new URI("https://youtu.be/insM7oUYNOE"));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+        	}
         	return;
         }
         super.wdgmsg(sender, msg, args);
@@ -347,7 +360,6 @@ public class LoginScreen extends Widget {
                 while (true) {
                 	//
                 	// True = up and false = down
-                    boolean ServerStatus;
                     String PlayerCount = "";
 
                     String mainpagecontent = geturlcontent("http://www.havenandhearth.com/portal/");
