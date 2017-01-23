@@ -1,5 +1,7 @@
 ## Changelog
 
+### 2.27.2
+	- Latest merges from Amber client
 ### 2.27.1
 	- Minor fixes
 	- Latest merges from Amber & Default client
