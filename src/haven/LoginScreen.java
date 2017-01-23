@@ -330,7 +330,6 @@ public class LoginScreen extends Widget {
             opts.reqdestroy();
             opts = null;
         } else if (sender == statusbtn) {
-        	System.out.println(":(");
         	if(!ServerStatus) {
                 Desktop desktop = Desktop.isDesktopSupported() ? Desktop.getDesktop() : null;
                 if (desktop != null && desktop.isSupported(Desktop.Action.BROWSE)) {
