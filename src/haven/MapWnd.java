@@ -56,6 +56,7 @@ public class MapWnd extends Window {
     public final MarkerList list;
     private final Locator player;
     private final Widget toolbar;
+    private final Widget zoombar;
     private final Frame viewf, listf;
     private final Button pmbtn, smbtn;
     private TextEntry namesel;
@@ -72,6 +73,7 @@ public class MapWnd extends Window {
     private final static Predicate<Marker> pmarkers = (m -> m instanceof PMarker);
     private final static Predicate<Marker> smarkers = (m -> m instanceof SMarker);
     private final static Comparator<Marker> namecmp = ((a, b) -> a.nm.compareTo(b.nm));
+
 
     public MapWnd(MapFile file, MapView mv, Coord sz, String title) {
         super(sz, title, true);
@@ -101,6 +103,7 @@ public class MapWnd extends Window {
             }
         }, Coord.z);
         toolbar.pack();
+        zoombar = add(new ZoomBar());
         listf = add(new Frame(new Coord(200, 200), false));
         list = listf.add(new MarkerList(listf.inner().x, 0));
         pmbtn = add(new Button(95, "Placed", false) {
@@ -116,6 +119,53 @@ public class MapWnd extends Window {
             }
         });
         resize(sz);
+    }
+
+    private class ZoomBar extends Widget {
+        private final static int btnsz = 21;
+        private Tex zoomtex = null;
+
+        public ZoomBar() {
+            super(new Coord(btnsz * 2 + 20, btnsz));
+            add(new IButton("gfx/hud/worldmap/minus", "", "", "") {
+                @Override
+                public void click() {
+                    if (MapFileWidget.zoom < 4) {
+                        zoomtex = null;
+                        Coord tc = view.curloc.tc.mul(MapFileWidget.scalef());
+                        MapFileWidget.zoom++;
+                        tc = tc.div(MapFileWidget.scalef());
+                        view.curloc.tc.x = tc.x;
+                        view.curloc.tc.y = tc.y;
+                    }
+                }
+            }, Coord.z);
+            add(new IButton("gfx/hud/worldmap/plus", "", "", "") {
+                @Override
+                public void click() {
+                    if (MapFileWidget.zoom > 0) {
+                        zoomtex = null;
+                        Coord tc = view.curloc.tc.mul(MapFileWidget.scalef());
+                        MapFileWidget.zoom--;
+                        tc = tc.div(MapFileWidget.scalef());
+                        view.curloc.tc.x = tc.x;
+                        view.curloc.tc.y = tc.y;
+                    }
+                }
+            }, new Coord(btnsz + 20, 0));
+        }
+
+        @Override
+        public void draw(GOut g) {
+            super.draw(g);
+            g.image(renderz(), new Coord((btnsz * 2 + 20) / 2 - zoomtex.sz().x / 2, btnsz / 2 - zoomtex.sz().y / 2));
+        }
+
+        private Tex renderz() {
+            if (zoomtex == null)
+                zoomtex = Text.renderstroked((5 - MapFileWidget.zoom) + "", Color.WHITE, Color.BLACK).tex();
+            return zoomtex;
+        }
     }
 
     private class View extends MapFileWidget {
@@ -314,6 +364,7 @@ public class MapWnd extends Window {
         viewf.resize(new Coord(sz.x - listf.sz.x - 10, sz.y));
         view.resize(viewf.inner());
         toolbar.c = viewf.c.add(0, viewf.sz.y - toolbar.sz.y).add(2, -2);
+        zoombar.c = viewf.c.add(viewf.sz.x - zoombar.sz.x, viewf.sz.y - zoombar.sz.y).sub(7, 7);
     }
 
     public void recenter() {

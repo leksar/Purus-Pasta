@@ -1033,17 +1033,6 @@ public class OptWnd extends Window {
                 a = val;
             }
         });
-        appender.add(new CheckBox("Auto hearth") {
-            {
-                a = Config.autohearth;
-            }
-
-            public void set(boolean val) {
-                Utils.setprefb("autohearth", val);
-                Config.autohearth = val;
-                a = val;
-            }
-        });
         appender.add(new CheckBox("Auto logout on unknown/red players") {
             {
                 a = Config.autologout;
@@ -1719,11 +1708,6 @@ public class OptWnd extends Window {
                 Utils.delpref("quickslotsc");
                 Utils.delpref("chatsz");
                 Utils.delpref("chatvis");
-                Utils.delpref("gui-bl-visible");
-                Utils.delpref("gui-br-visible");
-                Utils.delpref("gui-ul-visible");
-                Utils.delpref("gui-ur-visible");
-                Utils.delpref("gui-um-visible");
                 Utils.delpref("menu-visible");
                 Utils.delpref("fbelt_c");
                 Utils.delpref("fbelt_vertical");

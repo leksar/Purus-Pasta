@@ -1,3 +1,26 @@
+Version 1.50.1
+    Fixed:
+        * Auto-miner issues due to server-side drinking.
+        * Barterstand crash.
+
+    Misc:
+        * Added icon for nidbanes.
+        * Increase Q forage distance to 20 tiles.
+        * Removed auto-hearth since auto-logout is more practical (and having both options is confusing).
+
+
+Version 1.50.0
+    New:
+        * Worldmap zoom.
+
+    Fixed:
+        * Local minimap borking sometimes.
+
+    Misc:
+        * Limited auto-picker (Q key) to 10 tiles
+        * Added ladybug, moths, etc to hide icons list thus allowing them to be picked with the Q key.
+
+
 Version 1.49.2
     Fixed:
         * Crash in PickForagable.
