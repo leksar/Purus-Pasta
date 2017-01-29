@@ -507,7 +507,11 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
                         	hide = true;
                     
                     if (Config.hidewalls) 
-                    	 if (res.name.startsWith("gfx/terobjs/arch/pali") &&  !res.name.equals("gfx/terobjs/arch/palisadegate") && !res.name.equals("gfx/terobjs/arch/palisadebiggate") || res.name.startsWith("gfx/terobjs/arch/brick") && !res.name.equals("gfx/terobjs/arch/brickwallgate") || res.name.startsWith("gfx/terobjs/arch/pole") && !res.name.equals("gfx/terobjs/arch/polegate")) 
+                    	 if (res.name.startsWith("gfx/terobjs/arch/pali") && !res.name.equals("gfx/terobjs/arch/palisadegate") &&
+                    			 !res.name.equals("gfx/terobjs/arch/palisadebiggate") || res.name.startsWith("gfx/terobjs/arch/brick")
+                    			 && !res.name.equals("gfx/terobjs/arch/brickwallgate") &&!res.name.equals("gfx/terobjs/arch/brickwallbiggate")
+                    			 || res.name.startsWith("gfx/terobjs/arch/pole") && !res.name.equals("gfx/terobjs/arch/polegate") && 
+                    			 !res.name.equals("gfx/terobjs/arch/polebiggate")) 
                     		 hide = true;
                     
                     if (Config.hidewagons) 
