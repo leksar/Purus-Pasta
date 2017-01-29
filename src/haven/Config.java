@@ -149,6 +149,8 @@ public class Config {
     public static boolean autoskin = Utils.getprefb("autoskin", false);
     public static boolean autobutcher = Utils.getprefb("autobutcher", false);
     public static boolean autoflay = Utils.getprefb("autoflay", false);
+    public static boolean autogiddyup = Utils.getprefb("autogiddyup", false);
+    public static boolean autoshear = Utils.getprefb("autoshear", false);
     public static boolean runonlogin = Utils.getprefb("runonlogin", false);
     public static Coord chatsz = Utils.getprefc("chatsz", new Coord(683, 111));
     public static boolean autostudy = Utils.getprefb("autostudy", true);

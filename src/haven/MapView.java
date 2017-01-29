@@ -69,7 +69,7 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
     public static Coord2d pllastcc;
     public Coord2d cc;
     public final Glob glob;
-    private int view = 2;
+    private static final int view = 2;
     private Collection<Delayed> delayed = new LinkedList<Delayed>();
     private Collection<Delayed> delayed2 = new LinkedList<Delayed>();
     private Collection<Rendered> extradraw = new LinkedList<Rendered>();
@@ -1509,8 +1509,9 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
             }
 
             if (showgrid) {
-                Coord tc = new Coord((int)(cc.x / tilesz.x / MCache.cutsz.x - view - 1) * MCache.cutsz.x,
-                        (int)(cc.y / tilesz.y / MCache.cutsz.y - view - 1) * MCache.cutsz.y);
+                double tx = Math.ceil(cc.x / tilesz.x / MCache.cutsz.x);
+                double ty = Math.ceil(cc.y / tilesz.y / MCache.cutsz.y);
+                Coord tc = new Coord((int)(tx - view - 1) * MCache.cutsz.x, (int)(ty - view - 1) * MCache.cutsz.y);
                 if (!tc.equals(lasttc)) {
                     lasttc = tc;
                     gridol.update(tc);

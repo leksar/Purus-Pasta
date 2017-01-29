@@ -27,6 +27,8 @@
 package haven;
 
 import java.awt.Color;
+import java.awt.event.KeyEvent;
+import java.util.*;
 import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -43,7 +45,7 @@ public class BuddyWnd extends Widget implements Iterable<BuddyWnd.Buddy> {
     private Button sbalpha;
     private Button sbgroup;
     private Button sbstatus;
-    private TextEntry pname, charpass, opass;
+    private TextEntry pname, charpass, opass, search;
     private Buddy editing = null;
     private TextEntry nicksel;
     private GroupSelector grpsel;
@@ -190,16 +192,39 @@ public class BuddyWnd extends Widget implements Iterable<BuddyWnd.Buddy> {
     }
 
     private class BuddyList extends Listbox<Buddy> {
+        public String filter;
+
         public BuddyList(int w, int h) {
             super(w, h, 20);
         }
 
         public Buddy listitem(int idx) {
-            return (buddies.get(idx));
+            if (filter == null || filter == "")
+                return buddies.get(idx);
+
+            int num = 0;
+            synchronized (buddies) {
+                for (int i = 0; i < buddies.size(); i++) {
+                    if (buddies.get(i).name.toLowerCase().contains(filter) && num++ == idx)
+                        return buddies.get(i);
+                }
+            }
+
+            return buddies.get(idx);
         }
 
         public int listitems() {
-            return (buddies.size());
+            if (filter == null || filter == "")
+                return buddies.size();
+
+            int num = 0;
+            synchronized (buddies) {
+                for (int i = 0; i < buddies.size(); i++) {
+                    if (buddies.get(i).name.toLowerCase().contains(filter))
+                        num++;
+                }
+            }
+            return num;
         }
 
         protected void drawbg(GOut g) {
@@ -314,6 +339,17 @@ public class BuddyWnd extends Widget implements Iterable<BuddyWnd.Buddy> {
         setfocustab(true);
         int y = 0;
         add(new Img(CharWnd.catf.render(Resource.getLocString(Resource.BUNDLE_LABEL, "Kin")).tex()), new Coord(0, 0));
+        search = add(new TextEntry(110, "") {
+            @Override
+            public boolean type(char c, KeyEvent ev) {
+                if (!parent.visible)
+                    return false;
+
+                boolean ret = buf.key(ev);
+                bl.filter = text.toLowerCase();
+                return ret;
+            }
+        }, new Coord(width - 110, y + 5));
         y += 35;
 
         bl = add(new BuddyList(width - Window.wbox.bisz().x, 7), new Coord(Window.wbox.btloff().x, y));
@@ -543,5 +579,10 @@ public class BuddyWnd extends Widget implements Iterable<BuddyWnd.Buddy> {
 
     public String getCharName() {
         return pname != null ? pname.text : null;
+    }
+
+    public void clearSearch() {
+        search.settext("");
+        bl.filter = null;
     }
 }

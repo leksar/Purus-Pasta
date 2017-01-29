@@ -1,6 +1,7 @@
 package haven;
 
 import static haven.MCache.tilesz;
+import static haven.OCache.posres;
 
 public class AreaMine implements Runnable {
     private MapView mv;
@@ -138,7 +139,7 @@ public class AreaMine implements Runnable {
                         mv.wdgmsg("drop", Coord.z, gui.map.player().rc, 0);
 
                     mv.wdgmsg("click", Coord.z, tc.mul(11).add(5, 5), 3, 0);
-                    mv.wdgmsg("click", Coord.z, gui.map.player().rc, 1, 0);
+                    mv.wdgmsg("click", Coord.z, gui.map.player().rc.floor(posres), 1, 0);
                     break mine;
                 }
 

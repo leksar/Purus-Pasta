@@ -19,10 +19,15 @@ public class FeedClover implements Runnable {
     public void run() {
         synchronized (gui.map.glob.oc) {
             for (Gob gob : gui.map.glob.oc) {
-                Resource res = gob.getres();
-                if (res != null && (res.name.contains("gfx/kritter/horse/horse") ||
-                        res.name.contains("gfx/kritter/sheep/sheep") ||
-                        res.name.contains("gfx/kritter/cattle/cattle"))) {
+                Resource res = null;
+                try {
+                    res = gob.getres();
+                } catch (Loading l) {
+                }
+                if (res != null && (res.name.equals("gfx/kritter/horse/horse") ||
+                        res.name.equals("gfx/kritter/sheep/sheep") ||
+                        res.name.equals("gfx/kritter/cattle/cattle") ||
+                        res.name.equals("gfx/kritter/boar/boar"))) {
                     if (animal == null)
                         animal = gob;
                     else if (gob.rc.dist(gui.map.player().rc) < animal.rc.dist(gui.map.player().rc))
