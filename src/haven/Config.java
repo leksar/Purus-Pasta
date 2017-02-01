@@ -26,6 +26,8 @@ o *  This file is part of the Haven & Hearth game client.
 
 package haven;
 
+import static haven.Utils.getprop;
+
 import java.awt.event.KeyEvent;
 import java.io.InputStream;
 import java.io.PrintStream;
@@ -44,8 +46,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import haven.error.ErrorHandler;
-
-import static haven.Utils.getprop;
 
 public class Config {
     public static final boolean iswindows = System.getProperty("os.name").startsWith("Windows");

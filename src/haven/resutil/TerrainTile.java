@@ -33,6 +33,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.WeakHashMap;
 
+import haven.Config;
 import haven.Coord;
 import haven.Coord3f;
 import haven.GLState;
@@ -50,7 +51,6 @@ import haven.Tex;
 import haven.TexGL;
 import haven.TexSI;
 import haven.Tiler;
-import haven.Config;
 
 public class TerrainTile extends Tiler implements Tiler.MCons, Tiler.CTrans {
     public final GLState base;

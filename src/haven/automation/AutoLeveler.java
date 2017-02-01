@@ -1,5 +1,7 @@
 package haven.automation;
 
+import static haven.OCache.posres;
+
 import java.awt.Font;
 import java.awt.event.KeyEvent;
 import java.lang.reflect.Field;
@@ -28,14 +30,6 @@ import haven.Text;
 import haven.WItem;
 import haven.Widget;
 import haven.Window;
-
-import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.lang.reflect.Field;
-import java.util.*;
-import java.util.List;
-
-import static haven.OCache.posres;
 
 
 public class AutoLeveler extends Window implements GobSelectCallback, ErrorSysMsgCallback {

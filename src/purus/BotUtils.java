@@ -1,5 +1,7 @@
 package purus;
 
+import static haven.OCache.posres;
+
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,8 +31,6 @@ import haven.VMeter;
 import haven.WItem;
 import haven.Widget;
 import haven.Window;
-
-import static haven.OCache.posres;
 
 public class BotUtils {
 

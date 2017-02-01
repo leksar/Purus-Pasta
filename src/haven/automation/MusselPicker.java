@@ -1,12 +1,12 @@
 package haven.automation;
 
 
+import static haven.OCache.posres;
+
 import haven.GameUI;
 import haven.Gob;
 import haven.Loading;
 import haven.Resource;
-
-import static haven.OCache.posres;
 
 public class MusselPicker implements Runnable {
     private GameUI gui;

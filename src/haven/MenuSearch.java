@@ -1,7 +1,10 @@
 package haven;
 
 import java.awt.event.KeyEvent;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 public class MenuSearch extends GameUI.Hidewnd {
     private TextEntry search;

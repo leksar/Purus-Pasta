@@ -26,9 +26,14 @@
 
 package haven;
 
-import haven.resutil.FoodInfo;
+import static haven.PUtils.blurmask2;
+import static haven.PUtils.convolvedown;
+import static haven.PUtils.imgblur;
+import static haven.PUtils.rasterimg;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -39,7 +44,11 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import static haven.PUtils.*;
+import haven.PUtils.BlurFurn;
+import haven.PUtils.Convolution;
+import haven.PUtils.Hanning;
+import haven.PUtils.TexFurn;
+import haven.resutil.FoodInfo;
 
 public class CharWnd extends Window {
     public static final RichText.Foundry ifnd = new RichText.Foundry(Resource.remote(), java.awt.font.TextAttribute.FAMILY, "SansSerif", java.awt.font.TextAttribute.SIZE, Config.fontsizeglobal).aa(true);

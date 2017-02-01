@@ -1,14 +1,14 @@
 package haven.automation;
 
 
+import static haven.OCache.posres;
+
 import haven.Coord;
 import haven.GItem;
 import haven.GameUI;
 import haven.Gob;
 import haven.Resource;
 import haven.WItem;
-
-import static haven.OCache.posres;
 
 public class AddBranchesToOven implements Runnable {
     private GameUI gui;

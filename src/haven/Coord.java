@@ -26,9 +26,9 @@
 
 package haven;
 
-import java.util.Iterator;
-
 import static java.lang.Math.PI;
+
+import java.util.Iterator;
 
 @SuppressWarnings("serial")
 public class Coord implements Comparable<Coord>, java.io.Serializable {

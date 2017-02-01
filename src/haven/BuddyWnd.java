@@ -28,7 +28,6 @@ package haven;
 
 import java.awt.Color;
 import java.awt.event.KeyEvent;
-import java.util.*;
 import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Collections;

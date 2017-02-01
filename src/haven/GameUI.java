@@ -27,8 +27,6 @@
 package haven;
 
 import static haven.Inventory.invsq;
-import haven.automation.ErrorSysMsgCallback;
-import haven.automation.PickForageable;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -44,6 +42,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import haven.automation.ErrorSysMsgCallback;
+import haven.automation.PickForageable;
 
 public class GameUI extends ConsoleHost implements Console.Directory {
     public static final Text.Foundry msgfoundry = new Text.Foundry(Text.dfont, Config.fontsizeglobal * 14 / 11);

@@ -1,5 +1,7 @@
 package haven.automation;
 
+import static haven.OCache.posres;
+
 import java.awt.Font;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
@@ -18,7 +20,6 @@ import haven.VMeter;
 import haven.WItem;
 import haven.Widget;
 import haven.Window;
-import static haven.OCache.posres;
 
 
 public class SteelRefueler extends Window implements GobSelectCallback {
