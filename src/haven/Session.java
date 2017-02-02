@@ -44,7 +44,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 public class Session {
-    public static final int PVER = 8;
+    public static final int PVER = 9;
 
     public static final int MSG_SESS = 0;
     public static final int MSG_REL = 1;
@@ -542,8 +542,6 @@ public class Session {
                 glob.map.invalblob(msg);
             } else if (msg.type == RMessage.RMSG_GLOBLOB) {
                 glob.blob(msg);
-            } else if (msg.type == RMessage.RMSG_PAGINAE) {
-                glob.paginae(msg);
             } else if (msg.type == RMessage.RMSG_RESID) {
                 int resid = msg.uint16();
                 String resname = msg.string();

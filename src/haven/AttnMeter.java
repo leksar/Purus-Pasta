@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import haven.resutil.Curiosity;
+
 public class AttnMeter extends Widget {
     private static final Tex bg = Resource.loadtex("hud/meter/attention");
 

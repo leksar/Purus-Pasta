@@ -11,7 +11,7 @@ public abstract class ActWnd extends Window {
     private static final int WIDTH = 200;
 
     private final TextEntry entry;
-    private final List<Glob.Pagina> all = new ArrayList<Glob.Pagina>();
+    private final List<MenuGrid.Pagina> all = new ArrayList<MenuGrid.Pagina>();
     private final ActList list;
     private final String filter;
     private PaginaeListener listener;
@@ -61,7 +61,7 @@ public abstract class ActWnd extends Window {
         pack();
     }
 
-    protected abstract void act(Glob.Pagina act);
+    protected abstract void act(MenuGrid.Pagina act);
 
     @Override
     public void show() {
@@ -86,13 +86,13 @@ public abstract class ActWnd extends Window {
         if (listener == null) {
             // make initial list
             all.clear();
-            synchronized (ui.sess.glob.paginae) {
-                for (Glob.Pagina pagina : ui.sess.glob.paginae) {
+            synchronized (ui.gui.menu.paginae) {
+                for (MenuGrid.Pagina pagina : ui.gui.menu.paginae) {
                     if (isIncluded(pagina))
                         all.add(pagina);
                 }
                 listener = new PaginaeListener();
-                ui.sess.glob.paginae.addListener(listener);
+                ui.gui.menu.paginae.addListener(listener);
                 refilter();
             }
         }
@@ -100,7 +100,7 @@ public abstract class ActWnd extends Window {
 
     private void refilter() {
         list.clear();
-        for (Glob.Pagina p : all) {
+        for (MenuGrid.Pagina p : all) {
             if (p.res.get().layer(Resource.action).name.toLowerCase().contains(entry.text.toLowerCase()))
                 list.add(p);
         }
@@ -112,9 +112,9 @@ public abstract class ActWnd extends Window {
         }
     }
 
-    private class PaginaeListener implements CollectionListener<Glob.Pagina> {
+    private class PaginaeListener implements CollectionListener<MenuGrid.Pagina> {
         @Override
-        public void onItemAdded(Glob.Pagina item) {
+        public void onItemAdded(MenuGrid.Pagina item) {
             if (isIncluded(item)) {
                 all.add(item);
                 refilter();
@@ -122,7 +122,7 @@ public abstract class ActWnd extends Window {
         }
 
         @Override
-        public void onItemRemoved(Glob.Pagina item) {
+        public void onItemRemoved(MenuGrid.Pagina item) {
             all.remove(item);
             refilter();
         }
@@ -135,7 +135,7 @@ public abstract class ActWnd extends Window {
         }
     }
 
-    private boolean isIncluded(Glob.Pagina pagina) {
+    private boolean isIncluded(MenuGrid.Pagina pagina) {
         Resource res = null;
         try {
             res = pagina.res();

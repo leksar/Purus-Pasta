@@ -6,16 +6,16 @@ import java.util.Map;
 public class CraftWindow extends Window {
     private static final IBox frame = new IBox("hud/tab", "tl", "tr", "bl", "br", "extvl", "extvr", "extht", "exthb");
     private final TabStrip tabStrip;
-    private final Map<Glob.Pagina, TabStrip.Button> tabs = new HashMap<Glob.Pagina, TabStrip.Button>();
+    private final Map<MenuGrid.Pagina, TabStrip.Button> tabs = new HashMap<MenuGrid.Pagina, TabStrip.Button>();
     private Widget makeWidget;
-    private Glob.Pagina lastAction;
+    private MenuGrid.Pagina lastAction;
 
     public CraftWindow() {
         super(Coord.z, "Crafting");
         tabStrip = add(new TabStrip() {
             protected void selected(Button button) {
-                for (Map.Entry<Glob.Pagina, Button> entry : tabs.entrySet()) {
-                    Glob.Pagina pagina = entry.getKey();
+                for (Map.Entry<MenuGrid.Pagina, Button> entry : tabs.entrySet()) {
+                	MenuGrid.Pagina pagina = entry.getKey();
                     if (entry.getValue().equals(button) && pagina != lastAction) {
                         ui.gui.wdgmsg("act", (Object[])pagina.act().ad);
                         lastAction = null;
@@ -29,7 +29,7 @@ public class CraftWindow extends Window {
         setfocusctl(true);
     }
 
-    public void setLastAction(Glob.Pagina value) {
+    public void setLastAction(MenuGrid.Pagina value) {
         lastAction = value;
     }
 
@@ -95,7 +95,7 @@ public class CraftWindow extends Window {
     }
 
 
-    private void addTab(Glob.Pagina pagina) {
+    private void addTab(MenuGrid.Pagina pagina) {
         if (tabs.containsKey(pagina)) {
             TabStrip.Button old = tabs.get(pagina);
             tabStrip.remove(old);

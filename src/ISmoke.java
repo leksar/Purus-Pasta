@@ -22,7 +22,7 @@ public class ISmoke extends Sprite implements CDel {
     float den;
     final float fadepow;
     final float initzv;
-    final float life;
+    float life;
     float srad;
     boolean spawn = true;
     float de = 0.0F;
@@ -54,7 +54,8 @@ public class ISmoke extends Sprite implements CDel {
             if (boffid.equals("s0")) {
                 loc = GLState.compose(Location.xlate(new Coord3f(0, 0, 12)));
                 srad = 90.0F / 10.F;
-                den = 80.0F;
+                den = 60.0F;
+                life = 3;
             } else {
                 spawn = false;
             }

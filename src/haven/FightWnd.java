@@ -43,6 +43,10 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static haven.CharWnd.attrf;
+import static haven.Inventory.invsq;
+import static haven.Window.wbox;
+
 public class FightWnd extends Widget {
     public final int nsave;
     public int maxact;
@@ -160,7 +164,7 @@ public class FightWnd extends Widget {
     private static final Tex[] sub = {Resource.loadtex("gfx/hud/buttons/subu"),
             Resource.loadtex("gfx/hud/buttons/subd")};
 
-    public class Actions extends Listbox<Action> {
+    public class Actions extends Listbox<Action> implements DTarget {
         private boolean loading = false;
         UI.Grab d = null;
         Action drag = null;
@@ -316,6 +320,17 @@ public class FightWnd extends Widget {
                 return(true);
             }
             return(super.mouseup(c, button));
+        }
+
+        public boolean drop(Coord cc, Coord ul) {
+            return (false);
+        }
+
+        public boolean iteminteract(Coord cc, Coord ul) {
+            Action act = itemat(cc);
+            if (act != null)
+                FightWnd.this.wdgmsg("itemact", act.id, ui.modflags());
+            return (true);
         }
     }
 

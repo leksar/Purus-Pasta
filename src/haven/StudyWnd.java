@@ -1,5 +1,7 @@
 package haven;
 
+import haven.resutil.Curiosity;
+
 public class StudyWnd extends GameUI.Hidewnd {
     InventoryProxy study;
     StudyInfo info;
@@ -92,7 +94,7 @@ public class StudyWnd extends GameUI.Hidewnd {
 			texp += ci.exp;
 			tw += ci.mw;
 			tenc += ci.enc;
-			tlph += ci.LPH(ci.exp);
+			//tlph += ci.LPH(ci.exp);
 		    }
 		} catch (Loading ignored) {}
 	    }

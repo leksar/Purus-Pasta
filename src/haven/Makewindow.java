@@ -334,12 +334,18 @@ public class Makewindow extends Widget {
         else if (now - hoverstart > 1000)
             sh = false;
         if (sh) {
-            if (stip == null)
-                stip = new TexI(tspec.shorttip());
+            if (stip == null) {
+                BufferedImage img = tspec.shorttip();
+                if (img != null)
+                    stip = new TexI(img);
+            }
             return (stip);
         } else {
-            if (ltip == null)
-                ltip = new TexI(tspec.longtip());
+            if (ltip == null) {
+                BufferedImage img = tspec.longtip();
+                if (img != null)
+                    ltip = new TexI(img);
+            }
             return (ltip);
         }
     }

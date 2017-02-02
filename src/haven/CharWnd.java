@@ -34,6 +34,10 @@ import static haven.PUtils.rasterimg;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
+import haven.resutil.Curiosity;
+import haven.resutil.FoodInfo;
+
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -49,6 +53,7 @@ import haven.PUtils.Convolution;
 import haven.PUtils.Hanning;
 import haven.PUtils.TexFurn;
 import haven.resutil.FoodInfo;
+
 
 public class CharWnd extends Window {
     public static final RichText.Foundry ifnd = new RichText.Foundry(Resource.remote(), java.awt.font.TextAttribute.FAMILY, "SansSerif", java.awt.font.TextAttribute.SIZE, Config.fontsizeglobal).aa(true);
@@ -742,7 +747,8 @@ public class CharWnd extends Window {
         }
 
         void upd() {
-            int texp = 0, tw = 0, tenc = 0, tlph = 0;
+            int texp = 0, tw = 0, tenc = 0;
+            double tlph = 0;
             for (GItem item : study.children(GItem.class)) {
                 try {
                     Curiosity ci = ItemInfo.find(Curiosity.class, item.info());
@@ -750,7 +756,7 @@ public class CharWnd extends Window {
                         texp += ci.exp;
                         tw += ci.mw;
                         tenc += ci.enc;
-                        tlph += ci.LPH(ci.exp);
+                        tlph += (ci.exp / (ci.time / 60));
                     }
                 } catch (Loading l) {
                 }
@@ -758,7 +764,7 @@ public class CharWnd extends Window {
             this.texp = texp;
             this.tw = tw;
             this.tenc = tenc;
-            this.tlph = tlph;
+            this.tlph = (int) Math.round(tlph);
         }
 
         public void draw(GOut g) {

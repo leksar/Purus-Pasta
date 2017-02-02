@@ -1,3 +1,30 @@
+Version 1.52.3
+    Fixed:
+        * Missing dead wolverine icon.
+
+
+Version 1.52.2
+    Fixed:
+        * Crash in menu search.
+
+    Misc:
+        * Add radius to wolverines.
+
+
+Version 1.52.1
+    Fixed:
+        * Crime and tracking automatic toggle not working.
+
+    Misc:
+        * Use server provided values for everything that uses study times. 
+        * Display remaining study time using real time.
+
+
+Version 1.52.0
+    Misc:
+        * Upstream code merge.
+
+
 Version 1.51.0
     New:
         * Added study time and LP/H to curio tooltip (by Xcom).

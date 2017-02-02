@@ -36,7 +36,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.RandomAccessFile;
 import java.net.URI;
-import java.nio.channels.FileChannel;
 import java.nio.channels.FileLock;
 import java.nio.channels.FileLockInterruptionException;
 import java.nio.file.Files;
@@ -134,26 +133,45 @@ public class HashDirCache implements ResCache {
         fp.writeUTF(name);
     }
 
+    private static class LockedFile {
+        final RandomAccessFile f;
+        final FileLock l;
+
+        LockedFile(RandomAccessFile f, FileLock l) {
+            this.f = f;
+            this.l = l;
+        }
+    }
+
     /* These locks should never have to be waited for long at all, so
      * blocking interruptions until complete should be perfectly
      * okay. */
-    private static FileLock lock2(FileChannel ch) throws IOException {
+    private static LockedFile lock2(File path) throws IOException {
         boolean intr = false;
         try {
-            while(true) {
+            while (true) {
                 try {
-                    return(ch.lock());
-                } catch(FileLockInterruptionException e) {
+                    RandomAccessFile fp = null;
+                    try {
+                        fp = new RandomAccessFile(path, "rw");
+                        FileLock lk = fp.getChannel().lock();
+                        LockedFile ret = new LockedFile(fp, lk);
+                        fp = null;
+                        return (ret);
+                    } finally {
+                        if (fp != null)
+                            fp.close();
+                    }
+                } catch (FileLockInterruptionException e) {
                     Thread.currentThread().interrupted();
                     intr = true;
                 }
             }
         } finally {
-            if(intr)
+            if (intr)
                 Thread.currentThread().interrupt();
         }
     }
-
 
     private static final Map<File, Object> monitors = new WeakHashMap<File, Object>();
 
@@ -170,25 +188,23 @@ public class HashDirCache implements ResCache {
                 monitors.put(lfn, mon = new Object());
         }
         synchronized (mon) {
-            RandomAccessFile lf = new RandomAccessFile(lfn, "rw");
-            FileLock lk = null;
+            LockedFile lf = lock2(lfn);
             try {
-                lk = lock2(lf.getChannel());
                 for (int idx = 0; ; idx++) {
                     File path = new File(base, String.format("%016x.%d", h, idx));
                     if (!path.exists() && !creat)
                         return (null);
-                    RandomAccessFile fp = (idx == 0) ? lf : new RandomAccessFile(path, "rw");
+                    RandomAccessFile fp = (idx == 0) ? lf.f : new RandomAccessFile(path, "rw");
                     try {
                         Header head = readhead(fp);
-                        if(head == null) {
+                        if (head == null) {
                             if (!creat)
                                 return (null);
                             fp.setLength(0);
                             writehead(fp, name);
                             return (path);
                         }
-                        if (head != null && head.cid.equals(id.toString()) && head.name.equals(name))
+                        if (head.cid.equals(id.toString()) && head.name.equals(name))
                             return (path);
                     } finally {
                         if (idx != 0)
@@ -196,9 +212,8 @@ public class HashDirCache implements ResCache {
                     }
                 }
             } finally {
-                if (lk != null)
-                    lk.release();
-                lf.close();
+                lf.l.release();
+                lf.f.close();
             }
         }
     }
