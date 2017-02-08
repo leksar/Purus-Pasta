@@ -196,14 +196,14 @@ public class SeedCropFarmer extends Window implements Runnable {
     // Sorts coordinate array to efficient sequence
     class CoordSort implements Comparator<Gob> {
         public int compare(Gob a, Gob b) {
-        	
-        	if(a.rc.x==b.rc.x) {
-        		if(a.rc.x%2==0)
-        			return (a.rc.y < b.rc.y) ? 1 : (a.rc.y > b.rc.y) ? -1 : 0;
+    		System.out.println(a.rc.floor().x +", " + b.rc.floor().x);
+        	if(a.rc.floor().x==b.rc.floor().x) {
+        		if(a.rc.floor().x%2==0)
+        			return (a.rc.floor().y < b.rc.floor().y) ? 1 : (a.rc.floor().y > b.rc.floor().y) ? -1 : 0;
         		else
-                    return (a.rc.y < b.rc.y) ? -1 : (a.rc.y > b.rc.y) ? 1 : 0;
+                    return (a.rc.floor().y < b.rc.floor().y) ? -1 : (a.rc.floor().y > b.rc.floor().y) ? 1 : 0;
         	} else
-        		return (a.rc.x < b.rc.x) ? -1 : (a.rc.x > b.rc.x) ? 1 : 0;
+        		return (a.rc.floor().x < b.rc.floor().x) ? -1 : (a.rc.floor().x > b.rc.floor().x) ? 1 : 0;
         }
     }
 	
