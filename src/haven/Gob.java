@@ -41,7 +41,6 @@ import haven.resutil.BPRadSprite;
 import purus.CustomHitbox;
 import java.awt.*;
 import java.util.*;
-import java.util.concurrent.Callable;
 
 public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
     public Coord2d rc;
@@ -49,7 +48,6 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
     public Coord3f sczu;
     public double a;
     public boolean virtual = false;
-    int clprio = 0;
     public long id;
     public int frame;
     public final Glob glob;
@@ -75,16 +73,13 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
     private static final Material.Colors dframeEmpty = new Material.Colors(new Color(87, 204, 73, 255));
     private static final Material.Colors dframeDone = new Material.Colors(new Color(209, 42, 42, 255));
     private static final Gob.Overlay animalradius = new Gob.Overlay(new BPRadSprite(100.0F, -10.0F, BPRadSprite.smatDanger));
-    private static final Set<String> additionalmobs = new HashSet<>(Arrays.asList(
-            "gfx/kritter/boar/boar", "gfx/kritter/badger/badger", "gfx/kritter/wolverine/wolverine"));
-    // knocked will be null if pose update request hasn't been received yet
-    public Boolean knocked = null;
+    public Boolean knocked = null;  // knocked will be null if pose update request hasn't been received yet
     public Type type = null;
 
     public enum Type {
-        OTHER(0), DFRAME(1), TREE(2), BUSH(3), BOULDER(4), PLAYER(5), SIEGE_MACHINE(6),
+        OTHER(0), DFRAME(1), TREE(2), BUSH(3), BOULDER(4), PLAYER(5), SIEGE_MACHINE(6), MAMMOTH(7), BAT(8),
         PLANT(16), MULTISTAGE_PLANT(17),
-        MOB(32), MAMMOTH(33), BEAR(34), LYNX(35), TROLL(38), WALRUS(39),
+        MOB(32), BEAR(34), LYNX(35), TROLL(38), WALRUS(39),
         WOODEN_SUPPORT(64), STONE_SUPPORT(65), TROUGH(66), BEEHIVE(67);
 
         public final int value;
@@ -93,7 +88,9 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
             this.value = value;
         }
 
-        boolean is(Type g) {
+        boolean has(Type g) {
+            if (g == null)
+                return false;
             return (value & g.value) != 0;
         }
     }
@@ -492,7 +489,9 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
             type = Type.MAMMOTH;
         else if (name.endsWith("/troll"))
             type = Type.TROLL;
-        else if (additionalmobs.contains(name))
+        else if (name.endsWith("/bat"))
+            type = Type.BAT;
+        else if (name.endsWith("/boar") || name.endsWith("/badger") || name.endsWith("/wolverine"))
             type = Type.MOB;
         else if (name.endsWith("/minesupport") || name.endsWith("/ladder"))
             type = Type.WOODEN_SUPPORT;
@@ -709,7 +708,7 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
                 }
             }
 
-            if (Config.showanimalrad && type != null &&  type.is(Type.MOB)) {
+            if (Config.showanimalrad && Type.MOB.has(type)) {
                 boolean hasradius = ols.contains(animalradius);
                 if ((knocked == null || knocked == Boolean.FALSE) && !hasradius)
                     ols.add(animalradius);

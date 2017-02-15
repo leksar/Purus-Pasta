@@ -688,7 +688,7 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
         } catch (Loading le) {
         }
         */
-        if (Config.hidecrops && gob.type != null && gob.type.is(Gob.Type.PLANT))
+        if (Config.hidecrops && gob.type != null && gob.type.has(Gob.Type.PLANT))
             return;
 
         GLState xf;
@@ -2521,7 +2521,7 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
         OCache oc = glob.oc;
         synchronized (oc) {
             for (Gob gob : oc) {
-                if (gob.type != null && gob.type.is(Gob.Type.PLANT) || gob.type == Gob.Type.TREE || gob.type == Gob.Type.BUSH)
+                if (Gob.Type.PLANT.has(gob.type) || gob.type == Gob.Type.TREE || gob.type == Gob.Type.BUSH)
                     oc.changed(gob);
             }
         }
