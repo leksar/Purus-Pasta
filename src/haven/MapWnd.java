@@ -263,6 +263,7 @@ public class MapWnd extends Window {
             new Pair<>("Jotun Mussel", "jotunmussel"),
             new Pair<>("Quest Givers", "qst"),
             new Pair<>("Salt Basin", "saltbasin"),
+            new Pair<>("Swirling Vortex", "watervortex")
     };
 
     @SuppressWarnings("unchecked")
@@ -349,6 +350,8 @@ public class MapWnd extends Window {
                 if (colsel != null) {
                     ui.destroy(colsel);
                     colsel = null;
+                }
+                if (mremove != null) {
                     ui.destroy(mremove);
                     mremove = null;
                 }
@@ -382,13 +385,13 @@ public class MapWnd extends Window {
                     });
                     if ((colsel.group = Utils.index(BuddyWnd.gc, pm.color)) < 0)
                         colsel.group = 0;
-                    mremove = MapWnd.this.add(new Button(200, "Remove", false) {
-                        public void click() {
-                            view.file.remove(mark);
-                            change2(null);
-                        }
-                    });
                 }
+                mremove = MapWnd.this.add(new Button(200, "Remove", false) {
+                    public void click() {
+                        view.file.remove(mark);
+                        change2(null);
+                    }
+                });
                 MapWnd.this.resize(asz);
             }
         }
@@ -406,10 +409,9 @@ public class MapWnd extends Window {
 
         if (namesel != null) {
             namesel.c = listf.c.add(0, listf.sz.y + 10);
-            if (colsel != null) {
+            if (colsel != null)
                 colsel.c = namesel.c.add(0, namesel.sz.y + 10);
-                mremove.c = colsel.c.add(0, colsel.sz.y + 10);
-            }
+            mremove.c = new Coord(namesel.c.x, sz.y - mremove.sz.y);
         }
         viewf.resize(new Coord(sz.x - listf.sz.x - 10, sz.y));
         view.resize(viewf.inner());

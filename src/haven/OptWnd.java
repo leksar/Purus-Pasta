@@ -985,7 +985,7 @@ public class OptWnd extends Window {
                 }
             }
         });
-        appender.add(new CheckBox("Save map tiles to disk") {
+        /*appender.add(new CheckBox("Save map tiles to disk") {
             {
                 a = Config.savemmap;
             }
@@ -996,7 +996,7 @@ public class OptWnd extends Window {
                 MapGridSave.mgs = null;
                 a = val;
             }
-        });
+        });*/
         appender.add(new CheckBox("Show timestamps in chats") {
             {
                 a = Config.chattimestamp;

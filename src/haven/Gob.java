@@ -39,6 +39,9 @@ import java.util.Set;
 
 import haven.resutil.BPRadSprite;
 import purus.CustomHitbox;
+import java.awt.*;
+import java.util.*;
+import java.util.concurrent.Callable;
 
 public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
     public Coord2d rc;
@@ -72,11 +75,28 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
     private static final Material.Colors dframeEmpty = new Material.Colors(new Color(87, 204, 73, 255));
     private static final Material.Colors dframeDone = new Material.Colors(new Color(209, 42, 42, 255));
     private static final Gob.Overlay animalradius = new Gob.Overlay(new BPRadSprite(100.0F, -10.0F, BPRadSprite.smatDanger));
-    private static final Set<String> dangerousanimalrad = new HashSet<String>(Arrays.asList(
-            "gfx/kritter/bear/bear", "gfx/kritter/boar/boar", "gfx/kritter/lynx/lynx", "gfx/kritter/badger/badger",
-            "gfx/kritter/walrus/walrus", "gfx/kritter/wolverine/wolverine"));
+    private static final Set<String> additionalmobs = new HashSet<>(Arrays.asList(
+            "gfx/kritter/boar/boar", "gfx/kritter/badger/badger", "gfx/kritter/wolverine/wolverine"));
     // knocked will be null if pose update request hasn't been received yet
     public Boolean knocked = null;
+    public Type type = null;
+
+    public enum Type {
+        OTHER(0), DFRAME(1), TREE(2), BUSH(3), BOULDER(4), PLAYER(5), SIEGE_MACHINE(6),
+        PLANT(16), MULTISTAGE_PLANT(17),
+        MOB(32), MAMMOTH(33), BEAR(34), LYNX(35), TROLL(38), WALRUS(39),
+        WOODEN_SUPPORT(64), STONE_SUPPORT(65), TROUGH(66), BEEHIVE(67);
+
+        public final int value;
+
+        Type(int value) {
+            this.value = value;
+        }
+
+        boolean is(Type g) {
+            return (value & g.value) != 0;
+        }
+    }
 
     public static class Overlay implements Rendered {
         public Indir<Resource> res;
@@ -438,6 +458,56 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
     public void draw(GOut g) {
     }
 
+    private void determineType() {
+        Resource res = null;
+        try {
+            res = getres();
+        } catch (Loading l) {
+        }
+        if (res == null)
+            return;
+        String name = res.name;
+
+        if (name.startsWith("gfx/terobjs/trees") && !name.endsWith("log") && !name.endsWith("oldtrunk"))
+            type = Type.TREE;
+        else if (name.endsWith("terobjs/plants/carrot") || name.endsWith("terobjs/plants/hemp"))
+            type = Type.MULTISTAGE_PLANT;
+        else if (name.startsWith("gfx/terobjs/plants") && !name.endsWith("trellis"))
+            type = Type.PLANT;
+        else if (name.startsWith("gfx/terobjs/bushes"))
+            type = Type.BUSH;
+        else if (name.equals("gfx/borka/body"))
+            type = Type.PLAYER;
+        else if (name.startsWith("gfx/terobjs/bumlings"))
+            type = Type.BOULDER;
+        else  if (name.endsWith("vehicle/bram") || name.endsWith("vehicle/catapult"))
+            type = Type.SIEGE_MACHINE;
+        else if (name.endsWith("/bear"))
+            type = Type.BEAR;
+        else if (name.endsWith("/lynx"))
+            type = Type.LYNX;
+        else if (name.endsWith("/walrus"))
+            type = Type.WALRUS;
+        else if (name.endsWith("/mammoth"))
+            type = Type.MAMMOTH;
+        else if (name.endsWith("/troll"))
+            type = Type.TROLL;
+        else if (additionalmobs.contains(name))
+            type = Type.MOB;
+        else if (name.endsWith("/minesupport") || name.endsWith("/ladder"))
+            type = Type.WOODEN_SUPPORT;
+        else if (name.endsWith("/column"))
+            type = Type.STONE_SUPPORT;
+        else if (name.endsWith("/trough"))
+            type = Type.TROUGH;
+        else if (name.endsWith("/beehive"))
+            type = Type.BEEHIVE;
+        else if (name.endsWith("/dframe"))
+            type = Type.DFRAME;
+        else
+            type = Type.OTHER;
+    }
+
     public boolean setup(RenderList rl) {
         loc.tick();
         for (Overlay ol : ols)
@@ -453,13 +523,16 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
         if (MapView.markedGobs.contains(id))
             rl.prepc(MapView.markedFx);
 
+        if (type == null)
+            determineType();
+        
         Resource res = null;
         try {
             res = getres();
         } catch (Loading l) {
         }
 
-        if (Config.showdframestatus && res != null && res.name.equals("gfx/terobjs/dframe")) {
+        if (Config.showdframestatus && type == Type.DFRAME) {
             boolean done = true;
             boolean empty = true;
             for (Overlay ol : ols) {
@@ -543,6 +616,12 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
                 } catch (Loading le) {
                 }
             }
+            if (Config.hidegobs && type == Type.TREE) {
+                GobHitbox.BBox bbox = GobHitbox.getBBox(this, true);
+                if (bbox != null) {
+                    rl.add(new Overlay(new GobHitbox(this, bbox.a, bbox.b, true)), null);
+                }
+            }
 
             if (Config.showboundingboxes) {
                 GobHitbox.BBox bbox = GobHitbox.getBBox(this, true);
@@ -614,7 +693,7 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
                     }
                 }
 
-                if (res != null && (res.name.startsWith("gfx/terobjs/trees") || res.name.startsWith("gfx/terobjs/bushes"))) {
+                if (type == Type.TREE || type == Type.BUSH) {
                     ResDrawable rd = getattr(ResDrawable.class);
                     if (rd != null && !rd.sdt.eom()) {
                         final int stage = rd.sdt.peekrbuf(0);
@@ -630,7 +709,7 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
                 }
             }
 
-            if (Config.showanimalrad && res != null && dangerousanimalrad.contains(res.name)) {
+            if (Config.showanimalrad && type != null &&  type.is(Type.MOB)) {
                 boolean hasradius = ols.contains(animalradius);
                 if ((knocked == null || knocked == Boolean.FALSE) && !hasradius)
                     ols.add(animalradius);
@@ -655,7 +734,7 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
         	   
            }
 
-            if (Config.showarchvector && res != null && res.name.equals("gfx/borka/body") && d instanceof Composite) {
+            if (Config.showarchvector && type == Type.PLAYER && d instanceof Composite) {
                 boolean targetting = false;
 
                 Gob followGob = null;
@@ -690,7 +769,7 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
         KinInfo ki = getattr(KinInfo.class);
         if (ki != null)
             rl.add(ki.fx, null);
-        return (false);
+		return (false);
     }
 
     private static final Object DYNAMIC = new Object();

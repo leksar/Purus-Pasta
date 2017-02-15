@@ -336,7 +336,7 @@ public class Config {
         put("almondtree", new CheckListboxItem("Almond"));
     }};
 
-    public final static HashMap<String, CheckListboxItem> icons = new HashMap<String, CheckListboxItem>(27) {{
+    public final static HashMap<String, CheckListboxItem> icons = new HashMap<String, CheckListboxItem>(28) {{
         put("dandelion", new CheckListboxItem("Dandelion"));
         put("chantrelle", new CheckListboxItem("Chantrelle"));
         put("blueberry", new CheckListboxItem("Blueberry"));
@@ -365,6 +365,7 @@ public class Config {
         put("squirrel", new CheckListboxItem("Squirrel"));
         put("rabbit", new CheckListboxItem("Rabbit"));
         put("lingon", new CheckListboxItem("Lingonberries"));
+        put("grub", new CheckListboxItem("Grub"));
     }};
 
     public final static HashMap<String, CheckListboxItem> flowermenus = new HashMap<String, CheckListboxItem>(13) {{
@@ -430,7 +431,7 @@ public class Config {
         put("/idle", new CheckListboxItem("Idle animals"));
     }};
 
-    public final static HashMap<String, String[]> cures = new HashMap<String, String[]>(14) {{
+    public final static HashMap<String, String[]> cures = new HashMap<String, String[]>(15) {{
         put("paginae/wound/antburn", new String[]{
                 "gfx/invobjs/herbs/yarrow"
         });
@@ -484,6 +485,9 @@ public class Config {
         });
         put("paginae/wound/wretchedgore", new String[]{
                 "gfx/invobjs/stitchpatch"
+        });
+        put("paginae/wound/blackeye", new String[]{
+                "gfx/invobjs/toadbutter"
         });
     }};
 

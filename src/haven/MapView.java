@@ -688,6 +688,8 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
         } catch (Loading le) {
         }
         */
+        if (Config.hidecrops && gob.type != null && gob.type.is(Gob.Type.PLANT))
+            return;
 
         GLState xf;
         try {
@@ -708,35 +710,29 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
         }
         rl.add(gob, GLState.compose(extra, xf, gob.olmod, gob.save));
 
-        try {
-            Resource res = gob.getres();
-            if (res != null) {
-                Gob.Overlay rovl = null;
-                boolean show = false;
+        Gob.Overlay rovl = null;
+        boolean show = false;
 
-                if (res.name.equals("gfx/terobjs/minesupport") || res.name.equals("gfx/terobjs/ladder")) {
-                    rovl = rovlsupport;
-                    show = Config.showminerad;
-                } else if (res.name.equals("gfx/terobjs/column")) {
-                    rovl = rovlcolumn;
-                    show = Config.showminerad;
-                }
-
-                if (res.name.equals("gfx/terobjs/trough")) {
-                    rovl = rovltrough;
-                    show = Config.showfarmrad;
-                } else if (res.name.equals("gfx/terobjs/beehive")) {
-                    rovl = rovlbeehive;
-                    show = Config.showfarmrad;
-                }
-
-                if (show && !gob.ols.contains(rovl))
-                    gob.ols.add(rovl);
-                else if (!show && rovl != null)
-                    gob.ols.remove(rovl);
-            }
-        } catch (Loading le) {
+        if (gob.type == Gob.Type.WOODEN_SUPPORT) {
+            rovl = rovlsupport;
+            show = Config.showminerad;
+        } else if (gob.type == Gob.Type.STONE_SUPPORT) {
+            rovl = rovlcolumn;
+            show = Config.showminerad;
         }
+
+        if (gob.type == Gob.Type.TROUGH) {
+            rovl = rovltrough;
+            show = Config.showfarmrad;
+        } else if (gob.type == Gob.Type.BEEHIVE) {
+            rovl = rovlbeehive;
+            show = Config.showfarmrad;
+        }
+
+        if (show && !gob.ols.contains(rovl))
+            gob.ols.add(rovl);
+        else if (!show && rovl != null)
+            gob.ols.remove(rovl);
     }
 
     public static class ChangeSet implements OCache.ChangeCallback {
@@ -2515,14 +2511,8 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
         OCache oc = glob.oc;
         synchronized (oc) {
             for (Gob gob : oc) {
-                try {
-                    Resource res = gob.getres();
-                    if (res != null && res.name.startsWith("gfx/terobjs/trees")
-                            && !res.name.endsWith("log") && !res.name.endsWith("oldtrunk"))
-                        oc.changed(gob);
-                } catch (Loading l) {
-                }
-
+                if (gob.type == Gob.Type.TREE)
+                    oc.changed(gob);
             }
         }
     }
@@ -2531,15 +2521,8 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
         OCache oc = glob.oc;
         synchronized (oc) {
             for (Gob gob : oc) {
-                try {
-                    Resource res = gob.getres();
-                    if (res != null &&
-                            ((res.name.startsWith("gfx/terobjs/plants") && !res.name.endsWith("trellis")) ||
-                                    res.name.startsWith("gfx/terobjs/trees") || res.name.startsWith("gfx/terobjs/bushes")))
-                        oc.changed(gob);
-                } catch (Loading l) {
-                }
-
+                if (gob.type != null && gob.type.is(Gob.Type.PLANT) || gob.type == Gob.Type.TREE || gob.type == Gob.Type.BUSH)
+                    oc.changed(gob);
             }
         }
     }

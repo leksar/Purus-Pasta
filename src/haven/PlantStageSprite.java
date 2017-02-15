@@ -8,10 +8,9 @@ import java.util.Map;
 
 public class PlantStageSprite extends Sprite {
     private static final Text.Foundry fndr = new Text.Foundry(Text.sans.deriveFont(Font.BOLD), 12).aa(true);
-    private static final Text.Foundry fndrmax = new Text.Foundry(Text.sans.deriveFont(Font.BOLD), 20).aa(true);
     private static final Color stagecolor = new Color(255, 227, 168);
-    private static final Color stagemaxcolor = new Color(254, 100, 100);
-    private static final Tex stgmaxtex = Text.renderstroked("\u2022", stagemaxcolor, Color.BLACK, fndrmax).tex();
+    private static final Tex stgmaxtex = Text.renderstroked("\u25CF", new Color(254, 100, 100), Color.BLACK, fndr).tex();
+    private static final Tex stghrvtex = Text.renderstroked("\u25CF", new Color(201, 180, 0), Color.BLACK, fndr).tex();
     private static final Tex[] stgtex = new Tex[]{
             Text.renderstroked("2", stagecolor, Color.BLACK, fndr).tex(),
             Text.renderstroked("3", stagecolor, Color.BLACK, fndr).tex(),
@@ -32,7 +31,7 @@ public class PlantStageSprite extends Sprite {
     private Coord wndsz;
     private Location.Chain loc;
     private Camera camp;
-
+    
     public PlantStageSprite(int stg, int stgmax) {
         super(null, null);
         update(stg, stgmax);
