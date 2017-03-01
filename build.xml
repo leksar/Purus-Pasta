@@ -59,7 +59,7 @@
     	<zipgroupfileset dir="lib" includes="gson-2.3.1.jar"/>
       <manifest>
 	<attribute name="Main-Class" value="haven.MainFrame" />
-	<attribute name="Class-Path" value="lib/jogl.jar lib/gluegen-rt.jar lib/builtin-res.jar lib/hafen-res.jar lib/amber-res.jar lib/pasta-res.jar lib/l10n.jar lib/kittehIrcLib.jar" />
+      	<attribute name="Class-Path" value="lib/pasta-res.jar lib/amber-res.jar lib/jogl.jar lib/gluegen-rt.jar lib/builtin-res.jar lib/hafen-res.jar lib/l10n.jar lib/kittehIrcLib.jar" />
       </manifest>
     </jar>
     <chmod file="build/hafen.jar" perm="a+x" />
