@@ -239,7 +239,6 @@ public class MenuGrid extends Widget {
             p.add(paginafor(Resource.local().load("paginae/amber/coal12")));
             p.add(paginafor(Resource.local().load("paginae/amber/branchoven")));
            // p.add(paginafor(Resource.local().load("paginae/amber/steel")));
-            p.add(paginafor(Resource.local().load("paginae/amber/autosurvey")));
             p.add(paginafor(Resource.local().load("paginae/amber/torch")));
             p.add(paginafor(Resource.local().load("paginae/amber/clover")));
             p.add(paginafor(Resource.local().load("paginae/amber/fish")));
@@ -458,18 +457,6 @@ public class MenuGrid extends Widget {
                 gui.add(sw, new Coord(gui.sz.x / 2 - sw.sz.x / 2, gui.sz.y / 2 - sw.sz.y / 2 - 200));
                 synchronized (GobSelectCallback.class) {
                     gui.map.registerGobSelect(sw);
-                }
-            }
-        } else if (ad[1].equals("level")) {
-            if (gui.getwnd("Auto Leveler") == null) {
-                AutoLeveler lw = new AutoLeveler();
-                gui.map.autoleveler = lw;
-                gui.add(lw, new Coord(gui.sz.x / 2 - lw.sz.x / 2, gui.sz.y / 2 - lw.sz.y / 2 - 200));
-                synchronized (GobSelectCallback.class) {
-                    gui.map.registerGobSelect(lw);
-                }
-                synchronized (ErrorSysMsgCallback.class) {
-                    gui.registerErrMsg(lw);
                 }
             }
         } else if (ad[1].equals("torch")) {
