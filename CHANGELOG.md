@@ -1,5 +1,9 @@
 ## Changelog
 
+### 2.29.0
+	- Added trellis farmer (experimental)
+	- Minor fixes
+	- Latest merges from Amber & Default client
 ### 2.28.0
 	- Client ignores shift-clicking of steel crucibles
 	- Fixed farmer comparator
