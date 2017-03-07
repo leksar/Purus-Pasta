@@ -1379,8 +1379,13 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
             return;
         long now = System.currentTimeMillis();
         synchronized(polowners) {
-            int y = (sz.y - polowners.values().stream().map(t -> t.text.sz().y).reduce(0, (a, b) -> a + b + 10)) / 2;
-            for(Iterator<PolText> i = polowners.values().iterator(); i.hasNext();) {
+        	int y;
+        	if(!Config.enterrightalign)
+        		y = (sz.y - polowners.values().stream().map(t -> t.text.sz().y).reduce(0, (a, b) -> a + b + 10)) / 2;
+        	else
+        		y = (sz.y - polowners.values().stream().map(t -> t.text.sz().y).reduce(0, (a, b) -> a + b + 10))/10;
+        	
+        	for(Iterator<PolText> i = polowners.values().iterator(); i.hasNext();) {
                 PolText t = i.next();
                 long poldt = now - t.tm;
                 if(poldt < 6000) {
@@ -1392,8 +1397,10 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
                     else
                         a = (int)((255 * (2000 - (poldt - 4000))) / 2000);
                     g.chcolor(255, 255, 255, a);
-                    g.aimage(t.text.tex(), new Coord((sz.x - t.text.sz().x) / 2, y), 0.0, 0.0);
-                    y += t.text.sz().y + 10;
+                    if(!Config.enterrightalign)
+                    	g.aimage(t.text.tex(), new Coord((sz.x - t.text.sz().x) / 2, y), 0.0, 0.0);
+                    else
+                    	g.aimage(t.text.tex(), new Coord((sz.x - t.text.sz().x), y), 0.0, 0.0);y += t.text.sz().y + 10;
                     g.chcolor();
                 } else {
                     i.remove();

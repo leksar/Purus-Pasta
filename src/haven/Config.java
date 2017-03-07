@@ -123,6 +123,7 @@ public class Config {
     public static double hidegreen = Utils.getprefd("hidegreen", 155);
     public static double hideblue = Utils.getprefd("hideblue", 155);
     public static boolean showfps = Utils.getprefb("showfps", false);
+    public static boolean enterrightalign = Utils.getprefb("alignclaimenter", false);
     public static boolean autohearth = Utils.getprefb("autohearth", false);
     public static boolean studywndlock = Utils.getprefb("studywndlock", true);
     public static boolean servertime = Utils.getprefb("servertime", false);
