@@ -484,9 +484,8 @@ public class CharWnd extends Window {
             }
             order();
         }
-
-        public boolean mousedown(Coord c, int button) {
-            return (false);
+        
+        protected void itemclick(El item, int button) {
         }
     }
 
