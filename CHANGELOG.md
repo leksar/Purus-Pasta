@@ -1,5 +1,8 @@
 ## Changelog
 
+### 2.30.0
+	- Added option to align realm/village notification
+	- Latest merges from Amber & Default client
 ### 2.29.0
 	- Added trellis farmer (experimental)
 	- Minor fixes
