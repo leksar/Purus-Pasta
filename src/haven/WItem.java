@@ -29,9 +29,9 @@ package haven;
 import static haven.Inventory.sqsz;
 
 import java.awt.Color;
-import java.awt.Desktop;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 import java.util.function.Function;
@@ -319,17 +319,6 @@ public class WItem extends Widget implements DTarget {
         g.chcolor();
     }
 
-    private void openwebpage(String url) {
-        Desktop desktop = Desktop.isDesktopSupported() ? Desktop.getDesktop() : null;
-        if (desktop != null && desktop.isSupported(Desktop.Action.BROWSE)) {
-            try {
-                desktop.browse(new URL(url).toURI());
-            } catch (Exception e) {
-                // NOP
-            }
-        }
-    }
-
     public boolean mousedown(Coord c, int btn) {
     	if (btn == 3 && ui.modctrl && ui.keycode == KeyEvent.VK_I) {
         	ui.message(item.getres().name, Color.WHITE);
@@ -346,8 +335,12 @@ public class WItem extends Widget implements DTarget {
                     if (i > 0)
                         name = name.substring(i + 1, name.length() - 1);
                 }
-                String url = String.format("http://ringofbrodgar.com/wiki/%s", name);
-                openwebpage(url);
+                try {
+                    WebBrowser.self.show(new URL(String.format("http://ringofbrodgar.com/wiki/%s", name)));
+                } catch (WebBrowser.BrowserException e) {
+                    getparent(GameUI.class).error("Could not launch web browser.");
+                } catch (MalformedURLException e) {
+                }
             } else if (ui.modshift && !ui.modmeta)
                 item.wdgmsg("transfer", c);
             else if (ui.modctrl)

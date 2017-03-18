@@ -51,7 +51,7 @@ public class LocalMiniMap extends Widget {
     public final MapView mv;
     public final MapFile save;
     private Coord cc = null;
-    private MapTile cur = null;
+    public MapTile cur = null;
     private UI.Grab dragging;
     private static final Resource ramalarmsfx = Resource.local().loadwait("sfx/alarmram");
     private static final Resource wreckingarmsfx = Resource.local().loadwait("sfx/alarmWBall");
@@ -103,7 +103,7 @@ public class LocalMiniMap extends Widget {
     public long lastnewgid;
 
 
-    private static class MapTile {
+    public static class MapTile {
         public MCache.Grid grid;
         public int seq;
 
@@ -305,9 +305,7 @@ public class LocalMiniMap extends Widget {
                             enemy = true;
                         }
 
-                        if (Config.autologout && enemy)
-                            gameui().act("lo");
-                        else if (Config.autohearth && enemy)
+                        if (Config.autohearth && enemy)
                             gameui().act("travel", "hearth");
 
                         continue;
@@ -603,7 +601,7 @@ public class LocalMiniMap extends Widget {
                 if (Config.autopickmussels)
                     mv.startMusselsPicker(gob);
             }
-        } else if (button == 2 && !Config.maplocked) {
+        } else if (button == 2) {
             doff = c;
             dragging = ui.grabmouse(this);
         }

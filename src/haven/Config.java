@@ -29,6 +29,9 @@ package haven;
 import static haven.Utils.getprop;
 
 import java.awt.event.KeyEvent;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
 import java.io.PrintWriter;
@@ -81,7 +84,6 @@ public class Config {
     public static boolean qualitywhole = Utils.getprefb("qualitywhole", true);
     public static int badcamsensitivity = Utils.getprefi("badcamsensitivity", 5);
     public static List<LoginData> logins = new ArrayList<LoginData>();
-    public static boolean maplocked = Utils.getprefb("maplocked", false);
     public static boolean mapshowgrid = Utils.getprefb("mapshowgrid", false);
     public static boolean mapshowviewdist = Utils.getprefb("mapshowviewdist", false);
     public static boolean disabletiletrans = Utils.getprefb("disabletiletrans", false);
@@ -203,7 +205,6 @@ public class Config {
     public static boolean showarchvector =  Utils.getprefb("showarchvector", false);
     //public static boolean showcddelta =  Utils.getprefb("showcddelta", false);
     public static boolean disabledrinkhotkey =  Utils.getprefb("disabledrinkhotkey", false);
-    public static boolean autologout =  Utils.getprefb("autologout", false);
     public static int combatkeys =  Utils.getprefi("combatkeys", 0);
     public static boolean logcombatactions =  Utils.getprefb("logcombatactions", false);
     public static boolean autopickmussels =  Utils.getprefb("autopickmussels", false);
@@ -337,7 +338,7 @@ public class Config {
         put("almondtree", new CheckListboxItem("Almond"));
     }};
 
-    public final static HashMap<String, CheckListboxItem> icons = new HashMap<String, CheckListboxItem>(28) {{
+    public final static HashMap<String, CheckListboxItem> icons = new HashMap<String, CheckListboxItem>(30) {{
         put("dandelion", new CheckListboxItem("Dandelion"));
         put("chantrelle", new CheckListboxItem("Chantrelle"));
         put("blueberry", new CheckListboxItem("Blueberry"));
@@ -367,6 +368,8 @@ public class Config {
         put("rabbit", new CheckListboxItem("Rabbit"));
         put("lingon", new CheckListboxItem("Lingonberries"));
         put("grub", new CheckListboxItem("Grub"));
+        put("yellowfoot", new CheckListboxItem("Yellowfoot"));
+        put("chives", new CheckListboxItem("Chives"));
     }};
 
     public final static HashMap<String, CheckListboxItem> flowermenus = new HashMap<String, CheckListboxItem>(13) {{
@@ -488,6 +491,8 @@ public class Config {
         });
     }};
 
+    public static final Map<Long, Pair<String, String>> gridIdsMap = new HashMap<>(58000);
+
     static {
         Utils.loadprefchklist("disableanim", Config.disableanim);
 
@@ -508,6 +513,29 @@ public class Config {
                 in.close();
             }
         } catch (Exception e) {}
+
+        // populate grid ids map
+        BufferedReader reader = null;
+        try {
+            reader = new BufferedReader(new FileReader("lib/grid_ids.txt"));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] tknzed = line.split(",");
+                try {
+                    gridIdsMap.put(Long.parseLong(tknzed[2]), new Pair<>(tknzed[0], tknzed[1]));
+                } catch (NumberFormatException nfe) {
+                }
+            }
+        } catch (IOException e){
+            e.printStackTrace();
+        } finally {
+            if (reader != null) {
+                try {
+                    reader.close();
+                } catch (IOException e) { // ignored
+                }
+            }
+        }
 
         loadLogins();
     }

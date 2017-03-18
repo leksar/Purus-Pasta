@@ -42,6 +42,7 @@
     <copy todir="build/classes/haven" file="etc/res-bgload" />
     <copy todir="build/classes/haven" file="etc/icon.png" />
   	<copy todir="build/classes/haven" file="etc/curio.config" />
+    <copy todir="build/lib" file="etc/grid_ids.txt" />
   </target>
 
   <target name="lib-classes" depends="build-env" unless="unpacked-lib">
@@ -120,7 +121,7 @@
     </zip>
     <zip destfile="${basedir}/build/update.zip" update="false">
         <fileset dir="build" includes="hafen.jar" />
-        <fileset dir="build/lib" includes="amber-res.jar, l10n.jar, pasta-res.jar" />
+        <fileset dir="build/lib" includes="amber-res.jar, l10n.jar, pasta-res.jar, grids_ids.txt" />
     </zip>
   </target>
 

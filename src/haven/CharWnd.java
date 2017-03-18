@@ -484,7 +484,7 @@ public class CharWnd extends Window {
             }
             order();
         }
-        
+
         protected void itemclick(El item, int button) {
         }
     }
