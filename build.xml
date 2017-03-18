@@ -121,7 +121,7 @@
     </zip>
     <zip destfile="${basedir}/build/update.zip" update="false">
         <fileset dir="build" includes="hafen.jar" />
-        <fileset dir="build/lib" includes="amber-res.jar, l10n.jar, pasta-res.jar, grids_ids.txt" />
+        <fileset dir="build/lib" includes="amber-res.jar, l10n.jar, pasta-res.jar, grid_ids.txt" />
     </zip>
   </target>
 
