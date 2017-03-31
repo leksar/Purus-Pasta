@@ -57,7 +57,7 @@ public class FightWnd extends Widget {
     private final CharWnd.LoadingTextBox info;
     private Tex count;
     private Dropbox<Pair<Text, Integer>> schoolsDropdown;
-    private static final Text.Foundry cardnum = new Text.Foundry(Text.sans.deriveFont(Font.BOLD), 12).aa(true);
+    private static final Text.Foundry cardnum = new Text.Foundry(Text.cSans.deriveFont(Font.BOLD), 12).aa(true);
 
     private static final Set<String> attacks = new HashSet<>(Arrays.asList(
             "paginae/atk/pow",
@@ -129,7 +129,7 @@ public class FightWnd extends Widget {
             StringBuilder buf = new StringBuilder();
             Resource res = this.res.get();
             buf.append("$img[" + res.name + "]\n\n");
-            buf.append("$b{$font[serif,16]{" + res.layer(Resource.tooltip).t + "}}\n\n");
+            buf.append("$b{$font[Comic Sans MS,16]{" + res.layer(Resource.tooltip).t + "}}\n\n");
             Resource.Pagina pag = res.layer(Resource.pagina);
             if (pag != null)
                 buf.append(pag.text);

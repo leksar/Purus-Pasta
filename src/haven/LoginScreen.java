@@ -66,8 +66,8 @@ public class LoginScreen extends Widget {
     private static SSLSocketFactory sslfactory;
 
     static {
-        textf = new Text.Foundry(Text.sans, 16).aa(true);
-        textfs = new Text.Foundry(Text.sans, 14).aa(true);
+        textf = new Text.Foundry(Text.cSans, 16).aa(true);
+        textfs = new Text.Foundry(Text.cSans, 14).aa(true);
         
         InputStream crt = null;
         try {
@@ -208,7 +208,7 @@ public class LoginScreen extends Widget {
 
     private static class LoginList extends Widget {
         private static final int ITEM_HEIGHT = 20;
-        private static final Text.Foundry fnd = new Text.Foundry(Text.sans, 14);
+        private static final Text.Foundry fnd = new Text.Foundry(Text.cSans, 14);
         private Tex xicon = Text.render("\u2716", Color.RED, fnd).tex();
         private LoginData curLD;
 

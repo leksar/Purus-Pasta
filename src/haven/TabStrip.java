@@ -69,7 +69,7 @@ public class TabStrip extends Widget {
 
     public abstract static class Button extends Widget {
         public static final Coord padding = new Coord(5, 2);
-        public static final Text.Foundry font = new Text.Foundry(Text.sans, 14).aa(true);
+        public static final Text.Foundry font = new Text.Foundry(Text.cSans, 14).aa(true);
         private static final IBox frame = new IBox("hud/tab", "tl", "tr", "bl", "br", "extvl", "extvr", "extht", "exthb");
         private static final Color bg = new Color(0, 0, 0, 128);
         private Tex image;

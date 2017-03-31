@@ -35,7 +35,7 @@ public class Textlog extends Widget {
     static Tex texpap = Resource.loadtex("gfx/hud/texpap");
     static Tex schain = Resource.loadtex("gfx/hud/schain");
     static Tex sflarp = Resource.loadtex("gfx/hud/sflarp");
-    static RichText.Foundry fnd = new RichText.Foundry(TextAttribute.FAMILY, "SansSerif", TextAttribute.SIZE, 9, TextAttribute.FOREGROUND, Color.BLACK);
+    static RichText.Foundry fnd = new RichText.Foundry(TextAttribute.FAMILY, "Comic Sans MS", TextAttribute.SIZE, 9, TextAttribute.FOREGROUND, Color.BLACK);
     List<Text> lines;
     int maxy, cury;
     int margin = 3;

@@ -86,7 +86,7 @@ public class Glob {
     }
 
     public static class CAttr extends Observable {
-        public static final Text.Foundry capval = new Text.Foundry(Text.sans.deriveFont(Font.BOLD), 12).aa(true);
+        public static final Text.Foundry capval = new Text.Foundry(Text.cSans.deriveFont(Font.BOLD), 12).aa(true);
         String nm;
         int base, comp;
         public Tex comptex;

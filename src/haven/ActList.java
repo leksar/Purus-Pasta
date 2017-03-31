@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 public class ActList extends Listbox<ActList.ActItem> {
-    private static final Text.Foundry font = new Text.Foundry(Text.fraktur, 15).aa(true);
+    private static final Text.Foundry font = new Text.Foundry(Text.cSans, 15).aa(true);
     private final List<ActItem> items = new ArrayList<ActItem>();
     private final Map<MenuGrid.Pagina, ActItem> map = new HashMap<MenuGrid.Pagina, ActItem>();
 

@@ -7,7 +7,7 @@ import java.util.Map;
 
 
 public class PlantStageSprite extends Sprite {
-    private static final Text.Foundry fndr = new Text.Foundry(Text.sans.deriveFont(Font.BOLD), 12).aa(true);
+    private static final Text.Foundry fndr = new Text.Foundry(Text.cSans.deriveFont(Font.BOLD), 12).aa(true);
     private static final Color stagecolor = new Color(255, 227, 168);
     private static final Tex stgmaxtex = Text.renderstroked("\u25CF", new Color(254, 100, 100), Color.BLACK, fndr).tex();
     private static final Tex stghrvtex = Text.renderstroked("\u25CF", new Color(201, 180, 0), Color.BLACK, fndr).tex();
@@ -23,7 +23,7 @@ public class PlantStageSprite extends Sprite {
     private Tex tex;
     GLState.Buffer buf;
     private static final Map<String, Tex> plantTex = new HashMap<>();
-    private static final Text.Foundry gobhpf = new Text.Foundry(Text.sans, 14).aa(true);
+    private static final Text.Foundry gobhpf = new Text.Foundry(Text.cSans, 14).aa(true);
     private static Matrix4f cam = new Matrix4f();
     private static Matrix4f wxf = new Matrix4f();
     private static Matrix4f mv = new Matrix4f();

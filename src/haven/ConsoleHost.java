@@ -31,7 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class ConsoleHost extends Widget {
-    public static Text.Foundry cmdfoundry = new Text.Foundry(Text.mono, 12, new java.awt.Color(245, 222, 179));
+    public static Text.Foundry cmdfoundry = new Text.Foundry(Text.cSans, 12, new java.awt.Color(245, 222, 179));
     LineEdit cmdline = null;
     private Text.Line cmdtext = null;
     private String cmdtextf = null;

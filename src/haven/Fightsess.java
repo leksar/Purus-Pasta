@@ -44,7 +44,7 @@ public class Fightsess extends Widget {
     public static final Coord indframeo = (indframe.sz().sub(32, 32)).div(2);
     public static final Tex useframe = Resource.loadtex("gfx/hud/combat/lastframe");
     public static final Coord useframeo = (useframe.sz().sub(32, 32)).div(2);
-    private static final Text.Foundry cdfndr = new Text.Foundry(Text.serif, 18).aa(true);
+    private static final Text.Foundry cdfndr = new Text.Foundry(Text.cSans, 18).aa(true);
     //private static final Color cdclrpos = new Color(128, 128, 255);
     //private static final Color cdclrneg = new Color(239, 41, 41);
     public static final int actpitch = 50;
@@ -56,7 +56,7 @@ public class Fightsess extends Widget {
     private final Fightview fv;
     private final Tex[] keystex = new Tex[10];
     private final Tex[] keysftex = new Tex[10];
-    private final static Text.Foundry fnd = new Text.Foundry(Text.sans.deriveFont(Font.BOLD, 12));
+    private final static Text.Foundry fnd = new Text.Foundry(Text.cSans.deriveFont(Font.BOLD, 12));
 
     // private static final Map<Long, Tex> cdvalues = new HashMap<Long, Tex>(7);
 
@@ -145,7 +145,7 @@ public class Fightsess extends Widget {
         curfx.clear();
     }
 
-    private static final Text.Furnace ipf = new PUtils.BlurFurn(new Text.Foundry(Text.serif, 18, new Color(128, 128, 255)).aa(true), 1, 1, new Color(48, 48, 96));
+    private static final Text.Furnace ipf = new PUtils.BlurFurn(new Text.Foundry(Text.cSans, 18, new Color(128, 128, 255)).aa(true), 1, 1, new Color(48, 48, 96));
     private final Text.UText<?> ip = new Text.UText<Integer>(ipf) {
         public String text(Integer v) {
             return (Config.altfightui ? v.toString() : "IP: " + v);

@@ -27,7 +27,7 @@
 package haven;
 
 public class FastText {
-    public static final Text.Foundry fnd = new Text.Foundry(Text.sans, 11);
+    public static final Text.Foundry fnd = new Text.Foundry(Text.cSans, 11);
     private static final Tex[] ct = new Tex[225];
 
     private FastText() {
