@@ -1,6 +1,10 @@
 ## Changelog
 
 ### 2.30.1
+	- Cleaned up option window
+	- Refactored login screen server status updater
+	- Reverted UI font
+### 2.30.1
 	- Updated font for UI
 ### 2.30.0
 	- Added option to align realm/village notification
