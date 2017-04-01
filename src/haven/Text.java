@@ -42,8 +42,7 @@ public class Text {
     public static final Font sans = new Font("Sans", Font.PLAIN, Config.fontsizeglobal);
     public static final Font mono = new Font("Monospaced", Font.PLAIN, Config.fontsizeglobal);
     public static final Font fraktur = Resource.local().loadwait("ui/fraktur").layer(Resource.Font.class).font;
-    public static final Font cSans = new Font("Comic Sans MS", Font.PLAIN, Config.fontsizeglobal);
-    public static final Font dfont = cSans;
+    public static final Font dfont = sans;
     public static final Foundry std;
     public static final Foundry numfnd = new Foundry(sans, 10);
     public final BufferedImage img;
@@ -325,7 +324,7 @@ public class Text {
         if (cmd == "render") {
             PosixArgs opt = PosixArgs.getopt(args, 1, "aw:f:s:");
             boolean aa = false;
-            String font = "Comic Sans MS";
+            String font = "SansSerif";
             int width = 100, size = 10;
             for (char c : opt.parsed()) {
                 if (c == 'a') {

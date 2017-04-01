@@ -47,7 +47,7 @@ public class LocalMiniMap extends Widget {
     private static final Tex resize = Resource.loadtex("gfx/hud/wndmap/lg/resize");
     private static final Tex gridblue = Resource.loadtex("gfx/hud/mmap/gridblue");
     private static final Tex gridred = Resource.loadtex("gfx/hud/mmap/gridred");
-    public static final Text.Foundry bld12fnd = new Text.Foundry(Text.cSans.deriveFont(Font.BOLD), 12);
+    public static final Text.Foundry bld12fnd = new Text.Foundry(Text.sans.deriveFont(Font.BOLD), 12);
     public final MapView mv;
     public final MapFile save;
     private Coord cc = null;

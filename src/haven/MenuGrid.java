@@ -69,7 +69,7 @@ public class MenuGrid extends Widget {
     public final static Coord bgsz = Inventory.invsq.sz().add(-1, -1);
     public final static Pagina next = new Pagina(null, Resource.local().loadwait("gfx/hud/sc-next").indir());
     public final static Pagina bk = new Pagina(null, Resource.local().loadwait("gfx/hud/sc-back").indir());
-    public final static RichText.Foundry ttfnd = new RichText.Foundry(TextAttribute.FAMILY, "Comic Sans MS", TextAttribute.SIZE, Config.fontsizeglobal);
+    public final static RichText.Foundry ttfnd = new RichText.Foundry(TextAttribute.FAMILY, "SansSerif", TextAttribute.SIZE, Config.fontsizeglobal);
     public ObservableCollection<Pagina> paginae = new ObservableCollection<Pagina>(new HashSet<Pagina>());
     private static Coord gsz = new Coord(4, 4);
     private Pagina cur, pressed, dragging, layout[][] = new Pagina[gsz.x][gsz.y];

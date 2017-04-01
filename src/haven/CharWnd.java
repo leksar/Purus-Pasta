@@ -56,11 +56,11 @@ import haven.resutil.FoodInfo;
 
 
 public class CharWnd extends Window {
-    public static final RichText.Foundry ifnd = new RichText.Foundry(Resource.remote(), java.awt.font.TextAttribute.FAMILY, "Comic Sans MS", java.awt.font.TextAttribute.SIZE, Config.fontsizeglobal).aa(true);
-    public static final Text.Furnace catf = new BlurFurn(new TexFurn(new Text.Foundry(Text.cSans, 20).aa(true), Window.ctex), 2, 2, new Color(96, 48, 0));
-    public static final Text.Furnace failf = new BlurFurn(new TexFurn(new Text.Foundry(Text.cSans, 25).aa(true), Resource.loadimg("gfx/hud/fontred")), 3, 2, new Color(96, 48, 0));
-    public static final Text.Foundry attrf = new Text.Foundry(Text.cSans.deriveFont(Font.BOLD), Config.fontsizeattr).aa(true);
-    public static final Text.Foundry numfnd = new Text.Foundry(Text.cSans, 12);
+    public static final RichText.Foundry ifnd = new RichText.Foundry(Resource.remote(), java.awt.font.TextAttribute.FAMILY, "SansSerif", java.awt.font.TextAttribute.SIZE, Config.fontsizeglobal).aa(true);
+    public static final Text.Furnace catf = new BlurFurn(new TexFurn(new Text.Foundry(Text.sans, 20).aa(true), Window.ctex), 2, 2, new Color(96, 48, 0));
+    public static final Text.Furnace failf = new BlurFurn(new TexFurn(new Text.Foundry(Text.fraktur, 25).aa(true), Resource.loadimg("gfx/hud/fontred")), 3, 2, new Color(96, 48, 0));
+    public static final Text.Foundry attrf = new Text.Foundry(Text.sans.deriveFont(Font.BOLD), Config.fontsizeattr).aa(true);
+    public static final Text.Foundry numfnd = new Text.Foundry(Text.sans, 12);
     public static final Color debuff = new Color(255, 128, 128);
     public static final Color buff = new Color(128, 255, 128);
     public static final Color tbuff = new Color(128, 128, 255);
@@ -836,7 +836,7 @@ public class CharWnd extends Window {
             StringBuilder buf = new StringBuilder();
             Resource res = this.res.get();
             buf.append("$img[" + res.name + "]\n\n");
-            buf.append("$b{$font[Comic Sans MS,16]{" + res.layer(Resource.tooltip).t + "}}\n\n\n");
+            buf.append("$b{$font[serif,16]{" + res.layer(Resource.tooltip).t + "}}\n\n\n");
             buf.append(Resource.getLocString(Resource.BUNDLE_LABEL, "Cost: ") + cost + "\n\n");
             buf.append(res.layer(Resource.pagina).text);
             return (buf.toString());
@@ -868,7 +868,7 @@ public class CharWnd extends Window {
             StringBuilder buf = new StringBuilder();
             Resource res = this.res.get();
             buf.append("$img[" + res.name + "]\n\n");
-            buf.append("$b{$font[Comic Sans MS,16]{" + res.layer(Resource.tooltip).t + "}}\n\n\n");
+            buf.append("$b{$font[serif,16]{" + res.layer(Resource.tooltip).t + "}}\n\n\n");
             if (score > 0)
                 buf.append(Resource.getLocString(Resource.BUNDLE_LABEL, "Experience points: ") + Utils.thformat(score) + "\n\n");
             buf.append(res.layer(Resource.pagina).text);
@@ -927,7 +927,7 @@ public class CharWnd extends Window {
                 StringBuilder buf = new StringBuilder();
                 Resource res = this.res.get();
                 buf.append("$img[" + res.name + "]\n\n");
-                buf.append("$b{$font[Comic Sans MS,16]{" + res.layer(Resource.tooltip).t + "}}\n\n\n");
+                buf.append("$b{$font[serif,16]{" + res.layer(Resource.tooltip).t + "}}\n\n\n");
                 buf.append(res.layer(Resource.pagina).text);
                 if (Config.cures.containsKey(res.name)) {
                     buf.append(Resource.getLocString(Resource.BUNDLE_LABEL, "\n\nTreated with:\n"));
@@ -1134,7 +1134,7 @@ public class CharWnd extends Window {
                 StringBuilder buf = new StringBuilder();
                 Resource res = this.res.get();
                 buf.append("$img[" + res.name + "]\n\n");
-                buf.append("$b{$font[Comic Sans MS,16]{" + title() + "}}\n\n");
+                buf.append("$b{$font[serif,16]{" + title() + "}}\n\n");
                 Resource.Pagina pag = res.layer(Resource.pagina);
                 if ((pag != null) && !pag.text.equals("")) {
                     buf.append("\n");
@@ -1209,8 +1209,8 @@ public class CharWnd extends Window {
         }
 
         public static class QView extends Widget {
-            public static final Text.Furnace qtfnd = new BlurFurn(new Text.Foundry(Text.cSans.deriveFont(java.awt.Font.BOLD, 16)).aa(true), 2, 1, Color.BLACK);
-            public static final Text.Foundry qcfnd = new Text.Foundry(Text.cSans, 12).aa(true);
+            public static final Text.Furnace qtfnd = new BlurFurn(new Text.Foundry(Text.serif.deriveFont(java.awt.Font.BOLD, 16)).aa(true), 2, 1, Color.BLACK);
+            public static final Text.Foundry qcfnd = new Text.Foundry(Text.sans, 12).aa(true);
             public final QVInfo info;
             private Condition[] ccond;
             private Tex[] rcond = {};

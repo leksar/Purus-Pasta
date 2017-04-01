@@ -999,7 +999,7 @@ public class ChatUI extends Widget {
 
     private class Selector extends Widget {
         public final BufferedImage ctex = Resource.loadimg("gfx/hud/chantex");
-        public final Text.Foundry tf = new Text.Foundry(Text.cSans.deriveFont(Font.BOLD, 12)).aa(true);
+        public final Text.Foundry tf = new Text.Foundry(Text.serif.deriveFont(Font.BOLD, 12)).aa(true);
         public final Text.Furnace[] nf = {
                 new PUtils.BlurFurn(new PUtils.TexFurn(tf, ctex), 1, 1, new Color(80, 40, 0)),
                 new PUtils.BlurFurn(new PUtils.TexFurn(tf, ctex), 1, 1, new Color(0, 128, 255)),

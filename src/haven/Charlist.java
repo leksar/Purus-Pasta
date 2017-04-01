@@ -39,7 +39,7 @@ public class Charlist extends Widget {
     public static Charlist instance;
 
     public static class Char {
-        static Text.Foundry tf = new Text.Foundry(Text.cSans, 20);
+        static Text.Foundry tf = new Text.Foundry(Text.serif, 20);
         public String name;
         Text nt;
         // Avaview ava;

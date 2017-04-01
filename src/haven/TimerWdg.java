@@ -5,7 +5,7 @@ import java.awt.Font;
 import java.util.List;
 
 public class TimerWdg extends Widget {
-    public static final Text.Foundry foundry = new Text.Foundry(Text.cSans.deriveFont(Font.BOLD), 12).aa(true);
+    public static final Text.Foundry foundry = new Text.Foundry(Text.sans.deriveFont(Font.BOLD), 12).aa(true);
     private static final Resource timersfx = Resource.local().loadwait("sfx/timer");
     public final static int height = 31;
     private final static int txty = 8;

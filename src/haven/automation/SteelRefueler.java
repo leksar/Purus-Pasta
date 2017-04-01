@@ -23,8 +23,8 @@ import haven.Window;
 
 
 public class SteelRefueler extends Window implements GobSelectCallback {
-    private static final Text.Foundry infof = new Text.Foundry(Text.cSans, 10).aa(true);
-    private static final Text.Foundry countf = new Text.Foundry(Text.cSans.deriveFont(Font.BOLD), 12).aa(true);
+    private static final Text.Foundry infof = new Text.Foundry(Text.sans, 10).aa(true);
+    private static final Text.Foundry countf = new Text.Foundry(Text.sans.deriveFont(Font.BOLD), 12).aa(true);
     private List<Gob> crucibles = new ArrayList<>();
     private List<Gob> stockpiles = new ArrayList<>();
     private final Label lblc, lbls;

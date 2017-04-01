@@ -5,7 +5,7 @@ import java.awt.Font;
 
 
 public class GobHealthSprite extends Sprite {
-    private static final Text.Foundry gobhpf = new Text.Foundry(Text.cSans.deriveFont(Font.BOLD), 12).aa(true);
+    private static final Text.Foundry gobhpf = new Text.Foundry(Text.sans.deriveFont(Font.BOLD), 12).aa(true);
     private static final Tex hlt0 = Text.renderstroked("25%", new Color(255, 227, 168), Color.BLACK, gobhpf).tex();
     private static final Tex hlt1 = Text.renderstroked("50%", new Color(255, 227, 168), Color.BLACK, gobhpf).tex();
     private static final Tex hlt2 = Text.renderstroked("75%", new Color(255, 227, 168), Color.BLACK, gobhpf).tex();

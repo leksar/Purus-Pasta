@@ -1364,7 +1364,7 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
         PolText(Text text, long tm) {this.text = text; this.tm = tm;}
     }
 
-    private static final Text.Furnace polownertf = new PUtils.BlurFurn(new Text.Foundry(Text.cSans, 30).aa(true), 3, 1, Color.BLACK);
+    private static final Text.Furnace polownertf = new PUtils.BlurFurn(new Text.Foundry(Text.serif, 30).aa(true), 3, 1, Color.BLACK);
     private final Map<Integer, PolText> polowners = new HashMap<Integer, PolText>();
 
 

@@ -43,7 +43,7 @@ public class Makewindow extends Widget {
     static final Text qmodl = Text.render(Resource.getLocString(Resource.BUNDLE_LABEL, "Quality:"));
     int xoff = 45;
     private static final int qmy = 38, outy = 65;
-    public static final Text.Foundry nmf = new Text.Foundry(Text.cSans, 20).aa(true);
+    public static final Text.Foundry nmf = new Text.Foundry(Text.serif, 20).aa(true);
 
     @RName("make")
     public static class $_ implements Factory {

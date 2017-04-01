@@ -33,7 +33,7 @@ public class ISBox extends Widget implements DTarget {
     private Text label;
 
     static {
-        lf = new Text.Foundry(Text.cSans, 22, java.awt.Color.WHITE);
+        lf = new Text.Foundry(Text.sans, 22, java.awt.Color.WHITE);
         lf.aa = true;
     }
 
