@@ -225,9 +225,6 @@ public class FlowerMenu extends Widget {
         mg = ui.grabmouse(this);
         kg = ui.grabkeys(this);
         organize(opts);
-        if (Config.fastflower)
-        new OpeningFast(); 
-        else 
         new Opening();
     }
 
@@ -241,9 +238,6 @@ public class FlowerMenu extends Widget {
 
     public void uimsg(String msg, Object... args) {
         if (msg == "cancel") {
-        	if (Config.fastflower)
-        		new CancelFast();
-        	else
         		new Cancel();
             mg.remove();
             kg.remove();

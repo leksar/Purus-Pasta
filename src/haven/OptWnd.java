@@ -1041,17 +1041,6 @@ public class OptWnd extends Window {
                 a = val;
             }
         });
-        appender.add(new CheckBox("Fast Flower Menu") {
-            {
-                a = Config.fastflower;
-            } 
-
-            public void set(boolean val) {
-                Utils.setprefb("fastflower", val);
-                Config.fastflower = val;
-                a = val;
-            }
-        });
         appender.add(new CheckBox("Auto Logout after 5 minutes afking") {
             {
                 a = Config.afklogout;
