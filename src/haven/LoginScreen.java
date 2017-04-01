@@ -33,8 +33,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.CookieHandler;
-import java.net.CookieManager;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
@@ -350,72 +349,39 @@ public class LoginScreen extends Widget {
             opts = null;
         }
     }
-    //
+    
     private void StartUpdaterThread() {
         Thread statusupdaterthread = new Thread(new Runnable() {
             public void run() {
-                CookieHandler.setDefault(new CookieManager());
-
-                while (true) {
-                	//
-                	// True = up and false = down
-                    String PlayerCount = "";
-
-                    String mainpagecontent = geturlcontent("http://www.havenandhearth.com/portal/");
-                    if (!mainpagecontent.isEmpty())
-                        PlayerCount = getstringbetween(mainpagecontent, "There are", "hearthlings playing").trim();
-                    if (PlayerCount.isEmpty())
-                        ServerStatus = false;
-                    else 
-                    	ServerStatus = true;
-                    if (ServerStatus)
-                	statusbtn.change("Server is up M8", Color.GREEN);
-                    else 
-                    statusbtn.change("Server is down", Color.RED);
-                    //
-                    try {
-                        Thread.sleep(5000);
-                    } catch (InterruptedException ex) {
-                        return;
-                    }
-                }
+				try {
+	        		URL url = new URL("http://www.havenandhearth.com/mt/srv-mon"); // URL to connect
+	        		HttpURLConnection con = (HttpURLConnection) url.openConnection(); // Initialize connection
+	        		InputStream is;
+					is = con.getInputStream(); // Inputstream from url
+	        		String stringBuf = ""; // Initialize buffer
+	        		while(true) {
+	        			int i = is.read(); // Reads next char as int
+	        			if(i!=10) { // If its not line break, add char to current buffer
+	        				stringBuf = stringBuf+(char)i;
+	        			} else { // Here we have one full line of textif(stringBuf.contains("state hafen ")) {
+	        				if(stringBuf.contains("state hafen ")) {
+	        					System.out.println(stringBuf.substring(12));
+	        					if(stringBuf.substring(12).equals("up")) {
+		        					statusbtn.change("Server is up M8", Color.GREEN);
+		        				} else {
+		        					statusbtn.change("Server is " + stringBuf.substring(1), Color.RED);
+		        				}
+	        				}
+		        			stringBuf = "";
+	        			}
+	        		}
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} 
             }
         });
         statusupdaterthread.start();
-    }
-    
-    private static String getstringbetween(String input, String leftdelimiter, String rightdelimiter) {
-        int leftdelimiterposition = input.indexOf(leftdelimiter);
-        if (leftdelimiterposition == -1)
-            return "";
-
-        int rightdelimiterposition = input.indexOf(rightdelimiter);
-        if (rightdelimiterposition == -1)
-            return "";
-
-        return input.substring(leftdelimiterposition + leftdelimiter.length(), rightdelimiterposition);
-    }
-
-    private String geturlcontent(String url) {
-    	URL url_;
-    	StringBuilder sb = new StringBuilder();
-    	String outputLine;
-		try {
-			url_ = new URL(url);
-    	URLConnection con = url_.openConnection();
-    	BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream()));
-    	while ((outputLine = br.readLine()) != null)  {
-    		sb.append(outputLine + "\n");
-    	}
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-			return "";
-		} catch (IOException e) {
-			e.printStackTrace();
-			return "";
-		}
-    	return sb.toString();
-    	
     }
     
     public void uimsg(String msg, Object... args) {
