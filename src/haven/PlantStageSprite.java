@@ -7,16 +7,15 @@ import java.util.Map;
 
 
 public class PlantStageSprite extends Sprite {
-    private static final Text.Foundry fndr = new Text.Foundry(Text.sans.deriveFont(Font.BOLD), 12).aa(true);
     private static final Color stagecolor = new Color(255, 227, 168);
-    private static final Tex stgmaxtex = Text.renderstroked("\u25CF", new Color(254, 100, 100), Color.BLACK, fndr).tex();
-    private static final Tex stghrvtex = Text.renderstroked("\u25CF", new Color(201, 180, 0), Color.BLACK, fndr).tex();
+    private static final Tex stgmaxtex = Text.renderstroked("\u25CF", new Color(254, 100, 100), Color.BLACK, Text.sans12bold).tex();
+    private static final Tex stghrvtex = Text.renderstroked("\u25CF", new Color(201, 180, 0), Color.BLACK, Text.sans12bold).tex();
     private static final Tex[] stgtex = new Tex[]{
-            Text.renderstroked("2", stagecolor, Color.BLACK, fndr).tex(),
-            Text.renderstroked("3", stagecolor, Color.BLACK, fndr).tex(),
-            Text.renderstroked("4", stagecolor, Color.BLACK, fndr).tex(),
-            Text.renderstroked("5", stagecolor, Color.BLACK, fndr).tex(),
-            Text.renderstroked("6", stagecolor, Color.BLACK, fndr).tex()
+            Text.renderstroked("2", stagecolor, Color.BLACK, Text.sans12bold).tex(),
+            Text.renderstroked("3", stagecolor, Color.BLACK, Text.sans12bold).tex(),
+            Text.renderstroked("4", stagecolor, Color.BLACK, Text.sans12bold).tex(),
+            Text.renderstroked("5", stagecolor, Color.BLACK, Text.sans12bold).tex(),
+            Text.renderstroked("6", stagecolor, Color.BLACK, Text.sans12bold).tex()
     };
     public int stg;
     public int stgmax;

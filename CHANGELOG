@@ -1,3 +1,20 @@
+Version 1.55.4
+    Fixed:
+        * Crash in timers thread.
+
+
+Version 1.55.3
+    Fixed:
+        * Various timers issues.
+		* Charter secrets list erroneously displayed in charter/portico build windows.
+
+    Misc:
+		* Restored auto-logout option.
+		* Added harvest wax to menu options.
+		* Added rustroot to icons list.
+		* Added takedown to attacks filter.
+
+
 Version 1.55.2
     Fixed:
         * F-key bar related crashes yet again.

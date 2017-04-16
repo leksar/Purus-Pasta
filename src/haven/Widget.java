@@ -937,11 +937,15 @@ public class Widget {
     }
 
     public Widget rprev() {
-        if (lchild != null)
-            return (lchild);
-        if (prev != null)
-            return (prev);
-        return (parent);
+        if (prev != null) {
+            Widget lc = prev.lchild;
+            if (lc != null) {
+                for(; lc.lchild != null; lc = lc.lchild);
+                return(lc);
+            }
+            return(prev);
+        }
+        return(parent);
     }
 
     public Widget rnext() {

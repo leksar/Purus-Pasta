@@ -204,6 +204,7 @@ public class Config {
     public static boolean showarchvector =  Utils.getprefb("showarchvector", false);
     //public static boolean showcddelta =  Utils.getprefb("showcddelta", false);
     public static boolean disabledrinkhotkey =  Utils.getprefb("disabledrinkhotkey", false);
+    public static boolean autologout =  Utils.getprefb("autologout", false);
     public static int combatkeys =  Utils.getprefi("combatkeys", 0);
     public static boolean logcombatactions =  Utils.getprefb("logcombatactions", false);
     public static boolean autopickmussels =  Utils.getprefb("autopickmussels", false);
@@ -216,7 +217,7 @@ public class Config {
     public static int zkey =  Utils.getprefi("zkey", KeyEvent.VK_Z);
     public static boolean disableterrainsmooth =  Utils.getprefb("disableterrainsmooth", false);
     public static boolean disableelev =  Utils.getprefb("disableelev", false);
-    public static String treeboxclr =  Utils.getpref("treeboxclr", "549394");
+    public static String treeboxclr =  Utils.getpref("treeboxclr", "D7FF00");
     private final static Map<String, Integer> defFontSzGlobal =  new HashMap<String, Integer>(3) {{
         put("zh", 16);
         put("en", 11);
@@ -337,7 +338,7 @@ public class Config {
         put("almondtree", new CheckListboxItem("Almond"));
     }};
 
-    public final static HashMap<String, CheckListboxItem> icons = new HashMap<String, CheckListboxItem>(30) {{
+    public final static HashMap<String, CheckListboxItem> icons = new HashMap<String, CheckListboxItem>(31) {{
         put("dandelion", new CheckListboxItem("Dandelion"));
         put("chantrelle", new CheckListboxItem("Chantrelle"));
         put("blueberry", new CheckListboxItem("Blueberry"));
@@ -369,9 +370,10 @@ public class Config {
         put("grub", new CheckListboxItem("Grub"));
         put("yellowfoot", new CheckListboxItem("Yellowfoot"));
         put("chives", new CheckListboxItem("Chives"));
+        put("rustroot", new CheckListboxItem("Rustroot"));
     }};
 
-    public final static HashMap<String, CheckListboxItem> flowermenus = new HashMap<String, CheckListboxItem>(13) {{
+    public final static HashMap<String, CheckListboxItem> flowermenus = new HashMap<String, CheckListboxItem>(15) {{
         put("Pick", new CheckListboxItem("Pick", Resource.BUNDLE_FLOWER));
         put("Harvest", new CheckListboxItem("Harvest", Resource.BUNDLE_FLOWER));
         put("Eat", new CheckListboxItem("Eat", Resource.BUNDLE_FLOWER));
@@ -385,6 +387,8 @@ public class Config {
         put("Butcher", new CheckListboxItem("Butcher", Resource.BUNDLE_FLOWER));
         put("Giddyup!", new CheckListboxItem("Giddyup!", Resource.BUNDLE_FLOWER));
         put("Shear wool", new CheckListboxItem("Shear wool", Resource.BUNDLE_FLOWER));
+        put("Harvest wax", new CheckListboxItem("Harvest wax", Resource.BUNDLE_FLOWER));
+        put("Slice up", new CheckListboxItem("Slice up", Resource.BUNDLE_FLOWER));
     }};
 
     public final static Map<String, Tex> additonalicons = new HashMap<String, Tex>(16) {{

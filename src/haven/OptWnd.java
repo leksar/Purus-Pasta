@@ -1071,6 +1071,16 @@ public class OptWnd extends Window {
             public void set(boolean val) {
                 Utils.setprefb("togglecriminalacts", val);
                 Config.togglecriminalacts = val;
+            }
+        });
+        appender.add(new CheckBox("Auto logout on unknown/red players") {
+            {
+                a = Config.autologout;
+            }
+
+            public void set(boolean val) {
+                Utils.setprefb("autologout", val);
+                Config.autologout = val;
                 a = val;
             }
         });

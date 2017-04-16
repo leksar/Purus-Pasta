@@ -51,6 +51,7 @@ import haven.automation.ButcherFish;
 import haven.automation.ErrorSysMsgCallback;
 import haven.automation.FeedClover;
 import haven.automation.GobSelectCallback;
+import haven.automation.LeashAnimal;
 import haven.automation.LightWithTorch;
 import haven.automation.SteelRefueler;
 import haven.util.ObservableCollection;
@@ -241,6 +242,7 @@ public class MenuGrid extends Widget {
            // p.add(paginafor(Resource.local().load("paginae/amber/steel")));
             p.add(paginafor(Resource.local().load("paginae/amber/torch")));
             p.add(paginafor(Resource.local().load("paginae/amber/clover")));
+            p.add(paginafor(Resource.local().load("paginae/amber/rope")));
             p.add(paginafor(Resource.local().load("paginae/amber/fish")));
             p.add(paginafor(Resource.local().load("paginae/amber/timers")));
         	// Purus Cor Stuff
@@ -468,6 +470,8 @@ public class MenuGrid extends Widget {
             new Thread(new FeedClover(gui), "FeedClover").start();
         } else if (ad[1].equals("fish")) {
             new Thread(new ButcherFish(gui), "ButcherFish").start();
+        } else if (ad[1].equals("rope")) {
+            new Thread(new LeashAnimal(gui), "LeashAnimal").start();
         }
     }
 

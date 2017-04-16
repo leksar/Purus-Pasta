@@ -102,11 +102,6 @@ public class AreaMine implements Runnable {
                 break mine;
 
             GameUI gui = HavenPanel.lui.root.findchild(GameUI.class);
-            try {
-                haven.automation.Utils.drinkTillFull(gui, 70, 84);
-            } catch (InterruptedException e) {
-                break mine;
-            }
 
             Coord tc = path[i];
             int t = map.gettile(tc);

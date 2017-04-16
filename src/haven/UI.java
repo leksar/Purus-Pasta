@@ -197,8 +197,11 @@ public class UI {
                 pwdg.add(btn, new Coord(0, wdg.sz.y + 5));
                 pwdg.add(entry, new Coord(btn.sz.x + 5, wdg.sz.y + 5 + 2));
             } else if (wdg instanceof Window && (((Window) wdg).origcap.equals("Charter Stone") || ((Window) wdg).origcap.equals("Sublime Portico"))) {
-                wdg.add(new CharterList(150, 5), new Coord(0, 50));
-                wdg.presize();
+                // show secrets list only for already built chartes/porticos
+                if (((Window)wdg).wsz.y >= 80) {
+                    wdg.add(new CharterList(150, 5), new Coord(0, 50));
+                    wdg.presize();
+                }
             }
             bind(wdg, id);
 

@@ -42,7 +42,7 @@ import haven.util.ObservableCollection;
 
 public class Glob {
     public static final double SERVER_TIME_RATIO = 3.29d;
-    public long time, epoch = System.currentTimeMillis();
+    public long serverEpoch, localEpoch = System.currentTimeMillis();
     public Astronomy ast;
     public OCache oc = new OCache(this);
     public MCache map;
@@ -86,7 +86,6 @@ public class Glob {
     }
 
     public static class CAttr extends Observable {
-        public static final Text.Foundry capval = new Text.Foundry(Text.sans.deriveFont(Font.BOLD), 12).aa(true);
         String nm;
         int base, comp;
         public Tex comptex;
@@ -95,7 +94,7 @@ public class Glob {
             this.nm = nm.intern();
             this.base = base;
             this.comp = comp;
-            this.comptex = Text.renderstroked(comp + "", Color.WHITE, Color.BLACK, capval).tex();
+            this.comptex = Text.renderstroked(comp + "", Color.WHITE, Color.BLACK, Text.sans12bold).tex();
         }
 
         public void update(int base, int comp) {
@@ -105,7 +104,7 @@ public class Glob {
             this.comp = comp;
             setChanged();
             notifyObservers(null);
-            this.comptex = Text.renderstroked(comp + "", Color.WHITE, Color.BLACK, capval).tex();
+            this.comptex = Text.renderstroked(comp + "", Color.WHITE, Color.BLACK, Text.sans12bold).tex();
         }
     }
     private static Color colstep(Color o, Color t, double a) {
@@ -164,21 +163,21 @@ public class Glob {
     }
 
     private long lastrep = 0;
-    private long rgtime = 0;
+    private double rgtime = 0;
 
     public long globtime() {
         long now = System.currentTimeMillis();
-        long raw = ((now - epoch) * 3) + (time * 1000);
+        double raw = ((now - localEpoch) * SERVER_TIME_RATIO) + serverEpoch * 1000;
         if (lastrep == 0) {
             rgtime = raw;
         } else {
-            long gd = (now - lastrep) * 3;
+            double gd = (now - lastrep) * SERVER_TIME_RATIO;
             rgtime += gd;
-            if (Math.abs(rgtime + gd - raw) > 1000)
+            if (Math.abs(rgtime - raw) > 1000)
                 rgtime = rgtime + (long) ((raw - rgtime) * (1.0 - Math.pow(10.0, -(now - lastrep) / 1000.0)));
         }
         lastrep = now;
-        return (rgtime);
+        return (long)rgtime;
     }
 
     private static final long secinday = 60 * 60 * 24;
@@ -204,11 +203,10 @@ public class Glob {
             Object[] a = msg.list();
             int n = 0;
             if (t == "tm") {
-                time = ((Number) a[n++]).intValue();
-                epoch = System.currentTimeMillis();
+                serverEpoch = ((Number) a[n++]).intValue();
+                localEpoch = System.currentTimeMillis();
                 if (!inc)
                     lastrep = 0;
-                timersThread.tick(time, epoch);
                 servertimecalc();
             } else if (t == "astro") {
                 double dt = ((Number) a[n++]).doubleValue();

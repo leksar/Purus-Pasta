@@ -49,7 +49,6 @@ import haven.automation.PickForageable;
 
 public class GameUI extends ConsoleHost implements Console.Directory {
     public static final Text.Foundry msgfoundry = new Text.Foundry(Text.dfont, Config.fontsizeglobal * 14 / 11);
-    public static final Text.Foundry progressf = new Text.Foundry(Text.sans.deriveFont(Font.BOLD), 12).aa(true);
     private static final int blpw = 142;
     public final String chrid;
     public final long plid;
@@ -700,7 +699,7 @@ public class GameUI extends ConsoleHost implements Console.Directory {
         g.aimage(curprog, new Coord(sz.x / 2, (sz.y * 4) / 10), 0.5, 0.5);
 
         if (Config.showprogressperc)
-            g.atextstroked((int) (prog * 100) + "%", (sz.y * 4) / 10 - curprog.sz().y / 2 + 1, Color.WHITE, Color.BLACK, progressf);
+            g.atextstroked((int) (prog * 100) + "%", (sz.y * 4) / 10 - curprog.sz().y / 2 + 1, Color.WHITE, Color.BLACK, Text.sans12bold);
     }
 
     public void draw(GOut g) {

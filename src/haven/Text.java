@@ -50,6 +50,7 @@ public class Text {
     private Tex tex;
     public static final Color black = Color.BLACK;
     public static final Color white = Color.WHITE;
+    public static final Text.Foundry sans12bold = new Text.Foundry(Text.sans.deriveFont(Font.BOLD), 12).aa(true);
 
     static {
         std = new Foundry(sans, Config.fontsizeglobal);

@@ -56,7 +56,6 @@ public class Fightsess extends Widget {
     private final Fightview fv;
     private final Tex[] keystex = new Tex[10];
     private final Tex[] keysftex = new Tex[10];
-    private final static Text.Foundry fnd = new Text.Foundry(Text.sans.deriveFont(Font.BOLD, 12));
 
     // private static final Map<Long, Tex> cdvalues = new HashMap<Long, Tex>(7);
 
@@ -96,11 +95,11 @@ public class Fightsess extends Widget {
         this.dyn = new boolean[nact];
 
         for(int i = 0; i < 10; i++) {
-            keystex[i] = Text.renderstroked(FightWnd.keys[i], Color.WHITE, Color.BLACK, fnd).tex();
+            keystex[i] = Text.renderstroked(FightWnd.keys[i], Color.WHITE, Color.BLACK, Text.sans12bold).tex();
             if (i < 5)
                 keysftex[i] = keystex[i];
             else
-                keysftex[i] = Text.renderstroked(FightWnd.keysf[i - 5], Color.WHITE, Color.BLACK, fnd).tex();
+                keysftex[i] = Text.renderstroked(FightWnd.keysf[i - 5], Color.WHITE, Color.BLACK, Text.sans12bold).tex();
         }
     }
 
@@ -326,7 +325,7 @@ public class Fightsess extends Widget {
                         g.chcolor(clr);
                         g.frect(bc, simpleOpeningSz);
                         g.chcolor(Color.WHITE);
-                        Text t = Text.renderstroked(buff.ameter + "", Color.WHITE, Color.BLACK, fnd);
+                        Text t = Text.renderstroked(buff.ameter + "", Color.WHITE, Color.BLACK, Text.sans12bold);
                         Tex T = t.tex();
                         bc.x = bc.x + simpleOpeningSz.x / 2 - T.sz().x / 2;
                         bc.y = bc.y + simpleOpeningSz.y / 2 - T.sz().y / 2;

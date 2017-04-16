@@ -57,7 +57,6 @@ public class FightWnd extends Widget {
     private final CharWnd.LoadingTextBox info;
     private Tex count;
     private Dropbox<Pair<Text, Integer>> schoolsDropdown;
-    private static final Text.Foundry cardnum = new Text.Foundry(Text.sans.deriveFont(Font.BOLD), 12).aa(true);
 
     private static final Set<String> attacks = new HashSet<>(Arrays.asList(
             "paginae/atk/pow",
@@ -79,7 +78,8 @@ public class FightWnd extends Widget {
             "paginae/atk/uppercut",
             "paginae/atk/punchboth",
             "paginae/atk/stealthunder",
-            "paginae/atk/ravenbite"
+            "paginae/atk/ravenbite",
+            "paginae/atk/takedown"
     ));
     private static final Set<String> restorations = new HashSet<>(Arrays.asList(
             "paginae/atk/regain",
@@ -157,7 +157,7 @@ public class FightWnd extends Widget {
         int u = 0;
         for (Action act : acts)
             u += act.u;
-        count = cardnum.render(String.format("= %d/%d", u, maxact), (u > maxact) ? Color.RED : Color.WHITE).tex();
+        count = Text.sans12bold.render(String.format("= %d/%d", u, maxact), (u > maxact) ? Color.RED : Color.WHITE).tex();
     }
 
     private static final Tex[] add = {Resource.loadtex("gfx/hud/buttons/addu"),
@@ -239,7 +239,7 @@ public class FightWnd extends Widget {
             g.image(act.rnm.tex(), new Coord(itemh + 2, ty));
 
             if (act.ra == null)
-                act.ra = cardnum.render(String.valueOf(act.a));
+                act.ra = Text.sans12bold.render(String.valueOf(act.a));
             g.aimage(act.ra.tex(), new Coord(sz.x - 15, ty), 1.0, 0.0);
         }
 
@@ -430,7 +430,7 @@ public class FightWnd extends Widget {
                         g.image(act.res.get().layer(Resource.imgc).tex(), ic);
 
                         if (act.ru == null)
-                            act.ru = cardnum.render(String.format("%d/%d", act.u, act.a));
+                            act.ru = Text.sans12bold.render(String.format("%d/%d", act.u, act.a));
 
                         g.image(act.ru.tex(), c.add(invsq.sz().x / 2 - act.ru.sz().x / 2, pcy));
                         g.chcolor();

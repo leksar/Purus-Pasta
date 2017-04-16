@@ -730,7 +730,7 @@ public class MapFile {
                 if (moff == null) {
                     Coord psc = seg.map.reverse().get(g.id);
                     if (psc == null) {
-                        Debug.log.printf("mapfile warning: grid %x is oddly gone from segment %x; was at %s\n", g.id, seg.id, info.sc);
+                        if (debug) Debug.log.printf("mapfile warning: grid %x is oddly gone from segment %x; was at %s\n", g.id, seg.id, info.sc);
                         missing.add(g);
                         continue;
                     } else if (!psc.equals(info.sc)) {

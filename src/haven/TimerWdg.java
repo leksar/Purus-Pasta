@@ -5,7 +5,6 @@ import java.awt.Font;
 import java.util.List;
 
 public class TimerWdg extends Widget {
-    public static final Text.Foundry foundry = new Text.Foundry(Text.sans.deriveFont(Font.BOLD), 12).aa(true);
     private static final Resource timersfx = Resource.local().loadwait("sfx/timer");
     public final static int height = 31;
     private final static int txty = 8;
@@ -20,9 +19,9 @@ public class TimerWdg extends Widget {
         this.duration = duration;
 
         sz = new Coord(420, height);
-        lblname = new Label(name, foundry, true);
+        lblname = new Label(name, Text.sans12bold, true);
         add(lblname, new Coord(3, txty));
-        lbltime = new Label(timeFormat(duration), foundry, true);
+        lbltime = new Label(timeFormat(duration), Text.sans12bold, true);
 
         add(lbltime, new Coord(190, txty));
 
@@ -89,7 +88,7 @@ public class TimerWdg extends Widget {
     }
 
     public void start() {
-        start = Glob.timersThread.globtime() / 3;
+        start = (long)(ui.sess.glob.globtime() / Glob.SERVER_TIME_RATIO);
         btnstart.hide();
         btnstop.show();
         active = true;
@@ -142,7 +141,7 @@ public class TimerWdg extends Widget {
         public TimerDoneWindow(String timername) {
             super(new Coord(300, 130), "Hooray!");
 
-            Label lbltimer = new Label(timername, foundry);
+            Label lbltimer = new Label(timername, Text.sans12bold);
             add(lbltimer, new Coord(300 / 2 - lbltimer.sz.x / 2, 20));
 
             Label lblinf = new Label("has finished running");

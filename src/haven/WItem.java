@@ -341,9 +341,10 @@ public class WItem extends Widget implements DTarget {
                     getparent(GameUI.class).error("Could not launch web browser.");
                 } catch (MalformedURLException e) {
                 }
-            } else if (ui.modshift && !ui.modmeta)
+            } else if (ui.modshift && !ui.modmeta) {
+                // server side transfer all identical: pass third argument -1 (or 1 for single item)
                 item.wdgmsg("transfer", c);
-            else if (ui.modctrl)
+            } else if (ui.modctrl)
                 item.wdgmsg("drop", c);
             else if (ui.modmeta)
                 wdgmsg("transfer-identical", this.item);

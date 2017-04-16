@@ -5,7 +5,6 @@ import java.awt.Font;
 
 
 public class TreeStageSprite extends Sprite {
-    private static final Text.Foundry fndr = new Text.Foundry(Text.sans.deriveFont(Font.BOLD), 12).aa(true);
     private static final Tex[] treestg = new Tex[90];
     private static final Color stagecolor = new Color(235, 235, 235);//new Color(235, 235, 235);
     public int val;
@@ -20,7 +19,7 @@ public class TreeStageSprite extends Sprite {
 
     static {
         for (int i = 10; i < 100; i++) {
-            treestg[i - 10] = Text.renderstroked(i + "", stagecolor, Color.BLACK, fndr).tex();
+            treestg[i - 10] = Text.renderstroked(i + "", stagecolor, Color.BLACK, Text.sans12bold).tex();
         }
     }
 

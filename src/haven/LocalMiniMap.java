@@ -47,7 +47,6 @@ public class LocalMiniMap extends Widget {
     private static final Tex resize = Resource.loadtex("gfx/hud/wndmap/lg/resize");
     private static final Tex gridblue = Resource.loadtex("gfx/hud/mmap/gridblue");
     private static final Tex gridred = Resource.loadtex("gfx/hud/mmap/gridred");
-    public static final Text.Foundry bld12fnd = new Text.Foundry(Text.sans.deriveFont(Font.BOLD), 12);
     public final MapView mv;
     public final MapFile save;
     private Coord cc = null;
@@ -95,9 +94,9 @@ public class LocalMiniMap extends Widget {
             return size() > 7;
         }
     };
-    private final static Tex bushicn = Text.renderstroked("\u22C6", Color.CYAN, Color.BLACK, bld12fnd).tex();
-    private final static Tex treeicn = Text.renderstroked("\u25B2", Color.CYAN, Color.BLACK, bld12fnd).tex();
-    private final static Tex bldricn = Text.renderstroked("\u25AA", Color.CYAN, Color.BLACK, bld12fnd).tex();
+    private final static Tex bushicn = Text.renderstroked("\u22C6", Color.CYAN, Color.BLACK, Text.sans12bold).tex();
+    private final static Tex treeicn = Text.renderstroked("\u25B2", Color.CYAN, Color.BLACK, Text.sans12bold).tex();
+    private final static Tex bldricn = Text.renderstroked("\u25AA", Color.CYAN, Color.BLACK, Text.sans12bold).tex();
     private Map<Color, Tex> xmap = new HashMap<Color, Tex>(6);
     public static Coord plcrel = null;
     public long lastnewgid;
@@ -305,7 +304,9 @@ public class LocalMiniMap extends Widget {
                             enemy = true;
                         }
 
-                        if (Config.autohearth && enemy)
+                        if (Config.autologout && enemy)
+                            gameui().act("lo");
+                        else if (Config.autohearth && enemy)
                             gameui().act("travel", "hearth");
 
                         continue;
@@ -543,7 +544,7 @@ public class LocalMiniMap extends Widget {
                     if (gob == null) {
                         Tex tex = xmap.get(m.col);
                         if (tex == null) {
-                            tex = Text.renderstroked("\u2716",  m.col, Color.BLACK, bld12fnd).tex();
+                            tex = Text.renderstroked("\u2716",  m.col, Color.BLACK, Text.sans12bold).tex();
                             xmap.put(m.col, tex);
                         }
                         g.image(tex, ptc.sub(6, 6));
