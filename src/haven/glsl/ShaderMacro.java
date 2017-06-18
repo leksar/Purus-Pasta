@@ -27,6 +27,7 @@
 package haven.glsl;
 
 import java.io.StringWriter;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.IdentityHashMap;
 import java.util.LinkedList;
@@ -44,8 +45,35 @@ import haven.GOut;
 public interface ShaderMacro {
     public void modify(ProgramContext prog);
 
-    @SuppressWarnings("serial")
-	public static class Program extends GLProgram {
+    public static final ShaderMacro nil = new ShaderMacro() {
+        public void modify(ProgramContext prog) {
+        }
+
+        public String toString() {
+            return ("nil");
+        }
+    };
+
+    public static ShaderMacro compose(final Collection<ShaderMacro> smacs) {
+        if (smacs.isEmpty())
+            return (nil);
+        return (new ShaderMacro() {
+            public void modify(ProgramContext prog) {
+                for (ShaderMacro smac : smacs)
+                    smac.modify(prog);
+            }
+
+            public String toString() {
+                return (smacs.toString());
+            }
+        });
+    }
+
+    public static ShaderMacro compose(final ShaderMacro... smacs) {
+        return (compose(Arrays.asList(smacs)));
+    }
+
+    public static class Program extends GLProgram {
         public static boolean dumpall = false;
         public transient final ProgramContext built;
         private final transient int[][] automask;

@@ -59,6 +59,7 @@ public class Main {
         diff(baseMsg, l10nMsg);
         diff(baseLabel, l10nLabel);
         diff(baseAction, l10nAction);
+        diff(baseIngredient, l10nIngredient);
 
         dump(baseTooltip, BUNDLE_TOOLTIP, missing);
         dump(basePagina, BUNDLE_PAGINA, missing);

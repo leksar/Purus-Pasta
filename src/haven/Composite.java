@@ -55,8 +55,11 @@ public class Composite extends Drawable {
     private void init() {
         if (comp != null)
             return;
-        comp = new Composited(base.get().layer(Skeleton.Res.class).s);
+        Resource res = base.get();
+        comp = new Composited(res.layer(Skeleton.Res.class).s);
         comp.eqowner = gob;
+        if (gob.type == null)
+            gob.determineType(res.name);
     }
 
     public void setup(RenderList rl) {
@@ -71,7 +74,7 @@ public class Composite extends Drawable {
     private List<PoseMod> loadposes(Collection<ResData> rl, Skeleton skel, boolean old) {
         List<PoseMod> mods = new ArrayList<PoseMod>(rl.size());
         for (ResData dat : rl) {
-            PoseMod mod = skel.mkposemod(gob, dat.res.get(), dat.sdt);
+            PoseMod mod = skel.mkposemod(gob, dat.res.get(), dat.sdt.clone());
             if (old)
                 mod.age();
             mods.add(mod);
@@ -110,7 +113,9 @@ public class Composite extends Drawable {
                 updequ();
                 for (ResData resdata : nposes) {
                     Resource posres = resdata.res.get();
-                    if (posres != null && posres.name.endsWith("/knock")) {
+                    // livestock:       */knock-*
+                    // other animals:   */knock
+                    if (posres != null && posres.name.contains("/knock")) {
                         gob.knocked = Boolean.TRUE;
                         break;
                     }

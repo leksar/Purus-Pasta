@@ -44,6 +44,9 @@ public class Makewindow extends Widget {
     int xoff = 45;
     private static final int qmy = 38, outy = 65;
     public static final Text.Foundry nmf = new Text.Foundry(Text.serif, 20).aa(true);
+    private long qModProduct = -1;
+    private static final Tex softcapl = Text.render("Softcap:").tex();
+    private Tex softcap;
 
     @RName("make")
     public static class $_ implements Factory {
@@ -268,9 +271,22 @@ public class Makewindow extends Widget {
                 }
             }
 
-		if (pw > 0) {
-			g.image(Text.render(String.format("Cap: %.0f", Math.floor(Math.pow(vl, 1.0f/pw)))).tex(), new Coord(mx + 30, 3 + qmy));
-				}
+            if (Config.showcraftcap && qmodValues.size() > 0) {
+                long product = 1;
+                for (long cap : qmodValues)
+                    product *= cap;
+
+                if (product != qModProduct) {
+                    qModProduct = product;
+                    softcap = Text.renderstroked("" + (int) Math.pow(product, 1.0 / qmodValues.size()),
+                            Color.WHITE, Color.BLACK, Text.sans12bold).tex();
+                }
+
+                Coord sz = softcap.sz();
+                Coord szl = softcapl.sz();
+                g.image(softcapl, this.sz.sub(sz.x + szl.x + 8, this.sz.y / 2 + szl.y / 2));
+                g.image(softcap, this.sz.sub(sz.x, this.sz.y / 2 + sz.y / 2));
+            }
         }
         c = new Coord(xoff, outy);
         for (Spec s : outputs) {

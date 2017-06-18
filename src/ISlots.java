@@ -1,3 +1,4 @@
+
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -7,20 +8,20 @@ import java.util.List;
 
 import haven.CharWnd;
 import haven.Coord;
+import haven.GItem.GildingInfo;
 import haven.GItem.NumberInfo;
 import haven.Glob;
 import haven.ItemInfo;
 import haven.ItemInfo.Tip;
 import haven.PUtils;
 import haven.Resource;
-import haven.Resource.Image;
 import haven.RichText;
 import haven.Text;
 import haven.Text.Foundry;
 
-public class ISlots extends Tip implements NumberInfo {
+public class ISlots extends Tip implements NumberInfo, GildingInfo {
     public static final Text ch = Text.render(Resource.getLocString(Resource.BUNDLE_LABEL, "Gilding:"));
-    public static final Foundry progf;
+    public static final Foundry progf = new Foundry(Text.dfont.deriveFont(2), new Color(0, 169, 224));
     public final Collection<SItem> s = new ArrayList<SItem>();
     public final int left;
     public final double pmin;
@@ -42,9 +43,9 @@ public class ISlots extends Tip implements NumberInfo {
         if (this.attrs.length > 0) {
             String chanceStr = Resource.getLocString(Resource.BUNDLE_LABEL, "Chance: $col[%s]{%d%%} to $col[%s]{%d%%}");
             var2 = RichText.render(String.format(chanceStr,
-                    "192,192,255",
+                    chc,
                     Long.valueOf(Math.round(100.0D * this.pmin)),
-                    "192,192,255",
+                    chc,
                     Long.valueOf(Math.round(100.0D * this.pmax))),
                     0,
                     new Object[0]).img;
@@ -62,7 +63,7 @@ public class ISlots extends Tip implements NumberInfo {
         } else {
             String chanceStr = Resource.getLocString(Resource.BUNDLE_LABEL, "Chance: $col[%s]{%d%%}");
             var2 = RichText.render(String.format(chanceStr,
-                    "192,192,255", Integer.valueOf((int) Math.round(100.0D * this.pmin))),
+                    chc, Integer.valueOf((int) Math.round(100.0D * this.pmin))),
                     0,
                     new Object[0]).img;
             var1.cmp.add(var2, new Coord(10, var1.cmp.sz.y));
@@ -91,8 +92,8 @@ public class ISlots extends Tip implements NumberInfo {
         return this.s.size();
     }
 
-    static {
-        progf = new Foundry(Text.dfont.deriveFont(2), new Color(0, 169, 224));
+    public boolean hasGildableSlots() {
+        return left > 0;
     }
 
     public static class SItem implements ResOwner {
@@ -119,8 +120,8 @@ public class ISlots extends Tip implements NumberInfo {
         }
 
         public void layout(Layout var1) {
-            BufferedImage var2 = PUtils.convolvedown(((Image) this.res.layer(Resource.imgc)).img, new Coord(16, 16), CharWnd.iconfilter);
-            BufferedImage var3 = Text.render(((Resource.Tooltip) this.res.layer(Resource.tooltip)).t).img;
+            BufferedImage var2 = PUtils.convolvedown(this.res.layer(Resource.imgc).img, new Coord(16, 16), CharWnd.iconfilter);
+            BufferedImage var3 = Text.render(this.res.layer(Resource.tooltip).t).img;
             BufferedImage var4 = ItemInfo.longtip(this.info);
             byte var5 = 10;
             int var6 = var1.cmp.sz.y;

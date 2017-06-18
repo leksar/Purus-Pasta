@@ -38,6 +38,7 @@ import java.util.function.Function;
 
 import haven.automation.WItemDestroyCallback;
 import haven.res.ui.tt.Wear;
+import haven.res.ui.tt.q.qbuff.QBuff;
 
 public class WItem extends Widget implements DTarget {
     public static final Resource missing = Resource.local().loadwait("gfx/invobjs/missing");
@@ -184,10 +185,15 @@ public class WItem extends Widget implements DTarget {
         return(ret);
     });
 
-    public final AttrCache<Tex> itemnum = new AttrCache<Tex>(info -> {
+    public final AttrCache<Tex> itemnum = new AttrCache<>(info -> {
         GItem.NumberInfo ninf = ItemInfo.find(GItem.NumberInfo.class, info);
-        if(ninf == null) return(null);
-        return(new TexI(Utils.outline2(Text.render(Integer.toString(ninf.itemnum()), Color.WHITE).img, Utils.contrast(Color.WHITE))));
+        if (ninf == null)
+            return null;
+
+        if (ninf instanceof GItem.GildingInfo && ((GItem.GildingInfo) ninf).hasGildableSlots())
+            return Text.renderstroked(ninf.itemnum() + "", new Color(0, 169, 224), Color.BLACK).tex();
+
+        return Text.renderstroked(ninf.itemnum() + "", ninf.numcolor(), Color.BLACK).tex();
     });
 
     public final AttrCache<Double> itemmeter = new AttrCache<Double>(info -> {
@@ -229,20 +235,13 @@ public class WItem extends Widget implements DTarget {
             }
 
             Double meter = item.meter > 0 ? item.meter / 100.0 : itemmeter.get();
-            if (meter != null && meter > 0) {
-                if (Config.itemmeterbar) {
-                    g.chcolor(220, 60, 60, 255);
-                    g.frect(Coord.z, new Coord((int) (sz.x / (100 / (meter * 100))), 4));
-                    g.chcolor();
-                } else if (!Config.itempercentage) {
-                    g.chcolor(255, 255, 255, 64);
-                    Coord half = sz.div(2);
-                    g.prect(half, half.inv(), half, meter * Math.PI * 2);
-                    g.chcolor();
-                }
+            if (Config.itemmeterbar && meter != null && meter > 0) {
+                g.chcolor(220, 60, 60, 255);
+                g.frect(Coord.z, new Coord((int) (sz.x / (100 / (meter * 100))), 4));
+                g.chcolor();
             }
 
-            GItem.Quality quality = item.quality();
+            QBuff quality = item.quality();
             if (Config.showquality) {
                 if (quality != null && quality.qtex != null) {
                     Coord btm = new Coord(0, sz.y - 12);
@@ -256,19 +255,12 @@ public class WItem extends Widget implements DTarget {
                 }
             }
 
-            boolean studylefttimedisplayed = false;
-            if (Config.showstudylefttime && quality != null && quality.curio && item.meter > 0 && parent instanceof InventoryStudy) {
-                if (item.timelefttex == null) {
+            if (item.studytime > 0 && parent instanceof InventoryStudy) {
+                if (item.timelefttex == null)
                     item.updatetimelefttex();
-                }
-
-                if (item.timelefttex != null) {
+                if (item.timelefttex != null)
                     g.image(item.timelefttex, Coord.z);
-                    studylefttimedisplayed = true;
-                }
-            }
-
-            if (!studylefttimedisplayed && item.meter > 0 && Config.itempercentage && item.metertex != null) {
+            } else if (item.meter > 0 && item.metertex != null) {
                 g.image(item.metertex, Coord.z);
             }
 

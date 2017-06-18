@@ -150,19 +150,20 @@ public class HavenPanel extends GLCanvas implements Runnable, Console.Directory 
             public void init(GLAutoDrawable d) {
                 try {
                     GL gl = d.getGL();
-                    glconf = GLConfig.fromgl(gl, d.getContext(), getChosenGLCapabilities());
-                    glconf.pref = GLSettings.load(glconf, true);
-                    ui.cons.add(glconf);
                     if (h != null) {
                         String vendor = gl.glGetString(gl.GL_VENDOR);
                         isATI = vendor.contains("AMD") || vendor.contains("ATI");
-                        h.lsetprop("gl.vendor", vendor);
-                        h.lsetprop("gl.version", gl.glGetString(gl.GL_VERSION));
-                        h.lsetprop("gl.renderer", gl.glGetString(gl.GL_RENDERER));
-                        h.lsetprop("gl.exts", Arrays.asList(gl.glGetString(gl.GL_EXTENSIONS).split(" ")));
-                        h.lsetprop("gl.caps", d.getChosenGLCapabilities().toString());
-                        h.lsetprop("gl.conf", glconf);
+                        h.lsetprop("gpu", vendor + " (" + gl.glGetString(gl.GL_RENDERER) + ") - " + gl.glGetString(gl.GL_VERSION));
+                        // h.lsetprop("gl.vendor", vendor);
+                        // h.lsetprop("gl.version", gl.glGetString(gl.GL_VERSION));
+                        // h.lsetprop("gl.renderer", gl.glGetString(gl.GL_RENDERER));
+                        // h.lsetprop("gl.exts", Arrays.asList(gl.glGetString(gl.GL_EXTENSIONS).split(" ")));
+                        // h.lsetprop("gl.caps", d.getChosenGLCapabilities().toString());
+                        // h.lsetprop("gl.conf", glconf);
                     }
+                    glconf = GLConfig.fromgl(gl, d.getContext(), getChosenGLCapabilities());
+                    glconf.pref = GLSettings.load(glconf, true);
+                    ui.cons.add(glconf);
                     gstate = new GLState() {
                         public void apply(GOut g) {
                             BGL gl = g.gl;

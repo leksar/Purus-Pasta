@@ -1,8 +1,17 @@
-package haven;
+package haven.timers;
 
 
-import java.awt.Font;
 import java.util.List;
+
+import haven.Audio;
+import haven.Config;
+import haven.Coord;
+import haven.GOut;
+import haven.GameUI;
+import haven.Glob;
+import haven.Resource;
+import haven.Text;
+import haven.Widget;
 
 public class TimerWdg extends Widget {
     private static final Resource timersfx = Resource.local().loadwait("sfx/timer");
@@ -11,40 +20,40 @@ public class TimerWdg extends Widget {
     public String name;
     public long start, duration, elapsed;
     public boolean active = false;
-    private Label lbltime, lblname;
-    private Button btnstart, btnstop, btndel, btnedit;
+    private haven.Label lbltime, lblname;
+    private haven.Button btnstart, btnstop, btndel, btnedit;
 
     public TimerWdg(String name, long duration, long start) {
         this.name = name;
         this.duration = duration;
 
         sz = new Coord(420, height);
-        lblname = new Label(name, Text.sans12bold, true);
+        lblname = new haven.Label(name, Text.sans12bold, true);
         add(lblname, new Coord(3, txty));
-        lbltime = new Label(timeFormat(duration), Text.sans12bold, true);
+        lbltime = new haven.Label(timeFormat(duration), Text.sans12bold, true);
 
         add(lbltime, new Coord(190, txty));
 
-        btnstart = new Button(50, "Start") {
+        btnstart = new haven.Button(50, "Start") {
             @Override
             public void click() {
                 start();
             }
         };
-        btnstop = new Button(50, "Stop") {
+        btnstop = new haven.Button(50, "Stop") {
             @Override
             public void click() {
                 stop();
             }
         };
         btnstop.hide();
-        btndel = new Button(20, "X") {
+        btndel = new haven.Button(20, "X") {
             @Override
             public void click() {
                 delete();
             }
         };
-        btnedit = new Button(50, "Edit") {
+        btnedit = new haven.Button(50, "Edit") {
             @Override
             public void click() {
                 edit();
@@ -137,17 +146,17 @@ public class TimerWdg extends Widget {
         gui.add(new TimerEditWnd("Edit Timer", gui, name, duration, this), new Coord(gui.sz.x / 2 - 200, gui.sz.y / 2 - 200));
     }
 
-    private class TimerDoneWindow extends Window {
+    private class TimerDoneWindow extends haven.Window {
         public TimerDoneWindow(String timername) {
             super(new Coord(300, 130), "Hooray!");
 
-            Label lbltimer = new Label(timername, Text.sans12bold);
+            haven.Label lbltimer = new haven.Label(timername, Text.sans12bold);
             add(lbltimer, new Coord(300 / 2 - lbltimer.sz.x / 2, 20));
 
-            Label lblinf = new Label("has finished running");
+            haven.Label lblinf = new haven.Label("has finished running");
             add(lblinf, new Coord(300 / 2 - lblinf.sz.x / 2, 50));
 
-            add(new Button(60, "Close") {
+            add(new haven.Button(60, "Close") {
                 @Override
                 public void click() {
                     parent.reqdestroy();

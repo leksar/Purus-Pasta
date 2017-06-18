@@ -29,6 +29,7 @@ package haven;
 import static haven.Inventory.invsq;
 import haven.automation.ErrorSysMsgCallback;
 import haven.automation.PickForageable;
+import haven.livestock.LivestockManager;
 import haven.resutil.FoodInfo;
 
 import java.awt.Color;
@@ -87,7 +88,7 @@ public class GameUI extends ConsoleHost implements Console.Directory {
     public MinimapWnd minimapWnd;
     public StudyWnd studywnd;
     public LocalMiniMap mmap;
-    public static TimersWnd timerswnd;
+    public static haven.timers.TimersWnd timerswnd;
     public QuickSlotsWdg quickslots;
     public StatusWdg statuswindow;
     public AlignPanel questpanel;
@@ -103,6 +104,7 @@ public class GameUI extends ConsoleHost implements Console.Directory {
     public FBelt fbelt;
     public CraftHistoryBelt histbelt;
     private ErrorSysMsgCallback errmsgcb;
+    public LivestockManager livestockwnd;
 
     public abstract class Belt extends Widget {
         public Belt(Coord sz) {
@@ -200,9 +202,13 @@ public class GameUI extends ConsoleHost implements Console.Directory {
         zerg = add(new Zergwnd(), 187, 50);
         zerg.hide();
 
-        timerswnd = new TimersWnd(this);
+        timerswnd = new haven.timers.TimersWnd(this);
         timerswnd.hide();
         add(timerswnd, new Coord(HavenPanel.w / 2 - timerswnd.sz.x / 2, 100));
+
+        livestockwnd = new LivestockManager();
+        livestockwnd.hide();
+        add(livestockwnd, new Coord(HavenPanel.w / 2 - timerswnd.sz.x / 2, 100));
 
         quickslots = new QuickSlotsWdg();
         if (!Config.quickslots)

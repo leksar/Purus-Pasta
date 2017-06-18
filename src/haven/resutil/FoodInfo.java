@@ -39,6 +39,7 @@ import haven.ItemInfo;
 import haven.Resource;
 import haven.RichText;
 import haven.Utils;
+import haven.res.ui.tt.q.qbuff.QBuff;
 
 public class FoodInfo extends ItemInfo.Tip {
     public final double end, glut;
@@ -90,7 +91,7 @@ public class FoodInfo extends ItemInfo.Tip {
             Color col = Utils.blendcol(evs[i].ev.col, Color.WHITE, 0.5);
             String str;
             if (showbaseq && owner instanceof GItem) {
-                GItem.Quality q = ((GItem) owner).quality();
+                QBuff q = ((GItem) owner).quality();
                 str = String.format("%s: $col[%d,%d,%d]{%s}  $col[%d,%d,%d]{(%s)}",
                         evs[i].ev.nm,
                         col.getRed(), col.getGreen(), col.getBlue(), Utils.odformat2(evs[i].a, 2),

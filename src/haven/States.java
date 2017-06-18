@@ -34,14 +34,14 @@ import javax.media.opengl.GL3;
 
 import haven.glsl.BaseColor;
 import haven.glsl.Expression;
-import haven.glsl.Macro1;
-import haven.glsl.ProgramContext;
 import haven.glsl.ShaderMacro;
 
 public abstract class States extends GLState {
-    private States() {}
+    private States() {
+    }
 
     public static final Slot<ColState> color = new Slot<ColState>(Slot.Type.DRAW, ColState.class, HavenPanel.global);
+
     public static class ColState extends GLState {
         public final Color c;
         public final float[] ca;
@@ -61,7 +61,7 @@ public abstract class States extends GLState {
         }
 
         public int capply() {
-            return(1);
+            return (1);
         }
 
         public void unapply(GOut g) {
@@ -70,49 +70,57 @@ public abstract class States extends GLState {
         }
 
         public int capplyfrom(GLState o) {
-            if(o instanceof ColState)
-                return(1);
-            return(-1);
+            if (o instanceof ColState)
+                return (1);
+            return (-1);
         }
 
         public void applyfrom(GOut g, GLState o) {
             apply(g);
         }
 
-        public ShaderMacro[] shaders() {return(shaders);}
+        public ShaderMacro shader() {
+            return (shader);
+        }
 
         public void prep(Buffer buf) {
             buf.put(color, this);
         }
 
         public boolean equals(Object o) {
-            return((o instanceof ColState) && c.equals(((ColState)o).c));
+            return ((o instanceof ColState) && c.equals(((ColState) o).c));
         }
 
         public int hashCode() {
-            return(c.hashCode());
+            return (c.hashCode());
         }
 
         public String toString() {
-            return("ColState(" + c + ")");
+            return ("ColState(" + c + ")");
         }
 
-        private static final ShaderMacro[] shaders = {new haven.glsl.BaseColor()};
+        private static final ShaderMacro shader = new haven.glsl.BaseColor();
     }
-    public static final ColState vertexcolor = new ColState(0, 0, 0, 0) {
-        private final ShaderMacro[] shaders = {new haven.glsl.GLColorVary()};
-        public void apply(GOut g) {}
 
-        public ShaderMacro[] shaders() {return(shaders);}
+    public static final ColState vertexcolor = new ColState(0, 0, 0, 0) {
+        private final ShaderMacro shader = new haven.glsl.GLColorVary();
+
+        public void apply(GOut g) {
+        }
+
+        public ShaderMacro shader() {
+            return (shader);
+        }
 
         public boolean equals(Object o) {
-            return(o == this);
+            return (o == this);
         }
 
         public String toString() {
-            return("ColState(vertex)");
+            return ("ColState(vertex)");
         }
     };
+
     private static class InstColor extends ColState {
         private final ColState[] parts;
 
@@ -122,37 +130,44 @@ public abstract class States extends GLState {
         }
 
         public String toString() {
-            return("instanced color");
+            return ("instanced color");
         }
 
         public boolean equals(Object o) {
-            return(o == this);
+            return (o == this);
         }
 
-        static final ShaderMacro[] shaders = {GLState.Instancer.mkinstanced, new BaseColor()};
-        public ShaderMacro[] shaders() {return(shaders);}
-    }
-    static {color.instanced(new Instancer<ColState>() {
-        public ColState inststate(ColState[] in) {
-            if(in[0] == vertexcolor) {
-                for(int i = 1; i < in.length; i++) {
-                    if(in[i] != vertexcolor)
-                        throw(new RuntimeException("cannot mix uniform and per-vertex coloring in instanced rendering"));
-                }
-                return(vertexcolor);
-            } else {
-                for(int i = 1; i < in.length; i++) {
-                    if(in[i] == vertexcolor)
-                        throw(new RuntimeException("cannot mix uniform and per-vertex coloring in instanced rendering"));
-                }
-                return(new InstColor(in));
-            }
+        static final ShaderMacro shader = ShaderMacro.compose(GLState.Instancer.mkinstanced, new BaseColor());
+
+        public ShaderMacro shader() {
+            return (shader);
         }
-    });}
+    }
+
+    static {
+        color.instanced(new Instancer<ColState>() {
+            public ColState inststate(ColState[] in) {
+                if (in[0] == vertexcolor) {
+                    for (int i = 1; i < in.length; i++) {
+                        if (in[i] != vertexcolor)
+                            throw (new RuntimeException("cannot mix uniform and per-vertex coloring in instanced rendering"));
+                    }
+                    return (vertexcolor);
+                } else {
+                    for (int i = 1; i < in.length; i++) {
+                        if (in[i] == vertexcolor)
+                            throw (new RuntimeException("cannot mix uniform and per-vertex coloring in instanced rendering"));
+                    }
+                    return (new InstColor(in));
+                }
+            }
+        });
+    }
+
     @Material.ResName("vcol")
     public static class $vcol implements Material.ResCons {
         public GLState cons(Resource res, Object... args) {
-            return(new States.ColState((Color)args[0]));
+            return (new States.ColState((Color) args[0]));
         }
     }
 
@@ -179,6 +194,7 @@ public abstract class States extends GLState {
     };
 
     public static final Slot<Coverage> coverage = new Slot<Coverage>(Slot.Type.DRAW, Coverage.class, PView.proj);
+
     public static class Coverage extends GLState {
         public final float cov;
         public final boolean inv;
@@ -203,7 +219,9 @@ public abstract class States extends GLState {
         public void prep(Buffer buf) {
             buf.put(coverage, this);
         }
-    };
+    }
+
+    ;
 
     public static final StandAlone presdepth = new StandAlone(Slot.Type.GEOM, PView.proj) {
         public void apply(GOut g) {
@@ -214,9 +232,12 @@ public abstract class States extends GLState {
             g.gl.glDepthMask(true);
         }
     };
+
     @Material.ResName("maskdepth")
     public static class $maskdepth implements Material.ResCons {
-        public GLState cons(Resource res, Object... args) {return(presdepth);}
+        public GLState cons(Resource res, Object... args) {
+            return (presdepth);
+        }
     }
 
     public static final StandAlone prescolor = new StandAlone(Slot.Type.DRAW, PView.proj) {
@@ -228,14 +249,16 @@ public abstract class States extends GLState {
             g.gl.glColorMask(true, true, true, true);
         }
     };
+
     @Material.ResName("maskcol")
     public static class $colmask implements Material.ResCons {
         public GLState cons(Resource res, Object... args) {
-            return(prescolor);
+            return (prescolor);
         }
     }
 
     public static final Slot<Blending> blend = new Slot<Blending>(Slot.Type.DRAW, Blending.class, HavenPanel.global);
+
     public static class Blending extends GLState {
         public final int src, dst;
         public final int cfn, afn;
@@ -269,6 +292,7 @@ public abstract class States extends GLState {
     }
 
     public static final Slot<Fog> fog = new Slot<Fog>(Slot.Type.DRAW, Fog.class, PView.proj);
+
     public static class Fog extends GLState {
         public final Color c;
         public final float[] ca;
@@ -301,6 +325,7 @@ public abstract class States extends GLState {
     }
 
     public static final Slot<DepthOffset> depthoffset = new Slot<DepthOffset>(Slot.Type.GEOM, DepthOffset.class, PView.proj);
+
     public static class DepthOffset extends GLState {
         public final int mode;
         public final float factor, units;
@@ -353,32 +378,43 @@ public abstract class States extends GLState {
     }
 
     public static final StandAlone nullprog = new StandAlone(Slot.Type.DRAW, PView.proj) {
-        private final ShaderMacro[] sh = {};
+        private final ShaderMacro sh = prog -> {
+        };
 
-        public void apply(GOut g) {}
-        public void unapply(GOut g) {}
+        public void apply(GOut g) {
+        }
 
-        public ShaderMacro[] shaders() {
-            return(sh);
+        public void unapply(GOut g) {
+        }
+
+        public ShaderMacro shader() {
+            return (sh);
         }
     };
 
     public static final Slot<GLState> adhoc = new Slot<GLState>(Slot.Type.DRAW, GLState.class, PView.wnd);
-    public static class AdHoc extends GLState {
-        private final ShaderMacro[] sh;
 
-        public AdHoc(ShaderMacro[] sh) {
+    public static class AdHoc extends GLState {
+        private final ShaderMacro sh;
+
+        public AdHoc(ShaderMacro sh) {
             this.sh = sh;
         }
 
-        public AdHoc(ShaderMacro sh) {
-            this(new ShaderMacro[] {sh});
+        @Deprecated
+        public AdHoc(ShaderMacro[] sh) {
+            this(ShaderMacro.compose(sh));
         }
 
-        public void apply(GOut g) {}
-        public void unapply(GOut g) {}
+        public void apply(GOut g) {
+        }
 
-        public ShaderMacro[] shaders() {return(sh);}
+        public void unapply(GOut g) {
+        }
+
+        public ShaderMacro shader() {
+            return (sh);
+        }
 
         public void prep(Buffer buf) {
             buf.put(adhoc, this);
@@ -386,21 +422,28 @@ public abstract class States extends GLState {
     }
 
     public static final Slot<GLState> adhocg = new Slot<GLState>(Slot.Type.GEOM, GLState.class, PView.wnd);
-    public static class GeomAdHoc extends GLState {
-        private final ShaderMacro[] sh;
 
-        public GeomAdHoc(ShaderMacro[] sh) {
+    public static class GeomAdHoc extends GLState {
+        private final ShaderMacro sh;
+
+        public GeomAdHoc(ShaderMacro sh) {
             this.sh = sh;
         }
 
-        public GeomAdHoc(ShaderMacro sh) {
-            this(new ShaderMacro[] {sh});
+        @Deprecated
+        public GeomAdHoc(ShaderMacro[] sh) {
+            this(ShaderMacro.compose(sh));
         }
 
-        public void apply(GOut g) {}
-        public void unapply(GOut g) {}
+        public void apply(GOut g) {
+        }
 
-        public ShaderMacro[] shaders() {return(sh);}
+        public void unapply(GOut g) {
+        }
+
+        public ShaderMacro shader() {
+            return (sh);
+        }
 
         public void prep(Buffer buf) {
             buf.put(adhocg, this);
@@ -418,6 +461,7 @@ public abstract class States extends GLState {
     };
 
     public static final Slot<GLState> pointsize = new Slot<GLState>(Slot.Type.GEOM, GLState.class, HavenPanel.global);
+
     public static class PointSize extends GLState {
         private final float sz;
 
@@ -429,33 +473,27 @@ public abstract class States extends GLState {
             g.gl.glPointSize(sz);
         }
 
-        public void unapply(GOut g) {}
+        public void unapply(GOut g) {
+        }
 
         public void prep(Buffer buf) {
             buf.put(pointsize, this);
         }
     }
+
     public static class ProgPointSize extends GLState {
-        public final ShaderMacro[] sh;
+        public final ShaderMacro sh;
 
         public ProgPointSize(final ShaderMacro sh) {
-            this.sh = new ShaderMacro[] {new ShaderMacro() {
-                public void modify(ProgramContext prog) {
-                    prog.vctx.ptsz.force();
-                    sh.modify(prog);
-                }
-            }};
+            this.sh = prog -> {
+                prog.vctx.ptsz.force();
+                sh.modify(prog);
+            };
         }
 
         public ProgPointSize(final Expression ptsz) {
-            this(new ShaderMacro() {
-                public void modify(ProgramContext prog) {
-                    prog.vctx.ptsz.mod(new Macro1<Expression>() {
-                        public Expression expand(Expression in) {
-                            return(ptsz);
-                        }
-                    }, 0);
-                }
+            this(prog -> {
+                prog.vctx.ptsz.mod(in -> ptsz, 0);
             });
         }
 
@@ -467,7 +505,9 @@ public abstract class States extends GLState {
             g.gl.glDisable(GL3.GL_PROGRAM_POINT_SIZE);
         }
 
-        public ShaderMacro[] shaders() {return(sh);}
+        public ShaderMacro shader() {
+            return (sh);
+        }
 
         public void prep(Buffer buf) {
             buf.put(pointsize, this);

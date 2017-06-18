@@ -9,8 +9,6 @@ public class TreeStageSprite extends Sprite {
     private static final Color stagecolor = new Color(235, 235, 235);//new Color(235, 235, 235);
     public int val;
     private Tex tex;
-    private static Matrix4f cam = new Matrix4f();
-    private static Matrix4f wxf = new Matrix4f();
     private static Matrix4f mv = new Matrix4f();
     private Projection proj;
     private Coord wndsz;
@@ -29,9 +27,11 @@ public class TreeStageSprite extends Sprite {
     }
 
     public void draw(GOut g) {
-        mv.load(cam.load(camp.fin(Matrix4f.id))).mul1(wxf.load(loc.fin(Matrix4f.id)));
-        Coord3f s = proj.toscreen(mv.mul4(Coord3f.o), wndsz);
-        g.image(tex, new Coord((int) s.x - 8, (int) s.y - 20));
+        float[] c = mv.load(camp.fin(Matrix4f.id)).mul1(loc.fin(Matrix4f.id)).homoc();
+        Coord sc = proj.get2dCoord(c, wndsz);
+        sc.x -= 8;
+        sc.y -= 20;
+        g.image(tex, sc);
     }
 
     public boolean setup(RenderList rl) {

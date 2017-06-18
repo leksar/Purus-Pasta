@@ -24,7 +24,7 @@ public class LeashAnimal implements Runnable {
                     res = gob.getres();
                 } catch (Loading l) {
                 }
-                if (res != null && (res.name.equals("gfx/kritter/horse/horse") ||
+                if (res != null && (res.name.startsWith("gfx/kritter/horse/") ||
                         res.name.equals("gfx/kritter/sheep/sheep") ||
                         res.name.equals("gfx/kritter/cattle/cattle") ||
                         res.name.equals("gfx/kritter/boar/boar"))) {

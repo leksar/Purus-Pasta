@@ -45,6 +45,7 @@ public class Buff extends Widget {
     int a = 255;
     boolean dest = false;
     private Resource.Image img;
+    public Tex atex;
 
     @RName("buff")
     public static class $_ implements Factory {
@@ -162,25 +163,28 @@ public class Buff extends Widget {
     }
 
     public void uimsg(String msg, Object... args) {
-	if(msg == "ch") {
-	    this.res = ui.sess.getres((Integer)args[0]);
-        this.img = null;
-	} else if(msg == "tip") {
-	    String tt = (String)args[0];
-	    this.tt = tt.equals("")?null:tt;
-	    shorttip = longtip = null;
-	} else if(msg == "am") {
-	    this.ameter = (Integer)args[0];
-	    shorttip = longtip = null;
-	} else if(msg == "nm") {
-	    this.nmeter = (Integer)args[0];
-	} else if(msg == "cm") {
-	    this.cmeter = (Integer)args[0];
-	    this.cticks = (args.length > 1)?((Integer)args[1]):-1;
-	    gettime = System.currentTimeMillis();
-	} else {
-	    super.uimsg(msg, args);
-	}
+        if (msg == "ch") {
+            this.res = ui.sess.getres((Integer) args[0]);
+            this.img = null;
+        } else if (msg == "tip") {
+            String tt = (String) args[0];
+            this.tt = tt.equals("") ? null : tt;
+            shorttip = longtip = null;
+        } else if (msg == "am") {
+            this.ameter = (Integer) args[0];
+            shorttip = longtip = null;
+            if (atex != null)
+                atex.dispose();
+            atex = null;
+        } else if (msg == "nm") {
+            this.nmeter = (Integer) args[0];
+        } else if (msg == "cm") {
+            this.cmeter = (Integer) args[0];
+            this.cticks = (args.length > 1) ? ((Integer) args[1]) : -1;
+            gettime = System.currentTimeMillis();
+        } else {
+            super.uimsg(msg, args);
+        }
     }
 
     public boolean mousedown(Coord c, int btn) {

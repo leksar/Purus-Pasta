@@ -42,6 +42,8 @@ public class Curiosity extends ItemInfo.Tip {
         this.mw = mw; // Mental Weight
         this.enc = enc; // Experience Points
         this.time = time / Glob.SERVER_TIME_RATIO / 60;
+        if (owner instanceof GItem)
+            ((GItem) owner).studytime = this.time;
     }
 
     private String timefmt() {

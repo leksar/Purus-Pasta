@@ -61,8 +61,8 @@ public class GLConfig implements java.io.Serializable, Console.Directory {
     private static int glcondi(GL gl, int param, int def) {
         int[] buf = {0};
         gl.glGetIntegerv(param, buf, 0);
-        if (gl.glGetError() != 0)
-	    return(def);
+        if (GOut.glerror && gl.glGetError() != 0)
+	        return(def);
         return (buf[0]);
     }
 
@@ -76,7 +76,7 @@ public class GLConfig implements java.io.Serializable, Console.Directory {
     public static String glconds(GL gl, int param) {
         GOut.checkerr(gl);
         String ret = gl.glGetString(param);
-        if (gl.glGetError() != 0)
+        if (GOut.glerror && gl.glGetError() != 0)
             return (null);
         return (ret);
     }

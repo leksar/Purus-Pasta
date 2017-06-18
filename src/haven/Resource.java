@@ -1896,9 +1896,11 @@ public class Resource implements Serializable {
             "One for %s",
             "Fair Game for %s",
             "Meditations on %s",
+            "%s's Wild Harvest",
             "%s has invited you to join his party. Do you wish to do so?",
             "%s has requested to spar with you. Do you accept?",
-            "Experience points gained: %s"
+            "Experience points gained: %s",
+            "Here lies %s"
     };
 
     private static final String[] fmtLocStringsFlower = new String[]{
@@ -1916,7 +1918,8 @@ public class Resource implements Serializable {
             "Will refill in %s seconds",
             "Will refill in %s second",
             "Quality: %s",
-            "%s%% grown"
+            "%s%% grown",
+            "The battering ram cannot be used until the glue has dried, in %s hours."
     };
 
     public static String getLocString(String bundle, String key) {
@@ -2014,7 +2017,7 @@ public class Resource implements Serializable {
                     || key.startsWith("paginae/atk/ashoot") || key.startsWith("paginae/seid")))
                 return;
 
-            if (key == null || key.equals("") || val.equals("") || map.containsKey(key))
+            if (key == null || key.equals("") || val.equals(""))
                 return;
 
             if (val.charAt(0) >= '0' && val.charAt(0) <= '9')
@@ -2022,7 +2025,8 @@ public class Resource implements Serializable {
 
             if (key.startsWith("Village shield:") ||
                     key.endsWith("is ONLINE") || key.endsWith("is offline") ||
-                    key.startsWith("Experience points gained:"))
+                    key.startsWith("Born to ") ||
+                    key.equals("ui/r-enact"))
                 return;
             
             if (bundle == BUNDLE_LABEL) {
@@ -2035,7 +2039,18 @@ public class Resource implements Serializable {
                     if (fmtLocString(map, key, s) != null)
                         return;
                 }
+            } else if (bundle == BUNDLE_MSG) {
+                for (String s : fmtLocStringsMsg) {
+                    if (fmtLocString(map, key, s) != null)
+                        return;
+                }
             }
+
+            val = sanitizeVal(val);
+
+            String valOld = map.get(key);
+            if (valOld != null && sanitizeVal(valOld).equals(val))
+                return;
 
             new File("l10n").mkdirs();
 
@@ -2050,11 +2065,6 @@ public class Resource implements Serializable {
                     key = "\\u0020" + key.substring(2);
                 if (key.endsWith("\\ "))
                     key = "\\u0020" + key.substring(0, key.length() - 2);
-                val = val.replace("\\", "\\\\").replace("\n", "\\n").replace("\u0000", "");
-                if (val.startsWith(" "))
-                    val = "\\u0020" + val.substring(1);
-                if (val.endsWith(" "))
-                    val = "\\u0020" + val.substring(0, val.length() - 1);
                 out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("l10n/" + bundle + "_new.properties", true), encoder));
                 out.write(key + " = " + val);
                 out.newLine();
@@ -2074,6 +2084,19 @@ public class Resource implements Serializable {
 
             return;
         }
+    }
+
+    private static String sanitizeVal(String val) {
+        val = val.replace("\\", "\\\\").replace("\n", "\\n").replace("\u0000", "");
+        if (val.startsWith(" "))
+            val = "\\u0020" + val.substring(1);
+        if (val.endsWith(" "))
+            val = "\\u0020" + val.substring(0, val.length() - 1);
+
+        while (val.endsWith("\\n"))
+            val = val.substring(0, val.length() - 2);
+
+        return val;
     }
 
     public static void main(String[] args) throws Exception {

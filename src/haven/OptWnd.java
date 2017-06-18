@@ -665,7 +665,7 @@ public class OptWnd extends Window {
                 a = val;
             }
         });
-        appender.add(new CheckBox("Display item completion as progress bar") {
+        appender.add(new CheckBox("Display item completion progress bar") {
             {
                 a = Config.itemmeterbar;
             }
@@ -673,17 +673,6 @@ public class OptWnd extends Window {
             public void set(boolean val) {
                 Utils.setprefb("itemmeterbar", val);
                 Config.itemmeterbar = val;
-                a = val;
-            }
-        });
-        appender.add(new CheckBox("Display item completion as percentage") {
-            {
-                a = Config.itempercentage;
-            }
-
-            public void set(boolean val) {
-                Utils.setprefb("itempercentage", val);
-                Config.itempercentage = val;
                 a = val;
             }
         });
@@ -736,17 +725,6 @@ public class OptWnd extends Window {
             public void set(boolean val) {
                 Utils.setprefb("showplayerpaths", val);
                 Config.showplayerpaths = val;
-                a = val;
-            }
-        });
-        appender.add(new CheckBox("Show study remaining time") {
-            {
-                a = Config.showstudylefttime;
-            }
-
-            public void set(boolean val) {
-                Utils.setprefb("showstudylefttime", val);
-                Config.showstudylefttime = val;
                 a = val;
             }
         });
@@ -876,7 +854,29 @@ public class OptWnd extends Window {
                 a = val;
             }
         });
-        appender.add(new CheckBox("Show F-key toolbar") {
+        appender.add(new CheckBox("Highlight finished garden pots") {
+            {
+                a = Config.highlightpots;
+            }
+
+            public void set(boolean val) {
+                Utils.setprefb("highlightpots", val);
+                Config.highlightpots = val;
+                a = val;
+            }
+        });
+        appender.add(new CheckBox("Draw circles around party members") {
+            {
+                a = Config.partycircles;
+            }
+
+            public void set(boolean val) {
+                Utils.setprefb("partycircles", val);
+                Config.partycircles = val;
+                a = val;
+            }
+        });
+	appender.add(new CheckBox("Show F-key toolbar") {
             {
                 a = Config.fbelt;
             }
@@ -946,6 +946,17 @@ public class OptWnd extends Window {
             public void set(boolean val) {
                 Utils.setprefb("studybuff", val);
                 Config.studybuff = val;
+                a = val;
+            }
+        });
+        appender.add(new CheckBox("Miniature trees (req. logout)") {
+            {
+                a = Config.bonsai;
+            }
+
+            public void set(boolean val) {
+                Utils.setprefb("bonsai", val);
+                Config.bonsai = val;
                 a = val;
             }
         });
@@ -1513,6 +1524,17 @@ public class OptWnd extends Window {
                 a = val;
             }
         });
+        appender.add(new CheckBox("Disable dropping items over anywhere (overridable with Ctrl)") {
+            {
+                a = Config.nodropping_all;
+            }
+
+            public void set(boolean val) {
+                Utils.setprefb("nodropping_all", val);
+                Config.nodropping_all = val;
+                a = val;
+            }
+        });
         appender.add(new CheckBox("Enable full zoom-out in Ortho cam") {
             {
                 a = Config.enableorthofullzoom;
@@ -1768,17 +1790,6 @@ public class OptWnd extends Window {
         appender.setVerticalMargin(VERTICAL_MARGIN);
         appender.setHorizontalMargin(HORIZONTAL_MARGIN);
 
-        appender.add(new CheckBox("Open object menus without delay") {
-            {
-                a = Config.instantflowermenu;
-            }
-
-            public void set(boolean val) {
-                Utils.setprefb("instantflowermenu", val);
-                Config.instantflowermenu = val;
-                a = val;
-            }
-        });
         appender.add(new CheckBox("Automatically pick all clustered mussels (auto 'Pick' needs to be enabled)") {
             {
                 a = Config.autopickmussels;
@@ -1792,7 +1803,7 @@ public class OptWnd extends Window {
         });
         appender.add(new Label("Automatic selecton:"));
 
-        CheckListbox flowerlist = new CheckListbox(140, 15) {
+        CheckListbox flowerlist = new CheckListbox(140, 16) {
             @Override
             protected void itemclick(CheckListboxItem itm, int button) {
                 super.itemclick(itm, button);
@@ -1803,7 +1814,7 @@ public class OptWnd extends Window {
         Utils.loadprefchklist("flowersel", Config.flowermenus);
         for (CheckListboxItem itm : Config.flowermenus.values())
             flowerlist.items.add(itm);
-        flowermenus.add(flowerlist, new Coord(0, 70));
+        flowermenus.add(flowerlist, new Coord(0, 50));
 
         flowermenus.add(new PButton(200, "Back", 27, main), new Coord(210, 360));
         flowermenus.pack();
@@ -1990,17 +2001,7 @@ public class OptWnd extends Window {
             }
         });
         appender.setVerticalMargin(0);
-        appender.add(new CheckBox("Alarm on bears & lynx") {
-            {
-                a = Config.alarmbears;
-            }
-
-            public void set(boolean val) {
-                Utils.setprefb("alarmbears", val);
-                Config.alarmbears = val;
-                a = val;
-            }
-        });
+        appender.add(new Label("Alarm on bears & lynx"));
         appender.setVerticalMargin(VERTICAL_AUDIO_MARGIN);
         appender.add(new HSlider(200, 0, 1000, 0) {
             protected void attach(UI ui) {
@@ -2015,17 +2016,7 @@ public class OptWnd extends Window {
             }
         });
         appender.setVerticalMargin(0);
-        appender.add(new CheckBox("Alarm on mammoths") {
-            {
-                a = Config.alarmmammoth;
-            }
-
-            public void set(boolean val) {
-                Utils.setprefb("alarmmammoth", val);
-                Config.alarmmammoth = val;
-                a = val;
-            }
-        });
+        appender.add(new Label("Alarm on mammoths"));
         appender.setVerticalMargin(VERTICAL_AUDIO_MARGIN);
         appender.add(new HSlider(200, 0, 1000, 0) {
             protected void attach(UI ui) {

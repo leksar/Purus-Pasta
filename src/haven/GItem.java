@@ -45,9 +45,9 @@ public class GItem extends AWidget implements ItemInfo.SpriteOwner, GSprite.Owne
     private GSprite spr;
     private Object[] rawinfo;
     private List<ItemInfo> info = Collections.emptyList();
-    private Quality quality;
+    private QBuff quality;
     public Tex metertex;
-    private double studytime = 0.0;
+    public double studytime = 0.0;
     public Tex timelefttex;
     private String name = "";
     
@@ -58,21 +58,6 @@ public class GItem extends AWidget implements ItemInfo.SpriteOwner, GSprite.Owne
     
     public boolean drop = false;
     private double dropTimer = 0;
-
-    public static class Quality {
-        public double q;
-        public Tex qtex, qwtex;
-        public boolean curio;
-
-        public Quality(double q, boolean curio) {
-            this.q = q;
-            this.curio = curio;
-            if (q != 0) {
-                qtex = Text.renderstroked(Utils.fmt1DecPlace(q), Color.WHITE, Color.BLACK, numfnd).tex();
-                qwtex = Text.renderstroked(Math.round(q) + "", Color.WHITE, Color.BLACK, numfnd).tex();
-            }
-        }
-    }
 
     @RName("item")
     public static class $_ implements Factory {
@@ -89,6 +74,13 @@ public class GItem extends AWidget implements ItemInfo.SpriteOwner, GSprite.Owne
 
     public interface NumberInfo {
         public int itemnum();
+        public default Color numcolor() {
+            return(Color.WHITE);
+        }
+    }
+
+    public interface GildingInfo {
+        public boolean hasGildableSlots();
     }
 
     public interface MeterInfo {
@@ -130,20 +122,13 @@ public class GItem extends AWidget implements ItemInfo.SpriteOwner, GSprite.Owne
         }
     }
 
-    public boolean updatetimelefttex() {
-        if (studytime == 0.0) {
-            Curiosity ci = ItemInfo.find(Curiosity.class,  info());
-            if (ci == null || ci.time < 1)
-                return false;
-            studytime = ci.time;
-        }
-
+    public void updatetimelefttex() {
+        if (studytime == 0.0)
+            return;
         int timeleft = (int) studytime * (100 - meter) / 100;
         int hoursleft = timeleft / 60;
         int minutesleft = timeleft - hoursleft * 60;
-
         timelefttex = Text.renderstroked(String.format("%d:%02d", hoursleft, minutesleft), Color.WHITE, Color.BLACK, numfnd).tex();
-        return true;
     }
 
     private Random rnd = null;
@@ -235,18 +220,15 @@ public class GItem extends AWidget implements ItemInfo.SpriteOwner, GSprite.Owne
     }
 
     public void qualitycalc(List<ItemInfo> infolist) {
-        double q = 0;
-        boolean curio = false;
         for (ItemInfo info : infolist) {
-            if (info instanceof QBuff)
-                q = ((QBuff)info).q;
-            else if (info.getClass() == haven.resutil.Curiosity.class)
-                curio = true;
+            if (info instanceof QBuff) {
+                this.quality = (QBuff) info;
+                break;
+            }
         }
-        quality = new Quality(q, curio);
     }
 
-    public Quality quality() {
+    public QBuff quality() {
         if (quality == null) {
             try {
                 for (ItemInfo info : info()) {
@@ -256,7 +238,7 @@ public class GItem extends AWidget implements ItemInfo.SpriteOwner, GSprite.Owne
                     }
                 }
                 qualitycalc(info());
-            } catch (Exception ex) { // ignored
+            } catch (Loading l) {
             }
         }
         return quality;

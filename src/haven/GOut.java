@@ -38,6 +38,7 @@ import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 
 public class GOut {
+    public final static boolean glerror = false;
     public final BGL gl;
     public final GLConfig gc;
     public Coord ul, sz, tx;
@@ -159,13 +160,16 @@ public class GOut {
     }
 
     public static void checkerr(GL gl) {
-        int err = gl.glGetError();
-        if (err != 0)
-            throw (glexcfor(err));
+        if (glerror) {
+            int err = gl.glGetError();
+            if (err != 0)
+                throw (glexcfor(err));
+        }
     }
 
     public static void checkerr(BGL gl) {
-        gl.bglCheckErr();
+        if (glerror)
+            gl.bglCheckErr();
     }
 
     private void checkerr() {

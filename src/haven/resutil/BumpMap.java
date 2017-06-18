@@ -77,48 +77,44 @@ public class BumpMap extends GLState {
         this.tex = tex;
     }
 
-    private static final ShaderMacro[] shaders = {
-            new ShaderMacro() {
-                final AutoVarying tanc = new AutoVarying(VEC3) {
-                    protected Expression root(VertexContext vctx) {
-                        return (vctx.nxf(tan.ref()));
-                    }
-                };
-                final AutoVarying bitc = new AutoVarying(VEC3) {
-                    protected Expression root(VertexContext vctx) {
-                        return (vctx.nxf(bit.ref()));
-                    }
-                };
+    private static final ShaderMacro shader = new ShaderMacro() {
+        final AutoVarying tanc = new AutoVarying(VEC3) {
+            protected Expression root(VertexContext vctx) {
+                return (vctx.nxf(tan.ref()));
+            }
+        };
+        final AutoVarying bitc = new AutoVarying(VEC3) {
+            protected Expression root(VertexContext vctx) {
+                return (vctx.nxf(bit.ref()));
+            }
+        };
 
-                public void modify(final ProgramContext prog) {
-                    final ValBlock.Value nmod = prog.fctx.uniform.new Value(VEC3) {
-                        public Expression root() {
-                            return (mul(sub(pick(texture2D(ctex.ref(), Tex2D.texcoord(prog.fctx).ref()), "rgb"),
-                                    l(0.5)), l(2.0)));
-                        }
-                    };
-                    nmod.force();
-                    MiscLib.frageyen(prog.fctx).mod(new Macro1<Expression>() {
-                        public Expression expand(Expression in) {
-                            Expression m = nmod.ref();
-                            return (add(mul(pick(m, "s"), tanc.ref()),
-                                    mul(pick(m, "t"), bitc.ref()),
-                                    mul(pick(m, "p"), in)));
-                        }
-                    }, -100);
+        public void modify(final ProgramContext prog) {
+            final ValBlock.Value nmod = prog.fctx.uniform.new Value(VEC3) {
+                public Expression root() {
+                    return (mul(sub(pick(texture2D(ctex.ref(), Tex2D.texcoord(prog.fctx).ref()), "rgb"),
+                            l(0.5)), l(2.0)));
+                }
+            };
+            nmod.force();
+            MiscLib.frageyen(prog.fctx).mod(in -> {
+                Expression m = nmod.ref();
+                return (add(mul(pick(m, "s"), tanc.ref()),
+                        mul(pick(m, "t"), bitc.ref()),
+                        mul(pick(m, "p"), in)));
+            }, -100);
         /*
-        prog.fctx.fragcol.mod(new Macro1<Expression>() {
+		prog.fctx.fragcol.mod(new Macro1<Expression>() {
 			public Expression expand(Expression in) {
 			    return(mix(in, vec4(nmod.ref(), l(1.0)), l(0.5)));
 			}
 		    }, 1000);
 		*/
-                }
-            }
+        }
     };
 
-    public ShaderMacro[] shaders() {
-        return (shaders);
+    public ShaderMacro shader() {
+        return (shader);
     }
 
     public void reapply(GOut g) {

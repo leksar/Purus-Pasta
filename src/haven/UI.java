@@ -159,54 +159,15 @@ public class UI {
 
             Widget wdg = pwdg.makechild(f, pargs, cargs);
 
-            if (wdg instanceof ISBox && pwdg instanceof Window && ((Window) pwdg).origcap.equals("Stockpile")) {
-                TextEntry entry = new TextEntry(40, "") {
-                    @Override
-                    public boolean keydown(KeyEvent e) {
-                        return !(e.getKeyCode() >= KeyEvent.VK_F1 && e.getKeyCode() <= KeyEvent.VK_F12);
-                    }
+            GameUI gui = wdg.gameui();
+            if (wdg instanceof Window)
+                processWindowCreation(id, gui, (Window)wdg);
+            else if (pwdg instanceof Window)
+                processWindowContent(parent, gui, (Window)pwdg, wdg);
 
-                    @Override
-                    public boolean type(char c, KeyEvent ev) {
-                        if (c >= KeyEvent.VK_0 && c <= KeyEvent.VK_9 && buf.line.length() < 2 || c == '\b') {
-                            return buf.key(ev);
-                        } else if (c == '\n') {
-                            try {
-                                int count = Integer.parseInt(dtext());
-                                for (int i = 0; i < count; i++)
-                                    wdg.wdgmsg("xfer");
-                                return true;
-                            } catch (NumberFormatException e) {
-                            }
-                        }
-                        return false;
-                    }
-                };
-                Button btn = new Button(65, "Take") {
-                    @Override
-                    public void click() {
-                        try {
-                            String cs = entry.dtext();
-                            int count = cs.isEmpty() ? 1 : Integer.parseInt(cs);
-                            for (int i = 0; i < count; i++)
-                                wdg.wdgmsg("xfer");
-                        } catch (NumberFormatException e) {
-                        }
-                    }
-                };
-                pwdg.add(btn, new Coord(0, wdg.sz.y + 5));
-                pwdg.add(entry, new Coord(btn.sz.x + 5, wdg.sz.y + 5 + 2));
-            } else if (wdg instanceof Window && (((Window) wdg).origcap.equals("Charter Stone") || ((Window) wdg).origcap.equals("Sublime Portico"))) {
-                // show secrets list only for already built chartes/porticos
-                if (((Window)wdg).wsz.y >= 80) {
-                    wdg.add(new CharterList(150, 5), new Coord(0, 50));
-                    wdg.presize();
-                }
-            }
             bind(wdg, id);
 
             // drop everything except water containers if in area mining mode
-            GameUI gui = pwdg.gameui();
             if (Config.dropore && gui != null && gui.map != null && gui.map.areamine != null && wdg instanceof GItem) {
                 if (gui.maininv == pwdg) {
                     final GItem itm = (GItem) wdg;
@@ -224,6 +185,68 @@ public class UI {
                     });
                 }
             }
+        }
+    }
+
+    private void processWindowContent(long wndid, GameUI gui, Window pwdg, Widget wdg) {
+        String cap = pwdg.origcap;
+        if (gui != null && gui.livestockwnd.pendingAnimal != null && gui.livestockwnd.pendingAnimal.wndid == wndid) {
+            if (wdg instanceof TextEntry)
+                gui.livestockwnd.applyName(wdg);
+            else if (wdg instanceof Label)
+                gui.livestockwnd.applyAttr(cap, wdg);
+            else if (wdg instanceof Avaview)
+                gui.livestockwnd.applyId(wdg);
+        } else if (wdg instanceof ISBox && cap.equals("Stockpile")) {
+            TextEntry entry = new TextEntry(40, "") {
+                @Override
+                public boolean keydown(KeyEvent e) {
+                    return !(e.getKeyCode() >= KeyEvent.VK_F1 && e.getKeyCode() <= KeyEvent.VK_F12);
+                }
+
+                @Override
+                public boolean type(char c, KeyEvent ev) {
+                    if (c >= KeyEvent.VK_0 && c <= KeyEvent.VK_9 && buf.line.length() < 2 || c == '\b') {
+                        return buf.key(ev);
+                    } else if (c == '\n') {
+                        try {
+                            int count = Integer.parseInt(dtext());
+                            for (int i = 0; i < count; i++)
+                                wdg.wdgmsg("xfer");
+                            return true;
+                        } catch (NumberFormatException e) {
+                        }
+                    }
+                    return false;
+                }
+            };
+            Button btn = new Button(65, "Take") {
+                @Override
+                public void click() {
+                    try {
+                        String cs = entry.dtext();
+                        int count = cs.isEmpty() ? 1 : Integer.parseInt(cs);
+                        for (int i = 0; i < count; i++)
+                            wdg.wdgmsg("xfer");
+                    } catch (NumberFormatException e) {
+                    }
+                }
+            };
+            pwdg.add(btn, new Coord(0, wdg.sz.y + 5));
+            pwdg.add(entry, new Coord(btn.sz.x + 5, wdg.sz.y + 5 + 2));
+        }
+    }
+
+    private void processWindowCreation(long wdgid, GameUI gui, Window wdg) {
+        String cap = wdg.origcap;
+        if (cap.equals("Charter Stone") || cap.equals("Sublime Portico")) {
+            // show secrets list only for already built chartes/porticos
+            if (wdg.wsz.y >= 80) {
+                wdg.add(new CharterList(150, 5), new Coord(0, 50));
+                wdg.presize();
+            }
+        } else if (gui != null && gui.livestockwnd != null && gui.livestockwnd.getAnimalPanel(cap) != null) {
+            gui.livestockwnd.initPendingAnimal(wdgid, cap);
         }
     }
 

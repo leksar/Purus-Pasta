@@ -323,7 +323,7 @@ public class Utils {
         }
     }
 
-    static JSONObject[] getprefjsona(String prefname, JSONObject[] def) {
+    public static JSONObject[] getprefjsona(String prefname, JSONObject[] def) {
         try {
             String jsonstr = Utils.getpref(prefname, null);
             if (jsonstr == null)
@@ -341,7 +341,7 @@ public class Utils {
         }
     }
 
-    static void setprefjsona(String prefname, JSONObject[] val) {
+    public static void setprefjsona(String prefname, JSONObject[] val) {
         try {
             String jsonarr = "";
             for (JSONObject o : val)
@@ -393,7 +393,7 @@ public class Utils {
         }
     }
 
-    static void setprefb(String prefname, boolean val) {
+    public static void setprefb(String prefname, boolean val) {
         try {
             prefs().putBoolean(prefname, val);
         } catch (SecurityException e) {
@@ -453,6 +453,10 @@ public class Utils {
 
     public static byte sb(int b) {
         return ((byte) b);
+    }
+
+    public static long uint32(int n) {
+        return(n & 0xffffffffl);
     }
 
     public static int uint16d(byte[] buf, int off) {
@@ -1348,8 +1352,14 @@ public class Utils {
         return (true);
     }
 
-    public static <T> T or(T val, Supplier<T> els) {
-	return((val != null)?val:els.get());
+    @SafeVarargs
+    public static <T> T or(Supplier<T>... vals) {
+        for(Supplier<T> val : vals) {
+            T ret = val.get();
+            if(ret != null)
+                return(ret);
+        }
+        return(null);
     }
 
     public static <T> T construct(Constructor<T> cons, Object... args) {
@@ -1448,6 +1458,15 @@ public class Utils {
         } catch (NoSuchFieldException | SecurityException | IllegalAccessException e) {
             return null;
         }
+    }
+
+    public static double ntime() {
+        return(System.currentTimeMillis() / 1e3);
+    }
+
+    private static final long rtimeoff = System.nanoTime();
+    public static double rtime() {
+        return((System.nanoTime() - rtimeoff) / 1e9);
     }
 
     public static class MapBuilder<K, V> {

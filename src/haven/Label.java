@@ -31,8 +31,8 @@ import java.awt.Color;
 public class Label extends Widget {
     Text.Foundry f;
     Text text;
-    String texts;
-    Color col = Color.WHITE;
+    public String texts;
+    public Color col = Color.WHITE;
 
     @RName("lbl")
     public static class $_ implements Factory {
@@ -64,6 +64,14 @@ public class Label extends Widget {
 
     public Label(String text, Text.Foundry f, boolean noL10n) {
         super(Coord.z);
+        this.f = f;
+        this.text = f.render(texts = text, this.col);
+        sz = this.text.sz();
+    }
+
+    public Label(String text, Text.Foundry f, Color col, boolean noL10n) {
+        super(Coord.z);
+        this.col = col;
         this.f = f;
         this.text = f.render(texts = text, this.col);
         sz = this.text.sz();

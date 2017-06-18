@@ -26,8 +26,9 @@
 
 package haven;
 
-import java.awt.Color;
-import java.awt.Font;
+import java.awt.*;
+import java.util.*;
+import java.awt.event.KeyEvent;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
@@ -44,32 +45,15 @@ public class Fightsess extends Widget {
     public static final Coord indframeo = (indframe.sz().sub(32, 32)).div(2);
     public static final Tex useframe = Resource.loadtex("gfx/hud/combat/lastframe");
     public static final Coord useframeo = (useframe.sz().sub(32, 32)).div(2);
-    private static final Text.Foundry cdfndr = new Text.Foundry(Text.serif, 18).aa(true);
-    //private static final Color cdclrpos = new Color(128, 128, 255);
-    //private static final Color cdclrneg = new Color(239, 41, 41);
     public static final int actpitch = 50;
     public final Indir<Resource>[] actions;
     public final boolean[] dyn;
-    public int use = -1, useb = -1;
+    public int use = -1;
     public Coord pcc;
     public int pho;
     private final Fightview fv;
     private final Tex[] keystex = new Tex[10];
     private final Tex[] keysftex = new Tex[10];
-
-    // private static final Map<Long, Tex> cdvalues = new HashMap<Long, Tex>(7);
-
-    /*private static final Map<String, Integer> atkcds = new HashMap<String, Integer>(9){{
-        put("Chop", 50);
-        put("Cleave", 80);
-        put("Haymaker", 60);
-        put("Kick", 45);
-        put("Knock Its Teeth Out", 35);
-        put("Left Hook", 40);
-        put("Low Blow", 30);
-        put("Punch", 30);
-        put("Sting", 35);
-    }};*/
 
     private static final Map<String, Color> openings = new HashMap<String, Color>(4) {{
         put("paginae/atk/dizzy",new Color(8, 103, 136));
@@ -189,13 +173,13 @@ public class Fightsess extends Widget {
 
         for (Buff buff : fv.buffs.children(Buff.class)) {
             Coord bc = Config.altfightui ? new Coord(gcx - buff.c.x - Buff.cframe.sz().x - 80, 180) : pcc.add(-buff.c.x - Buff.cframe.sz().x - 20, buff.c.y + pho - Buff.cframe.sz().y);
-            drawOpening( g, buff, bc);
+            drawOpening(g, buff, bc);
         }
 
         if (fv.current != null) {
             for (Buff buff : fv.current.buffs.children(Buff.class)) {
                 Coord bc = Config.altfightui ? new Coord(gcx + buff.c.x + 80, 180) : pcc.add(buff.c.x + 20, buff.c.y + pho - Buff.cframe.sz().y);
-                drawOpening( g, buff, bc);
+                drawOpening(g, buff, bc);
             }
 
             g.aimage(ip.get().tex(), Config.altfightui ? new Coord(gcx - 45, 200) : pcc.add(-75, 0), 1, 0.5);
@@ -203,12 +187,6 @@ public class Fightsess extends Widget {
 
             if (fv.lsrel.size() > 1)
                 fxon(fv.current.gobid, tgtfx);
-
-            /*if (Config.showcddelta && fv.current != null) {
-                Tex cdtex = cdvalues.get(fv.current.gobid);
-                if (cdtex != null)
-                    g.aimage(cdtex, pcc.add(0, 175), 0.5, 1);
-            }*/
         }
 
         {
@@ -302,38 +280,36 @@ public class Fightsess extends Widget {
         if (Config.combaltopenings) {
             try {
                 Resource res = buff.res.get();
-                if (res != null && !openings.containsKey(res.name))
+                Color clr = openings.get(res.name);
+                if (clr == null) {
                     buff.draw(g.reclip(bc, buff.sz));
-
-                if (res != null) {
-                    Color clr = openings.get(res.name);
-                    if (clr != null) {
-                        if (buff.ameter >= 0) {
-                            g.chcolor(Color.WHITE);
-                            g.image(buff.cframe, bc);
-                            g.chcolor(Color.BLACK);
-                            g.frect(bc.add(buff.ameteroff), buff.ametersz);
-                            g.chcolor(Color.WHITE);
-                            g.frect(bc.add(buff.ameteroff), new Coord((buff.ameter * buff.ametersz.x) / 100, buff.ametersz.y));
-                        } else {
-                            g.image(buff.frame, bc);
-                        }
-
-                        bc.x += 3;
-                        bc.y += 3;
-
-                        g.chcolor(clr);
-                        g.frect(bc, simpleOpeningSz);
-                        g.chcolor(Color.WHITE);
-                        Text t = Text.renderstroked(buff.ameter + "", Color.WHITE, Color.BLACK, Text.sans12bold);
-                        Tex T = t.tex();
-                        bc.x = bc.x + simpleOpeningSz.x / 2 - T.sz().x / 2;
-                        bc.y = bc.y + simpleOpeningSz.y / 2 - T.sz().y / 2;
-                        g.image(T, bc);
-                        T.dispose();
-                        g.chcolor();
-                    }
+                    return;
                 }
+
+                if (buff.ameter >= 0) {
+                    g.image(buff.cframe, bc);
+                    g.chcolor(Color.BLACK);
+                    g.frect(bc.add(buff.ameteroff), buff.ametersz);
+                    g.chcolor(Color.WHITE);
+                    g.frect(bc.add(buff.ameteroff), new Coord((buff.ameter * buff.ametersz.x) / 100, buff.ametersz.y));
+                } else {
+                    g.image(buff.frame, bc);
+                }
+
+                bc.x += 3;
+                bc.y += 3;
+
+                g.chcolor(clr);
+                g.frect(bc, simpleOpeningSz);
+
+                g.chcolor(Color.WHITE);
+                if (buff.atex == null)
+                    buff.atex = Text.renderstroked(buff.ameter + "", Color.WHITE, Color.BLACK, Text.sans12bold).tex();
+                Tex atex = buff.atex;
+                bc.x = bc.x + simpleOpeningSz.x / 2 - atex.sz().x / 2;
+                bc.y = bc.y + simpleOpeningSz.y / 2 - atex.sz().y / 2;
+                g.image(atex, bc);
+                g.chcolor();
             } catch (Loading l) {
             }
         } else {
@@ -432,21 +408,6 @@ public class Fightsess extends Widget {
         } else if (msg == "use") {
             this.use = (Integer) args[0];
         } else if (msg == "used") {
-            /*Indir<Resource> act = actions[(Integer) args[0]];
-            try {
-                if (act != null) {
-                    Resource.Tooltip tt = act.get().layer(Resource.Tooltip.class);
-                    if (tt != null) {
-                        Integer cd = atkcds.get(tt.t);
-                        if (cd != null && fv.current != null) {
-                            double inc = fv.atkcd - cd;
-                            int cddelta = -(int) (inc / (double) cd * 100);
-                            cdvalues.put(fv.current.gobid, Text.renderstroked(cddelta + " %", cddelta < 0 ? cdclrneg : cdclrpos, Color.BLACK, cdfndr).tex());
-                        }
-                    }
-                }
-            } catch (Loading l) {
-            }*/
         } else {
             super.uimsg(msg, args);
         }

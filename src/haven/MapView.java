@@ -1838,7 +1838,7 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
                         pfRightClick(inf.gob, inf.clickid(), clickb, 0, null);
                     } else {
                         wdgmsg("click", pc, mc.floor(posres), clickb, modflags, 0, (int) inf.gob.id, inf.gob.rc.floor(posres), 0, inf.clickid());
-                        if (Config.autopickmussels)
+                        if (Config.autopickmussels && inf.gob.type == Gob.Type.MUSSEL)
                             startMusselsPicker(inf.gob);
                     }
                 } else {
@@ -2077,11 +2077,29 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
     public boolean drop(final Coord cc, final Coord ul) {
         delay(new Hittest(cc) {
             public void hit(Coord pc, Coord2d mc, ClickInfo inf) {
-                if (Config.nodropping && !ui.modctrl) {
-                    int t = glob.map.gettile(player().rc.floor(tilesz));
-                    Resource res = glob.map.tilesetr(t);
-                    if (res != null && (res.name.equals("gfx/tiles/water") || res.name.equals("gfx/tiles/deep")))
+                if ((Config.nodropping || Config.nodropping_all) && !ui.modctrl) {
+                    // no dropping at all or when we are on water
+                    boolean nodropping = false;
+                    if (Config.nodropping_all) {
+                        // no dropping over anywhere
+                        nodropping = true;
+                    } else {
+                        // we came here because Config.nodropping is set, check water tiles
+                        int t = glob.map.gettile(player().rc.floor(tilesz));
+                        Resource res = glob.map.tilesetr(t);
+                        if (res != null && (res.name.equals("gfx/tiles/water") || res.name.equals("gfx/tiles/deep"))) {
+                            nodropping = true;
+                        }
+                    }
+                    if (nodropping) {
+                        // we really don't want dropping, so click is moving
+                        if (Config.pf) {
+                            pfLeftClick(mc.floor(), null);
+                        } else {
+                            wdgmsg("click", pc, mc.floor(posres), 1, 0);
+                        }
                         return;
+                	}
                 }
                 wdgmsg("drop", pc, mc.floor(posres), ui.modflags());
             }
@@ -2518,12 +2536,7 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
     }
 
     public void startMusselsPicker(Gob gob) {
-        try {
-            if (gob.getres().name.equals("gfx/terobjs/herbs/mussels")) {
-                musselPicker = new Thread(new MusselPicker(gameui(), gob), "MusselPicker");
-                musselPicker.start();
-            }
-        } catch (Loading l) {
-        }
+        musselPicker = new Thread(new MusselPicker(gameui(), gob), "MusselPicker");
+        musselPicker.start();
     }
 }

@@ -1,3 +1,65 @@
+Version 1.57.3
+    Fixed:
+        * Possible crash when toggling grid overlay.
+
+    Misc:
+        * Added Chip stone to auto flower menus.
+        * Upstream code merge.
+
+
+Version 1.57.2
+    Fixed:
+        * Crash when running multiple clients.
+        * Invalid softcap value on high stats.
+
+    Misc:
+        * Display system specs in error reports.
+        * Updated wound treatments.
+        * Show warning radius around adders.
+
+
+Version 1.57.1
+    New:
+        * Shoo animals extension.
+
+    Misc:
+		* Added camomile to foragables alarm.
+		* Upstream code merge.
+
+
+Version 1.57.0
+    New:
+        * Draw gilding number in blue for items with available gilding slots (by Jynx). 
+
+    Fixed:
+        * Leashing extension not working with domesticated horses. 
+		* Last entry in livestock manager not displaying properly.
+
+    Misc:
+		* Russian localization has been significantly improved (by mdsanta, not_a_cat, North Grey).
+		* Hide bushes in addition to trees on Ctrl+H.
+		* Updated wound treatments.
+		* Some other minor changes.
+		* Upstream code merge.
+
+
+Version 1.56.0
+    New:
+        * Livestock manager.
+		* Animal leashing extension.
+		* Option to highlight finished pots.
+
+    Fixed:
+        * Incorrect error message when geolocation fails.
+		* Show container's content quality instead that of container in barterstands.
+
+    Misc:
+		* More sensible settings defaults
+		* Update treatments for Black-Eyed and Blade Kiss wounds.
+		* Some other minor changes...
+		* Upstream code merge.
+
+
 Version 1.55.4
     Fixed:
         * Crash in timers thread.

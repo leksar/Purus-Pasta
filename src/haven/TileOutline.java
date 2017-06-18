@@ -4,6 +4,7 @@ import static haven.MCache.tilesz;
 
 import java.nio.BufferOverflowException;
 import javax.media.opengl.GL2;
+import java.nio.BufferOverflowException;
 import java.nio.FloatBuffer;
 
 import javax.media.opengl.GL2;
@@ -69,12 +70,15 @@ public class TileOutline implements Rendered {
     }
 
     private void addLineStrip(Coord3f... vertices) {
-        FloatBuffer vbuf = getCurrentBuffer();
-        for (int i = 0; i < vertices.length - 1; i++) {
-            Coord3f a = vertices[i];
-            Coord3f b = vertices[i + 1];
-            vbuf.put(a.x).put(a.y).put(a.z);
-            vbuf.put(b.x).put(b.y).put(b.z);
+        try {
+            FloatBuffer vbuf = getCurrentBuffer();
+            for (int i = 0; i < vertices.length - 1; i++) {
+                Coord3f a = vertices[i];
+                Coord3f b = vertices[i + 1];
+                vbuf.put(a.x).put(a.y).put(a.z);
+                vbuf.put(b.x).put(b.y).put(b.z);
+            }
+        } catch (BufferOverflowException boe) {
         }
     }
 

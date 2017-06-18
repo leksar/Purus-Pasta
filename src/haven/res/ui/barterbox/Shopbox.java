@@ -38,7 +38,7 @@ import haven.res.ui.tt.q.qbuff.QBuff;
 // ui/barterstand
 public class Shopbox extends Widget implements SpriteOwner, Owner {
     public static final Text any = Text.render(Resource.getLocString(Resource.BUNDLE_LABEL, "Any"));
-    public static final Text qlbl = Text.render(Resource.getLocString(Resource.BUNDLE_LABEL, "Quality:"), Color.LIGHT_GRAY);
+    public static final Text qlbl = Text.render(Resource.getLocString(Resource.BUNDLE_LABEL, "Quality:"));
     public static final Tex bg = Resource.loadtex("ui/shopbox");
     public static final Coord itemc = new Coord(5, 5);
     public static final Coord buyc = new Coord(5, 66);
@@ -153,16 +153,31 @@ public class Shopbox extends Widget implements SpriteOwner, Owner {
     public List<ItemInfo> info() {
         if (this.cinfo == null) {
             this.cinfo = ItemInfo.buildinfo(this, this.info);
-
-            for (ItemInfo info : cinfo) {
-                if (info instanceof QBuff) {
-                    QBuff qb = (QBuff)info;
-                    quality = Text.render((int) qb.q + "");
-                    break;
-                }
-            }
+            QBuff qb = quality();
+            if (qb != null)
+                quality = Text.render((int) qb.q + "");
         }
         return this.cinfo;
+    }
+
+    private QBuff getQBuff(List<ItemInfo> infolist) {
+        for (ItemInfo info : infolist) {
+            if (info instanceof QBuff)
+                return (QBuff) info;
+        }
+        return null;
+    }
+
+    private QBuff quality() {
+        try {
+            for (ItemInfo info : info()) {
+                if (info instanceof ItemInfo.Contents)
+                    return getQBuff(((ItemInfo.Contents) info).sub);
+            }
+            return getQBuff(info());
+        } catch (Loading l) {
+        }
+        return null;
     }
 
     public Object tooltip(Coord var1, Widget var2) {

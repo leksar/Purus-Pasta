@@ -39,20 +39,18 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.TreeMap;
 import java.util.WeakHashMap;
 
 import haven.Resource.AButton;
 import haven.automation.AddBranchesToOven;
 import haven.automation.AddCoalToSmelter;
-import haven.automation.AutoLeveler;
 import haven.automation.ButcherFish;
-import haven.automation.ErrorSysMsgCallback;
 import haven.automation.FeedClover;
 import haven.automation.GobSelectCallback;
 import haven.automation.LeashAnimal;
 import haven.automation.LightWithTorch;
+import haven.automation.Shoo;
 import haven.automation.SteelRefueler;
 import haven.util.ObservableCollection;
 import purus.Builder;
@@ -245,6 +243,8 @@ public class MenuGrid extends Widget {
             p.add(paginafor(Resource.local().load("paginae/amber/rope")));
             p.add(paginafor(Resource.local().load("paginae/amber/fish")));
             p.add(paginafor(Resource.local().load("paginae/amber/timers")));
+            p.add(paginafor(Resource.local().load("paginae/amber/livestock")));
+            p.add(paginafor(Resource.local().load("paginae/amber/shoo")));
         	// Purus Cor Stuff
         	p.add(paginafor(Resource.local().load("paginae/custom/timer")));
         	p.add(paginafor(Resource.local().load("paginae/custom/study")));
@@ -472,6 +472,11 @@ public class MenuGrid extends Widget {
             new Thread(new ButcherFish(gui), "ButcherFish").start();
         } else if (ad[1].equals("rope")) {
             new Thread(new LeashAnimal(gui), "LeashAnimal").start();
+        } else if (ad[1].equals("livestock")) {
+            gui.livestockwnd.show(!gui.livestockwnd.visible);
+            gui.livestockwnd.raise();
+        } else if (ad[1].equals("shoo")) {
+            new Thread(new Shoo(gui), "Shoo").start();
         }
     }
 
