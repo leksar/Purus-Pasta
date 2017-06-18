@@ -1,6 +1,8 @@
 ## Changelog
 
-### 2.30.1
+### 2.30.3
+	- Latest merges from Amber & Default client
+### 2.30.2
 	- Cleaned up option window
 	- Refactored login screen server status updater
 	- Reverted UI font
