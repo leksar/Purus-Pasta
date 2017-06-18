@@ -107,7 +107,7 @@
     </copy>
   	<copy todir="build">
   	<fileset dir="etc">
-  		
+  				<include name="run.sh" />
   	    		<include name="run.bat" />
   	    		<include name="run_debug.bat" />
   	    	</fileset>
