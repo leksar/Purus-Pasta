@@ -1,5 +1,7 @@
 ## Changelog
 
+### 2.30.4
+	- Fixed plant stage indicator text being continuously visible
 ### 2.30.3
 	- Latest merges from Amber & Default client
 ### 2.30.2
