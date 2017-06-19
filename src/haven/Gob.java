@@ -665,7 +665,6 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
 	                    }
 	                }
             	}
-            }
 
                 if (type == Type.TREE || type == Type.BUSH) {
                     ResDrawable rd = getattr(ResDrawable.class);
@@ -736,6 +735,7 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
                     bowvector = null;
                 }
             }
+        }
         Speaking sp = getattr(Speaking.class);
         if (sp != null)
             rl.add(sp.fx, null);
