@@ -603,9 +603,9 @@ public class GameUI extends ConsoleHost implements Console.Directory {
             if (Config.fepmeter)
             addcmeter(new FepMeter(chrwdg.feps));
         } else if (place == "craft") {
-	    makewnd.add(child);
-        makewnd.pack();
-        makewnd.show();
+		    makewnd.add(child);
+	        makewnd.pack();
+	        makewnd.show();
         } else if (place == "buddy") {
             zerg.ntab(buddies = (BuddyWnd) child, zerg.kin);
         } else if (place == "pol") {
