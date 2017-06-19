@@ -644,26 +644,28 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
             	rl.add(new Overlay(new CustomHitbox(this, new Coord(-5, -5), new Coord(5, 5), true)), null);
             }
 
-            if (res != null && res.name.startsWith("gfx/terobjs/plants") && !res.name.endsWith("trellis")) {
-                GAttrib rd = getattr(ResDrawable.class);
-                if (rd != null) {
-                    try {
-                        int stage = ((ResDrawable) rd).sdt.peekrbuf(0);
-                        if (cropstgmaxval == 0) {
-                            for (FastMesh.MeshRes layer : res.layers(FastMesh.MeshRes.class)) {
-                                int stg = layer.id / 10;
-                                if (stg > cropstgmaxval)
-                                    cropstgmaxval = stg;
-                            }
-                        }
-                        Overlay ol = findol(Sprite.GROWTH_STAGE_ID);
-                        if (ol == null && (stage == cropstgmaxval || stage >= 0 && stage <= 5)) {
-                            addol(new Gob.Overlay(Sprite.GROWTH_STAGE_ID, new PlantStageSprite(stage, cropstgmaxval)));
-                        }
-                    } catch (ArrayIndexOutOfBoundsException e) { // ignored
-                    }
-                }
-}
+            if(Config.showplantgrowstage) {
+	            if (res != null && res.name.startsWith("gfx/terobjs/plants") && !res.name.endsWith("trellis")) {
+	                GAttrib rd = getattr(ResDrawable.class);
+	                if (rd != null) {
+	                    try {
+	                        int stage = ((ResDrawable) rd).sdt.peekrbuf(0);
+	                        if (cropstgmaxval == 0) {
+	                            for (FastMesh.MeshRes layer : res.layers(FastMesh.MeshRes.class)) {
+	                                int stg = layer.id / 10;
+	                                if (stg > cropstgmaxval)
+	                                    cropstgmaxval = stg;
+	                            }
+	                        }
+	                        Overlay ol = findol(Sprite.GROWTH_STAGE_ID);
+	                        if (ol == null && (stage == cropstgmaxval || stage >= 0 && stage <= 5)) {
+	                            addol(new Gob.Overlay(Sprite.GROWTH_STAGE_ID, new PlantStageSprite(stage, cropstgmaxval)));
+	                        }
+	                    } catch (ArrayIndexOutOfBoundsException e) { // ignored
+	                    }
+	                }
+            	}
+            }
 
                 if (type == Type.TREE || type == Type.BUSH) {
                     ResDrawable rd = getattr(ResDrawable.class);
