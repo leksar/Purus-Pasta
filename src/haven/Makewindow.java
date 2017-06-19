@@ -284,8 +284,8 @@ public class Makewindow extends Widget {
 
                 Coord sz = softcap.sz();
                 Coord szl = softcapl.sz();
-                g.image(softcapl, this.sz.sub(sz.x + szl.x + 8, this.sz.y / 2 + szl.y / 2));
-                g.image(softcap, this.sz.sub(sz.x, this.sz.y / 2 + sz.y / 2));
+                g.image(softcapl, new Coord(265-szl.x-38, 75 + szl.y/2));
+                g.image(softcap, new Coord(265-32, 75 + sz.y/2));
             }
         }
         c = new Coord(xoff, outy);
