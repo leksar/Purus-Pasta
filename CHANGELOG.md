@@ -1,5 +1,8 @@
 ## Changelog
 
+### 2.30.6
+	- Relocated softcap text location in craftwindow
+	- Latest merges from Amber & Default client
 ### 2.30.5
 	- Fixed plant stage indicator text being continuously visible on trees and bushes
 ### 2.30.4
