@@ -440,7 +440,9 @@ public class MapFile {
             try {
                 fp = store.store(String.format("map/grid-%x", id));
             } catch (IOException e) {
-                throw (new StreamMessage.IOError(e));
+                //throw (new StreamMessage.IOError(e));
+                // ignore IOE to prevent crashing when running multiple clients on Windows.
+                return;
             }
             try (StreamMessage out = new StreamMessage(fp)) {
                 save(out);

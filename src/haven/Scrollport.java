@@ -29,6 +29,7 @@ package haven;
 public class Scrollport extends Widget {
     public final Scrollbar bar;
     public final Scrollcont cont;
+    private int step;
 
     @RName("scr")
     public static class $_ implements Factory {
@@ -38,6 +39,10 @@ public class Scrollport extends Widget {
     }
 
     public Scrollport(Coord sz) {
+        this(sz, 23, 15);
+    }
+
+    public Scrollport(Coord sz, int step, int ymargin) {
         super(sz);
         bar = adda(new Scrollbar(sz.y, 0, 0) {
             public void changed() {
@@ -46,9 +51,10 @@ public class Scrollport extends Widget {
         }, sz.x, 0, 1, 0);
         cont = add(new Scrollcont(sz.sub(bar.sz.x, 0)) {
             public void update() {
-                bar.max = Math.max(0, csz().y + 23 - sz.y);
+                bar.max = Math.max(0, csz().y + ymargin - sz.y);
             }
         }, Coord.z);
+        this.step = step;
     }
 
     public static class Scrollcont extends Widget {
@@ -101,7 +107,7 @@ public class Scrollport extends Widget {
     }
 
     public boolean mousewheel(Coord c, int amount) {
-        bar.ch(amount * 15);
+        bar.ch(amount * step);
         return (true);
     }
 

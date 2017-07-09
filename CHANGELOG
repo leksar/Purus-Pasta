@@ -1,3 +1,37 @@
+Version 1.58.0
+    New:
+        * Alternative belt window. See UI Settings.
+
+    Fixed:
+        * Crash when running multiple clients on Windows.
+
+    Misc:
+		* Login list is now scrollable.
+		* Timers list is also scrollable (once you have more than 13 timers).
+		* Shift+Z+Right Click used to automatically place items into containers has been changed to Shift+Alt.
+		  And also no longer needs to be held all the time to work.
+		* Added crabs to hide icons list. They can be picked with the Q key now.
+		* Improvements to localization support.
+
+
+Version 1.57.5
+    Misc:
+		* Upstream code merge.
+
+
+Version 1.57.4
+    New:
+        * Option to restrict dropping mouse held items (by lichengyu).
+
+    Fixed:
+        * Shoo extensions triggering on dead animals.
+		* Player alarms triggering on mannequins.
+
+    Misc:
+		* Dead adders are now pickable with the Q key.
+		* Upstream code merge.
+
+
 Version 1.57.3
     Fixed:
         * Possible crash when toggling grid overlay.

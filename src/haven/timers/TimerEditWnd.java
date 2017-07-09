@@ -68,15 +68,12 @@ public class TimerEditWnd extends Window {
                     int y = 0;
                     List<TimerWdg> timers = Glob.timersThread.getall();
                     for (TimerWdg timer : timers) {
-                        if (timer.c.y > y)
-                            y = timer.c.y;
+                        if (timer.c.y + TimerWdg.height > y)
+                            y = timer.c.y + TimerWdg.height;
                     }
-                    if (y == 0)
-                        y = 20;
-
-                    GameUI.timerswnd.add(Glob.timersThread.add(txtname.text, duration, 0), new Coord(20, y + TimerWdg.height));
+                    gui.timerswnd.port.cont.add(Glob.timersThread.add(txtname.text, duration, 0), new Coord(0, y));
                     Glob.timersThread.save();
-                    GameUI.timerswnd.resize(TimersWnd.width, timers.size() * TimerWdg.height + 60);
+                    gui.timerswnd.resize();
                     parent.reqdestroy();
                 }
             };

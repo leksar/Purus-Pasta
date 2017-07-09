@@ -92,7 +92,6 @@ public class GameUI extends ConsoleHost implements Console.Directory {
     public QuickSlotsWdg quickslots;
     public StatusWdg statuswindow;
     public AlignPanel questpanel;
-    private boolean updhanddestroyed = false;
     public GameUI gui = null;
     public final CraftWindow makewnd;
     public static boolean swimon = false;
@@ -472,16 +471,12 @@ public class GameUI extends ConsoleHost implements Console.Directory {
         if ((hand.isEmpty() && (vhand != null)) || ((vhand != null) && !hand.contains(vhand.item))) {
             ui.destroy(vhand);
             vhand = null;
-            if (ui.modshift && ui.keycode == Config.zkey && map.lastItemactGob != null)
-                updhanddestroyed = true;
         }
         if (!hand.isEmpty() && (vhand == null)) {
             DraggedItem fi = hand.iterator().next();
             vhand = add(new ItemDrag(fi.dc, fi.item));
-            if (ui.modshift && ui.keycode == Config.zkey && updhanddestroyed) {
+            if (map.lastItemactGob != null)
                 map.iteminteractreplay();
-                updhanddestroyed = false;
-            }
         }
     }
     public void addcmeter(Widget meter) {

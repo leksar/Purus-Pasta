@@ -13,7 +13,6 @@ public class DetailsWdg extends Widget {
     private final Coord sepEnd = new Coord(800 - 40 - 11, HEIGHT);
     public Animal animal;
     private boolean hover = false;
-    private static final Text.Foundry delfnd = new Text.Foundry(Text.sans.deriveFont(Font.BOLD), 16);
 
     public DetailsWdg(Animal animal) {
         this.animal = animal;
@@ -41,7 +40,7 @@ public class DetailsWdg extends Widget {
             add(lbl, new Coord(col.x + offx, 5));
         }
 
-        Label del = new Label("\u2718", delfnd, Color.RED, true) {
+        Label del = new Label("\u2718", Text.delfnd, Color.RED, true) {
             @Override
             public boolean mousedown(Coord c, int button) {
                 delete();

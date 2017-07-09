@@ -58,6 +58,7 @@ import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -65,6 +66,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Random;
+import java.util.function.Consumer;
 import java.util.function.IntPredicate;
 import java.util.function.Supplier;
 import java.util.prefs.Preferences;
@@ -1106,8 +1108,7 @@ public class Utils {
     }
 
     public static boolean eq(Object a, Object b) {
-        return (((a == null) && (b == null)) ||
-                ((a != null) && (b != null) && a.equals(b)));
+        return ((a == b) || ((a != null) && a.equals(b)));
     }
 
     public static boolean parsebool(String s, boolean def) {
@@ -1360,6 +1361,12 @@ public class Utils {
                 return(ret);
         }
         return(null);
+    }
+
+    public static <T> void clean(Collection<T> c, Consumer<? super T> clean) {
+        for (T item : c)
+            clean.accept(item);
+        c.clear();
     }
 
     public static <T> T construct(Constructor<T> cons, Object... args) {

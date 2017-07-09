@@ -58,8 +58,12 @@ public class Composite extends Drawable {
         Resource res = base.get();
         comp = new Composited(res.layer(Skeleton.Res.class).s);
         comp.eqowner = gob;
-        if (gob.type == null)
+        if (gob.type == null) {
             gob.determineType(res.name);
+            // prevent mannequins to be recognized as players
+            if (gob.type == Gob.Type.PLAYER && gob.attr.containsKey(GobHealth.class))
+                gob.type = Gob.Type.OTHER;
+        }
     }
 
     public void setup(RenderList rl) {

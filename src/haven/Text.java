@@ -51,6 +51,7 @@ public class Text {
     public static final Color black = Color.BLACK;
     public static final Color white = Color.WHITE;
     public static final Text.Foundry sans12bold = new Text.Foundry(Text.sans.deriveFont(Font.BOLD), 12).aa(true);
+    public static final Text.Foundry delfnd = new Text.Foundry(Text.sans.deriveFont(Font.BOLD), 16);
 
     static {
         std = new Foundry(sans, Config.fontsizeglobal);

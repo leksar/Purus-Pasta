@@ -1788,6 +1788,8 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
             if (clickb == 1)
                 pllastcc = mc;
 
+            lastItemactGob = null;
+
             Resource curs = ui.root.getcurs(c);
 
             if (musselPicker != null) {
@@ -2110,6 +2112,7 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
     public boolean iteminteract(Coord cc, Coord ul) {
         delay(new Hittest(cc) {
             public void hit(Coord pc, Coord2d mc, ClickInfo inf) {
+                lastItemactGob = null;
                 if (inf == null) {
                     if (Config.tilecenter) {
                         mc.x = ((int)mc.x / 11) * 11 + Integer.signum((int)mc.x) * 5;
@@ -2118,8 +2121,10 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
                     wdgmsg("itemact", pc, mc.floor(posres), ui.modflags());
                 } else {
                     if (inf.ol == null) {
-                        lastItemactGob = inf.gob;
-                        lastItemactMeshId = inf.clickid();
+                        if (ui.modshift && ui.modmeta) {
+                            lastItemactGob = inf.gob;
+                            lastItemactMeshId = inf.clickid();
+                        }
                         wdgmsg("itemact", pc, mc.floor(posres), ui.modflags(), 0, (int) inf.gob.id, inf.gob.rc.floor(posres), 0, lastItemactMeshId);
                     } else {
                         wdgmsg("itemact", pc, mc.floor(posres), ui.modflags(), 1, (int) inf.gob.id, inf.gob.rc.floor(posres), inf.ol.id, inf.clickid());
@@ -2132,7 +2137,7 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
 
     public void iteminteractreplay() {
         Coord grc = lastItemactGob.rc.floor(posres);
-        wdgmsg("itemact", Coord.z, lastItemactGob.rc.floor(posres) , ui.modflags(), 0, (int) lastItemactGob.id, grc, 0, lastItemactMeshId);
+        wdgmsg("itemact", Coord.z, lastItemactGob.rc.floor(posres) , 1, 0, (int) lastItemactGob.id, grc, 0, lastItemactMeshId);
     }
 
     public boolean keydown(KeyEvent ev) {

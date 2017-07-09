@@ -41,7 +41,6 @@ import java.awt.event.MouseWheelListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.Map;
@@ -54,6 +53,7 @@ import javax.media.opengl.GL3;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLCapabilities;
 import javax.media.opengl.GLCapabilitiesChooser;
+import javax.media.opengl.GLContext;
 import javax.media.opengl.GLEventListener;
 import javax.media.opengl.GLProfile;
 import javax.media.opengl.awt.GLCanvas;
@@ -85,6 +85,7 @@ public class HavenPanel extends GLCanvas implements Runnable, Console.Directory 
     private GLConfig glconf = null;
     public static boolean needtotakescreenshot;
     public static boolean isATI;
+    private final boolean gldebug = false;
 
     private static GLCapabilities stdcaps() {
         GLProfile prof = GLProfile.getDefault();
@@ -101,7 +102,9 @@ public class HavenPanel extends GLCanvas implements Runnable, Console.Directory 
 
     public HavenPanel(int w, int h, GLCapabilitiesChooser cc) {
         super(stdcaps(), cc, null, null);
-        setSize(HavenPanel.w = w, HavenPanel.h = h);
+        if (gldebug)
+            setContextCreationFlags(getContextCreationFlags() | GLContext.CTX_OPTION_DEBUG);
+        setSize(this.w = w, this.h = h);
         newui(null);
         initgl();
         if (Toolkit.getDefaultToolkit().getMaximumCursorColors() >= 256 || Config.hwcursor)
@@ -162,6 +165,11 @@ public class HavenPanel extends GLCanvas implements Runnable, Console.Directory 
                         // h.lsetprop("gl.conf", glconf);
                     }
                     glconf = GLConfig.fromgl(gl, d.getContext(), getChosenGLCapabilities());
+                    if (gldebug) {
+                        if (!d.getContext().isGLDebugMessageEnabled())
+                            System.err.println("GL debugging not actually enabled");
+                        ((GL2) gl).glDebugMessageControl(GL.GL_DONT_CARE, GL.GL_DONT_CARE, GL.GL_DONT_CARE, 0, null, true);
+                    }
                     glconf.pref = GLSettings.load(glconf, true);
                     ui.cons.add(glconf);
                     gstate = new GLState() {
@@ -435,6 +443,8 @@ public class HavenPanel extends GLCanvas implements Runnable, Console.Directory 
         }
         state.clean();
         GLObject.disposeall(state.cgl, gl);
+        if (gldebug)
+            gl.bglGetDebugMessageLog(msg -> System.err.println(msg));
     }
 
     private static class Frame {

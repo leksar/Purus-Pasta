@@ -1,14 +1,15 @@
 package haven.timers;
 
 
+import java.awt.Color;
 import java.util.List;
 
 import haven.Audio;
 import haven.Config;
 import haven.Coord;
-import haven.GOut;
 import haven.GameUI;
 import haven.Glob;
+import haven.Label;
 import haven.Resource;
 import haven.Text;
 import haven.Widget;
@@ -21,7 +22,8 @@ public class TimerWdg extends Widget {
     public long start, duration, elapsed;
     public boolean active = false;
     private haven.Label lbltime, lblname;
-    private haven.Button btnstart, btnstop, btndel, btnedit;
+    private haven.Button btnstart, btnstop, btnedit;
+    private Label btndel;
 
     public TimerWdg(String name, long duration, long start) {
         this.name = name;
@@ -47,10 +49,11 @@ public class TimerWdg extends Widget {
             }
         };
         btnstop.hide();
-        btndel = new haven.Button(20, "X") {
+        btndel = new Label("\u2718", Text.delfnd, Color.RED, true) {
             @Override
-            public void click() {
+            public boolean mousedown(Coord c, int button) {
                 delete();
+                return true;
             }
         };
         btnedit = new haven.Button(50, "Edit") {
@@ -63,19 +66,10 @@ public class TimerWdg extends Widget {
         add(btnstart, new Coord(270, 3));
         add(btnstop, new Coord(270, 3));
         add(btnedit, new Coord(334, 3));
-        add(btndel, new Coord(395, 3));
+        add(btndel, new Coord(395, 6));
 
         if (start != 0)
             start(start);
-    }
-
-    @Override
-    public void draw(GOut g) {
-        g.chcolor(0, 0, 0, 128);
-        g.line(new Coord(0, 0), new Coord(sz.x, 0), 1);
-        g.line(new Coord(0, sz.y), new Coord(sz.x, sz.y), 1);
-        g.chcolor();
-        draw(g, true);
     }
 
     public void updateRemaining() {
@@ -121,7 +115,7 @@ public class TimerWdg extends Widget {
             if (timer.c.y > y)
                 timer.c.y -= height;
         }
-        parent.resize(TimersWnd.width, timers.size() * TimerWdg.height + 60);
+        gameui().timerswnd.resize();
         Glob.timersThread.save();
     }
 
@@ -134,7 +128,7 @@ public class TimerWdg extends Widget {
 
     public void done() {
         stop();
-        GameUI gui = ((TimersWnd) parent).gui;
+        GameUI gui = ((TimersWnd) parent.parent.parent).gui;
         gui.add(new TimerDoneWindow(name), new Coord(gui.sz.x / 2 - 150, gui.sz.y / 2 - 75));
         if (Config.timersalarm)
             Audio.play(timersfx, Config.timersalarmvol);
@@ -142,7 +136,7 @@ public class TimerWdg extends Widget {
     }
 
     public void edit() {
-        GameUI gui = ((TimersWnd) parent).gui;
+        GameUI gui = ((TimersWnd) parent.parent.parent).gui;
         gui.add(new TimerEditWnd("Edit Timer", gui, name, duration, this), new Coord(gui.sz.x / 2 - 200, gui.sz.y / 2 - 200));
     }
 

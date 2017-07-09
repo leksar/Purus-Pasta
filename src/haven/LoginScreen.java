@@ -107,11 +107,11 @@ public class LoginScreen extends Widget {
         statusbtn = adda(new Button(100, "Initializing..."), sz.x-110, 80, 0, 1);
         StartUpdaterThread();
         new UpdateChecker().start();
-        LoginList ll = new LoginList(new Coord(10, 10), new Coord(200, this.sz.y-20), this);
-        this.add(ll);
-        ll.show();
-        ll.raise();
-    	}
+        add(new LoginList(200, 29), new Coord(10, 10));
+        GameUI.swimon = false;
+        GameUI.trackon = false;
+        GameUI.crimeon = false;
+    }
 
     private static abstract class Login extends Widget {
         abstract Object[] data();
@@ -205,62 +205,92 @@ public class LoginScreen extends Widget {
         }
     }
 
-    private static class LoginList extends Widget {
-        private static final int ITEM_HEIGHT = 20;
-        private static final Text.Foundry fnd = new Text.Foundry(Text.sans, 14);
-        private Tex xicon = Text.render("\u2716", Color.RED, fnd).tex();
-        private LoginData curLD;
+    public class LoginList extends Listbox<LoginData> {
+        private final Text.Foundry fnd = new Text.Foundry(Text.sans, 14);
+        private final Tex xicon = Text.render("\u2716", Color.RED, fnd).tex();
+        private int hover = -1;
+        private final static int ITEM_HEIGHT = 20;
+        private Coord lastMouseDown = Coord.z;
 
-        public LoginList(Coord c, Coord sz, Widget parent) {
-            super(parent.ui, c, sz);
-            curLD = null;
+        public LoginList(int w, int h) {
+            super(w, h, ITEM_HEIGHT);
         }
 
-        public void draw(GOut g) {
-            g.chcolor(0, 0, 0, 128);
+        @Override
+        protected void drawbg(GOut g) {
+            g.chcolor(0, 0, 0, 120);
             g.frect(Coord.z, sz);
             g.chcolor();
-
-            synchronized(Config.logins) {
-                if(Config.logins.size() > 0) {
-                    for(int i = 0; i < Config.logins.size(); i++) {
-                        LoginData ld = Config.logins.get(i);
-                        if(ld == curLD) {
-                            g.chcolor(96, 96, 96, 255);
-                            g.frect(new Coord(0, i * ITEM_HEIGHT), new Coord(sz.x-30, ITEM_HEIGHT));
-                            g.chcolor();
-                        }
-                        g.aimage(Text.render(ld.name, Color.WHITE, fnd).tex(), new Coord(10, i * ITEM_HEIGHT + 10), 0, 0.5);
-                        g.aimage(xicon, new Coord(sz.x - 20, i * ITEM_HEIGHT + 10), 0, 0.5);
-                    }
-                }
-            }
-            super.draw(g);
         }
 
-        public boolean mousedown(Coord c, int button) {
-            if(super.mousedown(c, button))
-                return(true);
-            if(button == 1) {
-                int sel = (c.y / ITEM_HEIGHT);
-                synchronized(Config.logins) {
-                    if(sel < Config.logins.size() && sel >= 0) {
-                        curLD = Config.logins.get(sel);
-                        if (c.x >= sz.x - 25 && c.x <= sz.x - 25 + 20) {
-                            synchronized(Config.logins) {
-                                Config.logins.remove(curLD);
-                                Config.saveLogins();
-                                curLD = null;
-                            }
-                        } else if (c.x < sz.x - 35) {
-                            parent.wdgmsg("forget");
-                            parent.wdgmsg("login", new Object[]{new AuthClient.NativeCred(curLD.name, curLD.pass), false});
-                        }
-                    }
-                }
-                return(true);
+        @Override
+        protected void drawsel(GOut g) {
+        }
+
+        @Override
+        protected LoginData listitem(int i) {
+            synchronized (Config.logins) {
+                return Config.logins.get(i);
             }
-            return(false);
+        }
+
+        @Override
+        protected int listitems() {
+            synchronized (Config.logins) {
+                return Config.logins.size();
+            }
+        }
+
+        @Override
+        public void mousemove(Coord c) {
+            setHoverItem(c);
+            super.mousemove(c);
+        }
+
+        @Override
+        public boolean mousewheel(Coord c, int amount) {
+            setHoverItem(c);
+            return super.mousewheel(c, amount);
+        }
+
+        private void setHoverItem(Coord c) {
+            if (c.x > 0 && c.x < sz.x && c.y > 0 && c.y < listitems() * ITEM_HEIGHT)
+                hover = c.y / ITEM_HEIGHT + sb.val;
+            else
+                hover = -1;
+        }
+
+        @Override
+        protected void drawitem(GOut g, LoginData item, int i) {
+            if (hover == i) {
+                g.chcolor(96, 96, 96, 255);
+                g.frect(Coord.z, g.sz);
+                g.chcolor();
+            }
+            g.image(Text.render(item.name, Color.WHITE, fnd).tex(), new Coord(5, 2));
+            g.image(xicon, new Coord(sz.x - 25, 1));
+        }
+
+        @Override
+        public boolean mousedown(Coord c, int button) {
+            lastMouseDown = c;
+            return super.mousedown(c, button);
+        }
+
+        @Override
+        protected void itemclick(LoginData itm, int button) {
+            if (button == 1) {
+                if (lastMouseDown.x >= sz.x - 25 && lastMouseDown.x <= sz.x - 25 + 20) {
+                    synchronized (Config.logins) {
+                        Config.logins.remove(itm);
+                        Config.saveLogins();
+                    }
+                } else if (c.x < sz.x - 35) {
+                    parent.wdgmsg("forget");
+                    parent.wdgmsg("login", new Object[]{new AuthClient.NativeCred(itm.name, itm.pass), false});
+                }
+                super.itemclick(itm, button);
+            }
         }
     }
 

@@ -1590,6 +1590,17 @@ public class OptWnd extends Window {
                 }
             }
         });
+        appender.add(new CheckBox("Alternative equipment belt window") {
+            {
+                a = Config.quickbelt;
+            }
+
+            public void set(boolean val) {
+                Utils.setprefb("quickbelt", val);
+                Config.quickbelt = val;
+                a = val;
+            }
+        });
         appender.add(new CheckBox("Show F-key toolbar") {
             {
                 a = Config.fbelt;

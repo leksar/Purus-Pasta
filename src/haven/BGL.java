@@ -37,6 +37,7 @@ import java.util.Arrays;
 import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
 import javax.media.opengl.GL2;
 import javax.media.opengl.GL3;
@@ -1167,8 +1168,49 @@ public abstract class BGL {
     	});
     }
 
-    @SuppressWarnings("serial")
-	public static class Dump implements Serializable {
+    public static class DebugMessage {
+	public final int source, type, severity, id;
+	public final String text;
+
+	public DebugMessage(int source, int type, int severity, int id, String text) {
+	    this.source = source; this.type = type; this.severity = severity; this.id = id;
+	    this.text = text;
+	}
+
+	public String toString() {
+	    return(String.format("[@d %d:%d:%d] %s", severity, source, type, id, text));
+	}
+    }
+
+    public void glDebugMessageControl(final int source, final int type, final int severity, final int[] ids, final boolean enabled) {
+	add(new Command() {
+		public void run(GL2 gl) {gl.glDebugMessageControl(source, type, severity, (ids == null) ? 0 : ids.length, ids, 0, enabled);}
+	    });
+    }
+
+    public void bglGetDebugMessageLog(final Consumer<DebugMessage> cb) {
+	add(new Command() {
+		public void run(GL2 gl) {
+		    while(true) {
+			int n = 64;
+			int[] sources = new int[n], types = new int[n], severities = new int[n], ids = new int[n], lengths = new int[n];
+			byte[] textbuf = new byte[65536];
+			int ret = gl.glGetDebugMessageLog(n, textbuf.length, sources, 0, types, 0, ids, 0, severities, 0, lengths, 0, textbuf, 0);
+			for(int i = 0, off = 0; i < ret; i++) {
+			    if(textbuf[off + lengths[i] - 1] != 0)
+				throw(new AssertionError("Debug message not NUL-terminated"));
+			    String text = new String(textbuf, off, lengths[i] - 1);
+			    off += lengths[i];
+			    cb.accept(new DebugMessage(sources[i], types[i], severities[i], ids[i], text));
+			}
+			if(ret < n)
+			    break;
+		    }
+		}
+	    });
+    }
+
+    public static class Dump implements Serializable {
         public final List<DCmd> list;
         public final DCmd mark;
         private final transient Map<Object, Dummy> dummies = new IdentityHashMap<Object, Dummy>();

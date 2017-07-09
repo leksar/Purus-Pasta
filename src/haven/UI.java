@@ -151,6 +151,11 @@ public class UI {
     }
 
     public void newwidget(int id, String type, int parent, Object[] pargs, Object... cargs) throws InterruptedException {
+        if (Config.quickbelt && type.equals("wnd") && cargs[1].equals("Belt")) {
+            type = "wnd-belt";
+            pargs[1] = Utils.getprefc("Belt_c", new Coord(550, HavenPanel.h - 160));
+        }
+
         Widget.Factory f = Widget.gettype2(type);
         synchronized (this) {
             Widget pwdg = widgets.get(parent);
@@ -164,6 +169,10 @@ public class UI {
                 processWindowCreation(id, gui, (Window)wdg);
             else if (pwdg instanceof Window)
                 processWindowContent(parent, gui, (Window)pwdg, wdg);
+
+            if (type.equals("wnd-belt")) {
+                gui.getequipory().beltWndId = id;
+            }
 
             bind(wdg, id);
 
