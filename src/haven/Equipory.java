@@ -40,7 +40,7 @@ public class Equipory extends Widget implements DTarget {
     private static final Tex bg = Resource.loadtex("gfx/hud/equip/bg");
     private static final int rx = 34 + bg.sz().x;
     private static final int acx = 34 + bg.sz().x / 2;
-    private static final Text.Foundry acf = new Text.Foundry(Text.sans, Config.fontsizeglobal).aa(true);
+    private static final Text.Foundry acf = new Text.Foundry(Text.sans, Text.cfg.def).aa(true);
     private Tex armorclass = null;
     public int beltWndId = -1;
     public static final Coord ecoords[] = {
@@ -132,7 +132,7 @@ public class Equipory extends Widget implements DTarget {
         if (Config.quickbelt && beltWndId == -1) {
             for (WItem itm[] : wmap.values()) {
                 try {
-                    if (itm[0].item.res.get().name.endsWith("belt"))
+                    if (itm.length > 0 && itm[0].item.res.get().name.endsWith("belt"))
                         itm[0].mousedown(Coord.z, 3);
                 } catch (Loading l) {
                 }

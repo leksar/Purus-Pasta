@@ -62,27 +62,20 @@ public class Label extends Widget {
         sz = this.text.sz();
     }
 
-    public Label(String text, Text.Foundry f, boolean noL10n) {
-        super(Coord.z);
-        this.f = f;
-        this.text = f.render(texts = text, this.col);
-        sz = this.text.sz();
-    }
-
-    public Label(String text, Text.Foundry f, Color col, boolean noL10n) {
+    public Label(String text, Text.Foundry f, Color col) {
         super(Coord.z);
         this.col = col;
         this.f = f;
-        this.text = f.render(texts = text, this.col);
+        this.text = f.render(texts = text, this.col); // used only for numbers and symbols. hence no localization.
         sz = this.text.sz();
     }
 
     public Label(String text, int w) {
-        this(text, w, Text.std);
+        this(text, w, Text.labelFnd);
     }
 
     public Label(String text) {
-        this(text, Text.std);
+        this(text, Text.labelFnd);
     }
 
     public void settext(String text) {

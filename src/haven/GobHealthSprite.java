@@ -5,9 +5,9 @@ import java.awt.Font;
 
 
 public class GobHealthSprite extends Sprite {
-    private static final Tex hlt0 = Text.renderstroked("25%", new Color(255, 227, 168), Color.BLACK, Text.sans12bold).tex();
-    private static final Tex hlt1 = Text.renderstroked("50%", new Color(255, 227, 168), Color.BLACK, Text.sans12bold).tex();
-    private static final Tex hlt2 = Text.renderstroked("75%", new Color(255, 227, 168), Color.BLACK, Text.sans12bold).tex();
+    private static final Tex hlt0 = Text.renderstroked("25%", new Color(255, 227, 168), Color.BLACK, Text.num12boldFnd).tex();
+    private static final Tex hlt1 = Text.renderstroked("50%", new Color(255, 227, 168), Color.BLACK, Text.num12boldFnd).tex();
+    private static final Tex hlt2 = Text.renderstroked("75%", new Color(255, 227, 168), Color.BLACK, Text.num12boldFnd).tex();
     public int val;
     private Tex tex;
     private static Matrix4f mv = new Matrix4f();

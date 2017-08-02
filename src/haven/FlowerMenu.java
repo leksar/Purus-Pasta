@@ -32,7 +32,7 @@ import java.awt.Color;
 
 public class FlowerMenu extends Widget {
     public static final Color pink = new Color(255, 0, 128);
-    public static final Text.Foundry ptf = new Text.Foundry(Text.dfont, Config.fontsizeglobal * 12 / 11);
+    public static final Text.Foundry ptf = new Text.Foundry(Text.dfont, Text.cfg.flowerMenu);
     public static final IBox pbox = Window.wbox;
     public static final Tex pbg = Window.bg;
     public static final int ph = 30;

@@ -74,10 +74,10 @@ public class CheckBox extends Widget {
     }
 
     public void draw(GOut g) {
-        g.image(lbl.tex(), loff.add(box.sz().x, box.sz().y / 2 - lbl.sz().y / 2));
-        g.image(box, Coord.z);
+        g.image(lbl.tex(), loff.add(box.sz().x, (sz.y - lbl.sz().y) / 2));
+        g.image(box, Coord.z.add(0, (sz.y - box.sz().y) / 2));
         if (a)
-            g.image(mark, Coord.z);
+            g.image(mark, Coord.z.add(0, (sz.y - mark.sz().y) / 2));
         super.draw(g);
     }
 

@@ -45,7 +45,7 @@ public abstract class Animal extends HashMap<String, Integer> {
 
     public static int addColumn(Map<String, Column> columns, String name, String displayName, int index, int x) {
         String nameloc = Resource.getLocString(Resource.BUNDLE_LABEL, name);
-        Label lbl = new Label(displayName, Text.std) {
+        Label lbl = new Label(displayName, Text.labelFnd) {
             @Override
             public boolean mousedown(Coord c, int button) {
                 for (Widget child = parent.lchild; child != null; child = child.prev) {

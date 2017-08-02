@@ -67,7 +67,7 @@ public class Makewindow extends Widget {
             this.res = res;
             this.sdt = new MessageBuf(sdt);
             if (num >= 0)
-                this.num = new TexI(Utils.outline2(Text.render(Integer.toString(num), Color.WHITE,  Text.numfnd).img, Utils.contrast(Color.WHITE)));
+                this.num = new TexI(Utils.outline2(Text.render(Integer.toString(num), Color.WHITE,  Text.num10Fnd).img, Utils.contrast(Color.WHITE)));
             else
                 this.num = null;
             this.rawinfo = info;
@@ -279,7 +279,7 @@ public class Makewindow extends Widget {
                 if (product != qModProduct) {
                     qModProduct = product;
                     softcap = Text.renderstroked("" + (int) Math.pow(product, 1.0 / qmodValues.size()),
-                            Color.WHITE, Color.BLACK, Text.sans12bold).tex();
+                            Color.WHITE, Color.BLACK, Text.num12boldFnd).tex();
                 }
 
                 Coord sz = softcap.sz();

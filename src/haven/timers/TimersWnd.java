@@ -44,7 +44,7 @@ public class TimersWnd extends Window {
         timers = Glob.timersThread.getall();
 
         int portHeight = timers.size() > MAX_ITEMS ? TimerWdg.height * MAX_ITEMS : timers.size() * TimerWdg.height;
-        port = new Scrollport(new Coord(WIDTH - 20 - 15, portHeight), TimerWdg.height, 0) {
+        port = new Scrollport(new Coord(WIDTH - 20 - 15, portHeight), TimerWdg.height) {
             @Override
             public void draw(GOut g) {
                 g.chcolor(0, 0, 0, 128);

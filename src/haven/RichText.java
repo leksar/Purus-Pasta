@@ -55,8 +55,8 @@ public class RichText extends Text {
 
     static {
         Map<Attribute, Object> a = new HashMap<Attribute, Object>();
-        a.put(TextAttribute.FAMILY, "SansSerif");
-        a.put(TextAttribute.SIZE,  Config.fontsizeglobal);
+        a.put(TextAttribute.FAMILY, Text.cfg.font.get("sans"));
+        a.put(TextAttribute.SIZE, Text.cfg.richText);
         std = new Parser(a);
         stdf = new Foundry(std);
     }
@@ -438,7 +438,8 @@ public class RichText extends Text {
             } else {
                 Map<Attribute, Object> na = new HashMap<Attribute, Object>(attrs);
                 if (tn == "font") {
-                    na.put(TextAttribute.FAMILY, args[0]);
+                    String font = Text.cfg.font.get(args[0]);
+                    na.put(TextAttribute.FAMILY, font != null ? font : args[0]);
                     if (args.length > 1)
                         na.put(TextAttribute.SIZE, Float.parseFloat(args[1]));
                 } else if (tn == "size") {
@@ -591,7 +592,7 @@ public class RichText extends Text {
     public static class Foundry {
         private Parser parser;
         private RState rs;
-        public boolean aa = false;
+        public boolean aa = Config.fontaa;
 
         public Foundry(Parser parser) {
             this.parser = parser;

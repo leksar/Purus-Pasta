@@ -216,26 +216,11 @@ public class Config {
     public static String treeboxclr =  Utils.getpref("treeboxclr", "D7FF00");
     public static boolean highlightpots = Utils.getprefb("highlightpots", false);
     public static boolean bonsai = Utils.getprefb("bonsai", false);
-    private final static Map<String, Integer> defFontSzGlobal =  new HashMap<String, Integer>(3) {{
-        put("zh", 16);
-        put("en", 11);
-        put("ru", 11);
-    }};
-    private final static Map<String, Integer> defFontSzButton =  new HashMap<String, Integer>(3) {{
-        put("zh", 14);
-        put("en", 12);
-        put("ru", 12);
-    }};
-    private final static Map<String, Integer> defFontSzAttr =  new HashMap<String, Integer>(3) {{
-        put("zh", 14);
-        put("en", 14);
-        put("ru", 13);
-    }};
-    public static int fontsizeglobal = Utils.getprefi("fontsizeglobal", defFontSzGlobal.get(Resource.language));
-    public static int fontsizebutton = Utils.getprefi("fontsizebutton", defFontSzButton.get(Resource.language));
-    public static int fontsizewndcap = Utils.getprefi("fontsizewndcap", 14);
-    public static int fontsizeattr = Utils.getprefi("fontsizeattr", defFontSzAttr.get(Resource.language));
     public static int fontsizechat = Utils.getprefi("fontsizechat", 14);
+    public static boolean fontaa = Utils.getprefb("fontaa", false);
+    public static boolean usefont = Utils.getprefb("usefont", false);
+    public static String font = Utils.getpref("font", "SansSerif");
+    public static int fontadd = Utils.getprefi("fontadd", 0);
     public static boolean pf = false;
     public static String playerposfile;
     public static byte[] authck = null;
@@ -336,7 +321,7 @@ public class Config {
         put("almondtree", new CheckListboxItem("Almond"));
     }};
 
-    public final static HashMap<String, CheckListboxItem> icons = new HashMap<String, CheckListboxItem>(34) {{
+    public final static HashMap<String, CheckListboxItem> icons = new HashMap<String, CheckListboxItem>(36) {{
         put("dandelion", new CheckListboxItem("Dandelion"));
         put("chantrelle", new CheckListboxItem("Chantrelle"));
         put("blueberry", new CheckListboxItem("Blueberry"));
@@ -372,6 +357,8 @@ public class Config {
         put("boostspeed", new CheckListboxItem("Speed Boost"));
         put("adder", new CheckListboxItem("Adder"));
         put("crab", new CheckListboxItem("Crab"));
+        put("clover", new CheckListboxItem("Clover"));
+        put("ladysmantle", new CheckListboxItem("Lady's Mantle"));
     }};
 
     public final static HashMap<String, CheckListboxItem> flowermenus = new HashMap<String, CheckListboxItem>(15) {{

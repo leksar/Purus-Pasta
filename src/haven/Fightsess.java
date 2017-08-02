@@ -79,11 +79,11 @@ public class Fightsess extends Widget {
         this.dyn = new boolean[nact];
 
         for(int i = 0; i < 10; i++) {
-            keystex[i] = Text.renderstroked(FightWnd.keys[i], Color.WHITE, Color.BLACK, Text.sans12bold).tex();
+            keystex[i] = Text.renderstroked(FightWnd.keys[i], Color.WHITE, Color.BLACK, Text.num12boldFnd).tex();
             if (i < 5)
                 keysftex[i] = keystex[i];
             else
-                keysftex[i] = Text.renderstroked(FightWnd.keysf[i - 5], Color.WHITE, Color.BLACK, Text.sans12bold).tex();
+                keysftex[i] = Text.renderstroked(FightWnd.keysf[i - 5], Color.WHITE, Color.BLACK, Text.num12boldFnd).tex();
         }
     }
 
@@ -198,7 +198,7 @@ public class Fightsess extends Widget {
                 g.fellipse(cdc, Config.altfightui ? new Coord(24, 24) : new Coord(22, 22), Math.PI / 2 - (Math.PI * 2 * Math.min(1.0 - a, 1.0)), Math.PI / 2);
                 g.chcolor();
                 if (Config.showcooldown)
-                    g.atextstroked(Utils.fmt1DecPlace(cd), cdc, 0.5, 0.5, Color.WHITE, Color.BLACK);
+                    g.atextstroked(Utils.fmt1DecPlace(cd), cdc, 0.5, 0.5, Color.WHITE, Color.BLACK, Text.num11Fnd);
             }
             g.image(cdframe, Config.altfightui ? new Coord(gameui().sz.x / 2, 200).sub(cdframe.sz().div(2)) : cdc.sub(cdframe.sz().div(2)));
         }
@@ -304,7 +304,7 @@ public class Fightsess extends Widget {
 
                 g.chcolor(Color.WHITE);
                 if (buff.atex == null)
-                    buff.atex = Text.renderstroked(buff.ameter + "", Color.WHITE, Color.BLACK, Text.sans12bold).tex();
+                    buff.atex = Text.renderstroked(buff.ameter + "", Color.WHITE, Color.BLACK, Text.num12boldFnd).tex();
                 Tex atex = buff.atex;
                 bc.x = bc.x + simpleOpeningSz.x / 2 - atex.sz().x / 2;
                 bc.y = bc.y + simpleOpeningSz.y / 2 - atex.sz().y / 2;

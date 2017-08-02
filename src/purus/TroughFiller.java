@@ -36,7 +36,7 @@ public class TroughFiller extends Window implements GobSelectCallback {
         super(new Coord(270, 50), "Trough Filler");
         BotUtils = new BotUtils(ui, w, i);
         
-        Widget inf = add(new Widget(new Coord(245, Config.fontsizeglobal+5)) {
+        Widget inf = add(new Widget(new Coord(245, 30)) {
             public void draw(GOut g) {
                 g.chcolor(0, 0, 0, 128);
                 g.frect(Coord.z, sz);

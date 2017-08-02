@@ -37,6 +37,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import haven.factories.BackwaterFactory;
+import haven.factories.BullmythFactory;
+import haven.factories.CenteroflearningFactory;
+import haven.factories.FecundearthFactory;
+import haven.factories.FoundingmythosFactory;
+import haven.factories.GamekeepingFactory;
+import haven.factories.GuardedmarchesFactory;
+import haven.factories.HeraldicswanFactory;
+import haven.factories.LocalcuisineFactory;
+import haven.factories.MountaintraditionFactory;
+import haven.factories.SeamarriageFactory;
+import haven.factories.WoodlandrealmFactory;
 import haven.res.ui.tt.ArmorFactory;
 import haven.res.ui.tt.WearFactory;
 
@@ -338,6 +350,27 @@ public abstract class ItemInfo {
         return (null);
     }
 
+
+    private static final Map<String, ItemInfo.InfoFactory> customFactories = new HashMap<>(14);
+
+    static {
+        customFactories.put("paginae/gov/enact/backwater", new BackwaterFactory());
+        customFactories.put("paginae/gov/enact/bullmyth", new BullmythFactory());
+        customFactories.put("paginae/gov/enact/centeroflearning", new CenteroflearningFactory());
+        customFactories.put("paginae/gov/enact/fecundearth", new FecundearthFactory());
+        customFactories.put("paginae/gov/enact/foundingmythos", new FoundingmythosFactory());
+        customFactories.put("paginae/gov/enact/gamekeeping", new GamekeepingFactory());
+        customFactories.put("paginae/gov/enact/guardedmarches", new GuardedmarchesFactory());
+        customFactories.put("paginae/gov/enact/heraldicswan", new HeraldicswanFactory());
+        customFactories.put("paginae/gov/enact/localcuisine", new LocalcuisineFactory());
+        customFactories.put("paginae/gov/enact/mountaintradition", new MountaintraditionFactory());
+        customFactories.put("paginae/gov/enact/seamarriage", new SeamarriageFactory());
+        customFactories.put("paginae/gov/enact/woodlandrealm", new WoodlandrealmFactory());
+
+        customFactories.put("ui/tt/armor", new ArmorFactory());
+        customFactories.put("ui/tt/wear", new WearFactory());
+    }
+
     public static List<ItemInfo> buildinfo(Owner owner, Object[] rawinfo) {
         List<ItemInfo> ret = new ArrayList<ItemInfo>();
         for (Object o : rawinfo) {
@@ -354,14 +387,8 @@ public abstract class ItemInfo {
                     throw (new ClassCastException("Unexpected info specification " + a[0].getClass()));
                 }
 
-                InfoFactory f;
-                // custom armor and wear classes are used because server returns identically named class "Wear"
-                // for both of those.
-                if (ttres.name.equals("ui/tt/armor"))
-                    f = new ArmorFactory();
-                else if (ttres.name.equals("ui/tt/wear"))
-                    f = new WearFactory();
-                else
+                InfoFactory f = customFactories.get(ttres.name);
+                if (f == null)
                     f = ttres.getcode(InfoFactory.class, true);
 
                 ItemInfo inf = f.build(owner, a);

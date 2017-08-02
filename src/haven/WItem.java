@@ -48,6 +48,7 @@ public class WItem extends Widget implements DTarget {
     public static final Color[] wearclr = new Color[]{
             new Color(233, 0, 14), new Color(218, 128, 87), new Color(246, 233, 87), new Color(145, 225, 60)
     };
+
     private WItemDestroyCallback destroycb;
 
     public WItem(GItem item) {
@@ -229,7 +230,7 @@ public class WItem extends Widget implements DTarget {
             drawmain(g, spr);
             g.defstate();
             if (item.num >= 0) {
-                g.atext(Integer.toString(item.num), sz, 1, 1, Text.numfnd);
+                g.atext(Integer.toString(item.num), sz, 1, 1, Text.num10Fnd);
             } else if (itemnum.get() != null) {
                 g.aimage(itemnum.get(), new Coord(sz.x, 0), 1, 0);
             }

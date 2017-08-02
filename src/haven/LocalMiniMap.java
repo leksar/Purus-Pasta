@@ -70,10 +70,10 @@ public class LocalMiniMap extends Widget {
     private static final Resource doomedsfx = Resource.local().loadwait("sfx/doomed");
     private static final Resource swagsfx = Resource.local().loadwait("sfx/swag");
 	private final HashSet<Long> sgobs = new HashSet<Long>();
-    private final Map<Coord, Tex> maptiles = new LinkedHashMap<Coord, Tex>(28, 0.75f, false) {
+    private final Map<Coord, Tex> maptiles = new LinkedHashMap<Coord, Tex>(100, 0.75f, false) {
         @Override
         protected boolean removeEldestEntry(Map.Entry<Coord, Tex> eldest) {
-            if (size() > 28) {
+            if (size() > 100) {
                 try {
                     eldest.getValue().dispose();
                 } catch (RuntimeException e) {
@@ -94,9 +94,9 @@ public class LocalMiniMap extends Widget {
             return size() > 7;
         }
     };
-    private final static Tex bushicn = Text.renderstroked("\u22C6", Color.CYAN, Color.BLACK, Text.sans12bold).tex();
-    private final static Tex treeicn = Text.renderstroked("\u25B2", Color.CYAN, Color.BLACK, Text.sans12bold).tex();
-    private final static Tex bldricn = Text.renderstroked("\u25AA", Color.CYAN, Color.BLACK, Text.sans12bold).tex();
+    private final static Tex bushicn = Text.renderstroked("\u22C6", Color.CYAN, Color.BLACK, Text.num12boldFnd).tex();
+    private final static Tex treeicn = Text.renderstroked("\u25B2", Color.CYAN, Color.BLACK, Text.num12boldFnd).tex();
+    private final static Tex bldricn = Text.renderstroked("\u25AA", Color.CYAN, Color.BLACK, Text.num12boldFnd).tex();
     private Map<Color, Tex> xmap = new HashMap<Color, Tex>(6);
     public static Coord plcrel = null;
     public long lastnewgid;
@@ -542,7 +542,7 @@ public class LocalMiniMap extends Widget {
                     if (gob == null) {
                         Tex tex = xmap.get(m.col);
                         if (tex == null) {
-                            tex = Text.renderstroked("\u2716",  m.col, Color.BLACK, Text.sans12bold).tex();
+                            tex = Text.renderstroked("\u2716",  m.col, Color.BLACK, Text.num12boldFnd).tex();
                             xmap.put(m.col, tex);
                         }
                         g.image(tex, ptc.sub(6, 6));

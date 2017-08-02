@@ -67,7 +67,7 @@ public class MapWnd extends Window {
     private int markerseq = -1;
     private boolean domark = false;
     private final Collection<Runnable> deferred = new LinkedList<>();
-    private static final Tex plx = Text.renderstroked("\u2716",  Color.red, Color.BLACK, Text.sans12bold).tex();
+    private static final Tex plx = Text.renderstroked("\u2716",  Color.red, Color.BLACK, Text.num12boldFnd).tex();
     private  Predicate<Marker> filter = (m -> true);
     private final static Comparator<Marker> namecmp = ((a, b) -> a.nm.compareTo(b.nm));
 

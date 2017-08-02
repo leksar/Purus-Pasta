@@ -12,14 +12,13 @@ public class InventoryBelt extends Widget implements DTarget {
 
     public void draw(GOut g) {
         Coord c = new Coord();
-        for (c.x = 0; c.x < isz.x; c.x++) {
-            g.image(invsq, c.mul(sqsz));
-        }
+        for (; c.x < isz.x * isz.y * sqsz.x; c.x += sqsz.x)
+            g.image(invsq, c);
         super.draw(g);
     }
 
     public InventoryBelt(Coord sz) {
-        super(invsq.sz().add(new Coord(-1 + 3, -1)).mul(sz).add(new Coord(1, 1)));
+        super(invsq.sz().add(new Coord(-1 + 3, -1)).mul(sz.x * sz.y, 1).add(new Coord(1, 1)));
         isz = sz;
     }
 
@@ -33,6 +32,9 @@ public class InventoryBelt extends Widget implements DTarget {
         add(child);
         Coord c = (Coord) args[0];
         if (child instanceof GItem) {
+            // convert multi-row coordinate into single row
+            c.x = isz.x * c.y + c.x;
+            c.y = 0;
             GItem i = (GItem) child;
             wmap.put(i, add(new WItem(i), c.mul(sqsz).add(1, 1)));
         }
@@ -50,6 +52,11 @@ public class InventoryBelt extends Widget implements DTarget {
     @Override
     public boolean drop(Coord cc, Coord ul) {
         Coord dc = dropul ? ul.add(sqsz.div(2)).div(sqsz) : cc.div(sqsz);
+        // convert single row coordinate into multi-row
+        if (dc.x >= isz.x) {
+            dc.x = dc.x % isz.x;
+            dc.y = 1;
+        }
         wdgmsg("drop", dc);
         return(true);
     }

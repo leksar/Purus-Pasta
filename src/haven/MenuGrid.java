@@ -39,6 +39,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 import java.util.WeakHashMap;
 
@@ -46,6 +47,7 @@ import haven.Resource.AButton;
 import haven.automation.AddBranchesToOven;
 import haven.automation.AddCoalToSmelter;
 import haven.automation.ButcherFish;
+import haven.automation.DreamHarvester;
 import haven.automation.FeedClover;
 import haven.automation.GobSelectCallback;
 import haven.automation.LeashAnimal;
@@ -68,7 +70,7 @@ public class MenuGrid extends Widget {
     public final static Coord bgsz = Inventory.invsq.sz().add(-1, -1);
     public final static Pagina next = new Pagina(null, Resource.local().loadwait("gfx/hud/sc-next").indir());
     public final static Pagina bk = new Pagina(null, Resource.local().loadwait("gfx/hud/sc-back").indir());
-    public final static RichText.Foundry ttfnd = new RichText.Foundry(TextAttribute.FAMILY, "SansSerif", TextAttribute.SIZE, Config.fontsizeglobal);
+    public final static RichText.Foundry ttfnd = new RichText.Foundry(TextAttribute.FAMILY, Text.cfg.font.get("sans"), TextAttribute.SIZE, Text.cfg.tooltipCap); //aa(true)
     public ObservableCollection<Pagina> paginae = new ObservableCollection<Pagina>(new HashSet<Pagina>());
     private static Coord gsz = new Coord(4, 4);
     private Pagina cur, pressed, dragging, layout[][] = new Pagina[gsz.x][gsz.y];
@@ -233,7 +235,7 @@ public class MenuGrid extends Widget {
         super.attach(ui);
         synchronized (paginae) {
         	ObservableCollection<Pagina> p = paginae;
-           // Collection<Pagina> p = paginae;
+        	//Collection<Pagina> p = paginae;
             p.add(paginafor(Resource.local().load("paginae/amber/coal11")));
             p.add(paginafor(Resource.local().load("paginae/amber/coal12")));
             p.add(paginafor(Resource.local().load("paginae/amber/branchoven")));
@@ -245,6 +247,7 @@ public class MenuGrid extends Widget {
             p.add(paginafor(Resource.local().load("paginae/amber/timers")));
             p.add(paginafor(Resource.local().load("paginae/amber/livestock")));
             p.add(paginafor(Resource.local().load("paginae/amber/shoo")));
+            p.add(paginafor(Resource.local().load("paginae/amber/dream")));
         	// Purus Cor Stuff
         	p.add(paginafor(Resource.local().load("paginae/custom/timer")));
         	p.add(paginafor(Resource.local().load("paginae/custom/study")));
@@ -477,6 +480,8 @@ public class MenuGrid extends Widget {
             gui.livestockwnd.raise();
         } else if (ad[1].equals("shoo")) {
             new Thread(new Shoo(gui), "Shoo").start();
+        } else if (ad[1].equals("dream")) {
+            new Thread(new DreamHarvester(gui), "DreamHarvester").start();
         }
     }
 

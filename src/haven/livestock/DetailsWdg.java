@@ -7,6 +7,8 @@ import haven.Label;
 import java.awt.*;
 import java.util.Map;
 
+import static haven.OCache.posres;
+
 public class DetailsWdg extends Widget {
     public final static int HEIGHT = 25;
     private final Coord sepStart = new Coord(0, HEIGHT);
@@ -36,11 +38,11 @@ public class DetailsWdg extends Widget {
                 key.equals(Resource.getLocString(Resource.BUNDLE_LABEL, "Endurance:")))
                 valStr += "%";
 
-            Label lbl = new Label(valStr, Text.std);
+            Label lbl = new Label(valStr, Text.labelFnd);
             add(lbl, new Coord(col.x + offx, 5));
         }
 
-        Label del = new Label("\u2718", Text.delfnd, Color.RED, true) {
+        Label del = new Label("\u2718", Text.delfnd, Color.RED) {
             @Override
             public boolean mousedown(Coord c, int button) {
                 delete();
@@ -72,6 +74,8 @@ public class DetailsWdg extends Widget {
         if (gob != null) {
             gob.delattr(GobHighlight.class);
             gob.setattr(new GobHighlight(gob));
+            if (button == 3)
+                gameui().map.wdgmsg("click", gob.sc, gob.rc.floor(posres), 3, 0, 0, (int) gob.id, gob.rc.floor(posres), 0, -1);
         }
         return super.mousedown(c, button);
     }

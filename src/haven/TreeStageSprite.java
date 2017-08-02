@@ -17,7 +17,7 @@ public class TreeStageSprite extends Sprite {
 
     static {
         for (int i = 10; i < 100; i++) {
-            treestg[i - 10] = Text.renderstroked(i + "", stagecolor, Color.BLACK, Text.sans12bold).tex();
+            treestg[i - 10] = Text.renderstroked(i + "", stagecolor, Color.BLACK, Text.num12boldFnd).tex();
         }
     }
 

@@ -157,7 +157,7 @@ public class FightWnd extends Widget {
         int u = 0;
         for (Action act : acts)
             u += act.u;
-        count = Text.sans12bold.render(String.format("= %d/%d", u, maxact), (u > maxact) ? Color.RED : Color.WHITE).tex();
+        count = Text.num12boldFnd.render(String.format("= %d/%d", u, maxact), (u > maxact) ? Color.RED : Color.WHITE).tex();
     }
 
     private static final Tex[] add = {Resource.loadtex("gfx/hud/buttons/addu"),
@@ -239,7 +239,7 @@ public class FightWnd extends Widget {
             g.image(act.rnm.tex(), new Coord(itemh + 2, ty));
 
             if (act.ra == null)
-                act.ra = Text.sans12bold.render(String.valueOf(act.a));
+                act.ra = Text.num12boldFnd.render(String.valueOf(act.a));
             g.aimage(act.ra.tex(), new Coord(sz.x - 15, ty), 1.0, 0.0);
         }
 
@@ -430,7 +430,7 @@ public class FightWnd extends Widget {
                         g.image(act.res.get().layer(Resource.imgc).tex(), ic);
 
                         if (act.ru == null)
-                            act.ru = Text.sans12bold.render(String.format("%d/%d", act.u, act.a));
+                            act.ru = Text.num12boldFnd.render(String.format("%d/%d", act.u, act.a));
 
                         g.image(act.ru.tex(), c.add(invsq.sz().x / 2 - act.ru.sz().x / 2, pcy));
                         g.chcolor();
@@ -717,7 +717,7 @@ public class FightWnd extends Widget {
         Frame.around(this, Collections.singletonList(info));
 
         add(new Img(CharWnd.catf.render(Resource.getLocString(Resource.BUNDLE_LABEL,"Martial Arts & Combat Schools")).tex()), 0, 0);
-        actlist = add(new Actions(235, Config.iswindows ? 7 : 8), new Coord(276, 35).add(wbox.btloff()));
+        actlist = add(new Actions(235, actionsListHeight()), new Coord(276, 35).add(wbox.btloff()));
         Frame.around(this, Collections.singletonList(actlist));
         Widget p = add(new BView(), 77, 200);
 
@@ -736,7 +736,7 @@ public class FightWnd extends Widget {
         add(new Button(110, "Rename", false) {
             public void click() {
                 Pair<Text, Integer> sel = schoolsDropdown.sel;
-                if (sel == null || sel.a.text.equals("unused save"))
+                if (sel == null || sel.a.text.equals(Resource.getLocString(Resource.BUNDLE_LABEL, "unused save")))
                     return;
 
                 Window renwnd = new Window(new Coord(225, 100), "Rename School") {
@@ -790,6 +790,20 @@ public class FightWnd extends Widget {
         pack();
     }
 
+    private static int actionsListHeight() {
+        switch (Resource.language) {
+            default:
+            case "en":
+                return Config.iswindows ? 7 : 8;
+            case "ru":
+                return 8;
+            case "zh":
+                return Config.iswindows ? 7 : 8;
+            case "ko":
+                return 7;
+        }
+    }
+
     public Action findact(int resid) {
         for(Action act : acts) {
             if(act.id == resid)
@@ -798,7 +812,7 @@ public class FightWnd extends Widget {
         return(null);
     }
 
-    private final Text unused = new Text.Foundry(attrf.font.deriveFont(java.awt.Font.ITALIC)).aa(true).render("unused save");
+    private final Text unused = new Text.Foundry(Text.sans.deriveFont(Font.ITALIC, 14)).aa(true).render(Resource.getLocString(Resource.BUNDLE_LABEL, "unused save"));
 
     public void uimsg(String nm, Object... args) {
         if (nm == "avail") {

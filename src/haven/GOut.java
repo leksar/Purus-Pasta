@@ -328,35 +328,11 @@ public class GOut {
         checkerr();
     }
 
-    public void atextstroked(String text, Coord c, Color color, Color stroke) {
-        Text t = Text.renderstroked(text, color, stroke);
-        Tex T = t.tex();
-        image(T, c);
-        T.dispose();
-        checkerr();
-    }
-
-    public void atextstroked(String text, Coord c, double ax, double ay, Color color, Color stroke) {
-        Text t = Text.renderstroked(text, color, stroke);
+    public void atextstroked(String text, Coord c, double ax, double ay, Color color, Color stroke, Text.Foundry foundry) {
+        Text t = Text.renderstroked(text, color, stroke, foundry);
         Tex T = t.tex();
         Coord sz = t.sz();
         image(T, c.add((int) ((double) sz.x * -ax), (int) ((double) sz.y * -ay)));
-        T.dispose();
-        checkerr();
-    }
-
-    public void atextstroked(String text, Coord c, Color color, Color stroke, Text.Foundry foundry) {
-        Text t = Text.renderstroked(text, color, stroke, foundry);
-        Tex T = t.tex();
-        image(T, c);
-        T.dispose();
-        checkerr();
-    }
-
-    public void atextstroked(String text, int y, Color color, Color stroke, Text.Foundry foundry) {
-        Text t = Text.renderstroked(text, color, stroke, foundry);
-        Tex T = t.tex();
-        image(T, new Coord(sz.x / 2 - t.sz().x / 2, y));
         T.dispose();
         checkerr();
     }

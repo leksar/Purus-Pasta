@@ -1,3 +1,47 @@
+Version 1.61.0
+    Fixed:
+        * Alternative belt window not working with Exquisite Belts.
+
+    Misc:
+		* Added clover and lady's mantles to icons list.
+		* Right-clicking entry in the livestock manager will simulate right-click on the animal.
+		* Upstream code merge.
+
+
+Version 1.60.0
+    New:
+        * Option to change interface font.
+		* Dream harvester.
+
+    Fixed:
+        * Unable to hang items on walls at different heights.
+
+    Misc:
+		* Upstream code merge.
+
+
+Version 1.59.2
+    Misc:
+		* Reverted to system supplied fonts.
+
+
+Version 1.59.1
+    Fixed:
+        * Missing Latin script in Korean/Chinese localization.
+
+
+Version 1.59.0
+    New:
+        * Korean localization.
+
+    Fixed:
+        * Crash when accessing wardrobes while alternative belt window is toggled on.
+
+    Misc:
+		* Bundle all the required fonts with the client instead of using system defined fonts.
+		* Improvements to localization support.
+
+
 Version 1.58.0
     New:
         * Alternative belt window. See UI Settings.

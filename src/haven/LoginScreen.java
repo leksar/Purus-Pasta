@@ -58,7 +58,7 @@ public class LoginScreen extends Widget {
     Button statusbtn;
     OptWnd opts;
     static boolean ServerStatus;
-    static Text.Foundry textf, textfs;
+    static Text.Foundry textf, textfs, special;
     static Tex bg = Resource.loadtex("gfx/loginscr");
     Text progress = null;
 
@@ -67,6 +67,7 @@ public class LoginScreen extends Widget {
     static {
         textf = new Text.Foundry(Text.sans, 16).aa(true);
         textfs = new Text.Foundry(Text.sans, 14).aa(true);
+        special = new Text.Foundry(Text.latin, 14).aa(true);
         
         InputStream crt = null;
         try {
@@ -206,8 +207,7 @@ public class LoginScreen extends Widget {
     }
 
     public class LoginList extends Listbox<LoginData> {
-        private final Text.Foundry fnd = new Text.Foundry(Text.sans, 14);
-        private final Tex xicon = Text.render("\u2716", Color.RED, fnd).tex();
+        private final Tex xicon = Text.render("\u2716", Color.RED, special).tex();
         private int hover = -1;
         private final static int ITEM_HEIGHT = 20;
         private Coord lastMouseDown = Coord.z;
@@ -267,8 +267,10 @@ public class LoginScreen extends Widget {
                 g.frect(Coord.z, g.sz);
                 g.chcolor();
             }
-            g.image(Text.render(item.name, Color.WHITE, fnd).tex(), new Coord(5, 2));
-            g.image(xicon, new Coord(sz.x - 25, 1));
+            Tex tex = Text.render(item.name, Color.WHITE, textfs).tex();
+            int y = ITEM_HEIGHT / 2 - tex.sz().y / 2;
+            g.image(tex, new Coord(5, y));
+            g.image(xicon, new Coord(sz.x - 25, y));
         }
 
         @Override

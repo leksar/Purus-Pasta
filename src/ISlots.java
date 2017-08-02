@@ -21,7 +21,6 @@ import haven.Text.Foundry;
 
 public class ISlots extends Tip implements NumberInfo, GildingInfo {
     public static final Text ch = Text.render(Resource.getLocString(Resource.BUNDLE_LABEL, "Gilding:"));
-    public static final Foundry progf = new Foundry(Text.dfont.deriveFont(2), new Color(0, 169, 224));
     public final Collection<SItem> s = new ArrayList<SItem>();
     public final int left;
     public final double pmin;
@@ -79,7 +78,7 @@ public class ISlots extends Tip implements NumberInfo, GildingInfo {
         if (this.left > 0) {
             String gildStr = Resource.getLocString(Resource.BUNDLE_LABEL, "Gildable ×%d");
             String gild2Str = Resource.getLocString(Resource.BUNDLE_LABEL, "Gildable");
-            var1.cmp.add(progf.render(this.left > 1 ? String.format(gildStr, Integer.valueOf(this.left)) : gild2Str).img, new Coord(10, var1.cmp.sz.y));
+            var1.cmp.add(Text.slotFnd.render(this.left > 1 ? String.format(gildStr, Integer.valueOf(this.left)) : gild2Str).img, new Coord(10, var1.cmp.sz.y));
         }
 
     }
