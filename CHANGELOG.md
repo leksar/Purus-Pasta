@@ -1,5 +1,7 @@
 ## Changelog
 
+### 2.30.7
+	- Latest merges from Amber & Default client
 ### 2.30.6
 	- Relocated softcap text location in craftwindow
 	- Latest merges from Amber & Default client
