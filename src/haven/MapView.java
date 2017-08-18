@@ -1797,6 +1797,23 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
                 }
             }
 
+            if (Config.proximityaggro && clickb == 1 && curs != null && curs.name.equals("gfx/hud/curs/atk")) {
+                Gob target = null;
+                synchronized (glob.oc) {
+                    for (Gob gob : glob.oc) {
+                        if (gob.type == Gob.Type.PLAYER && !gob.isplayer()) {
+                            double dist = gob.rc.dist(mc);
+                            if ((target == null || dist < target.rc.dist(mc)) && dist <= 5 * tilesz.x)
+                                target = gob;
+                        }
+                    }
+                }
+                if (target != null) {
+                    wdgmsg("click", target.sc, target.rc.floor(posres), 1, 0, 0, (int) target.id, target.rc.floor(posres), 0, -1);
+                    return;
+                }
+            }
+
             // reset alt so we could walk with alt+lmb while having item on the cursor
             int modflags = ui.modflags();
             if (gameui().vhand != null && clickb == 1)

@@ -47,7 +47,6 @@ public class GItem extends AWidget implements ItemInfo.SpriteOwner, GSprite.Owne
     public Tex metertex;
     public double studytime = 0.0;
     public Tex timelefttex;
-    private String name = "";
     
     public long finishedTime = -1;
     public long totalTime = -1;
@@ -118,15 +117,6 @@ public class GItem extends AWidget implements ItemInfo.SpriteOwner, GSprite.Owne
         } catch (Exception ex) {
             return "";
         }
-    }
-
-    public void updatetimelefttex() {
-        if (studytime == 0.0)
-            return;
-        int timeleft = (int) studytime * (100 - meter) / 100;
-        int hoursleft = timeleft / 60;
-        int minutesleft = timeleft - hoursleft * 60;
-        timelefttex = Text.renderstroked(String.format("%d:%02d", hoursleft, minutesleft), Color.WHITE, Color.BLACK, num10Fnd).tex();
     }
 
     private Random rnd = null;

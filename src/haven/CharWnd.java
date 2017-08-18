@@ -1559,9 +1559,9 @@ public class CharWnd extends Window {
 
         public CredoGrid(Coord sz) {
             super(sz);
-            pcrc = new Img(GridList.dcatf.render("Pursuing").tex());
-            ncrc = new Img(GridList.dcatf.render("Credos Available").tex());
-            ccrc = new Img(GridList.dcatf.render("Credos Acquired").tex());
+            pcrc = new Img(GridList.dcatf.render(Resource.getLocString(Resource.BUNDLE_LABEL, "Pursuing")).tex());
+            ncrc = new Img(GridList.dcatf.render(Resource.getLocString(Resource.BUNDLE_LABEL, "Credos Available")).tex());
+            ccrc = new Img(GridList.dcatf.render(Resource.getLocString(Resource.BUNDLE_LABEL, "Credos Acquired")).tex());
             pbtn = new Button(100, "Pursue", false) {
                 public void click() {
                     if(sel != null)
@@ -1630,8 +1630,8 @@ public class CharWnd extends Window {
                 cont.add(pcrc, 5, y);
                 y += pcrc.sz.y + 5;
                 Widget pcrim = cont.add(new CredoImg(pcr), 5, y);
-                cont.add(new Label(String.format("Level: %d/%d", pcl, pclt), prsf), pcrim.c.x + pcrim.sz.x + 5, y);
-                cont.add(new Label(String.format("Quest: %d/%d", pcql, pcqlt), prsf), pcrim.c.x + pcrim.sz.x + 5, y + 20);
+                cont.add(new Label(String.format(Resource.getLocString(Resource.BUNDLE_LABEL, "Level: %d/%d"), pcl, pclt), prsf), pcrim.c.x + pcrim.sz.x + 5, y);
+                cont.add(new Label(String.format(Resource.getLocString(Resource.BUNDLE_LABEL, "Quest: %d/%d"), pcql, pcqlt), prsf), pcrim.c.x + pcrim.sz.x + 5, y + 20);
                 cont.adda(qbtn, pcrim.c.x + pcrim.sz.x + 5, y + pcrim.sz.y, 0, 1);
                 y += pcrim.sz.y;
                 y += 10;

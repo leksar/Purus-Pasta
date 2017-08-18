@@ -121,7 +121,7 @@ public class Equipory extends Widget implements DTarget {
 
     @Override
     public void tick(double dt) throws InterruptedException {
-	    if (!checkForDrop.isEmpty()) {
+	if (!checkForDrop.isEmpty()) {
 		GItem g = checkForDrop.get(0);
 		if (g.resname().equals("gfx/invobjs/leech")) {
 			 g.drop = true; 
@@ -129,7 +129,7 @@ public class Equipory extends Widget implements DTarget {
 		}
 		checkForDrop.remove(0);
 	    }
-        if (Config.quickbelt && beltWndId == -1) {
+        if (Config.quickbelt && beltWndId == -1 && ((Window) parent).origcap.equals("Equipment")) {
             for (WItem itm[] : wmap.values()) {
                 try {
                     if (itm.length > 0 && itm[0].item.res.get().name.endsWith("belt"))

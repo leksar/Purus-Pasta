@@ -131,7 +131,7 @@ public class InventoryStudy extends Inventory {
         GItem item = ((WItem) w).item;
         try {
             haven.resutil.Curiosity ci = ItemInfo.find(haven.resutil.Curiosity.class, item.info());
-            if (ci != null && item.meter >= 99) {
+            if (ci != null && ((WItem) w).itemmeter.get() > 99) {
                 Resource.Tooltip tt = item.resource().layer(Resource.Tooltip.class);
                 if (tt != null)
                     gameui().syslog.append(tt.t + " LP: " + ci.exp, Color.LIGHT_GRAY);

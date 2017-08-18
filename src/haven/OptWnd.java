@@ -41,6 +41,7 @@ import java.util.Locale;
 import java.util.Set;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
+import java.util.prefs.BackingStoreException;
 import java.util.stream.Collectors;
 
 public class OptWnd extends Window {
@@ -909,57 +910,35 @@ public class OptWnd extends Window {
                 a = val;
             }
         });
-	appender.add(new CheckBox("Show F-key toolbar") {
-            {
-                a = Config.fbelt;
-            }
-
-            public void set(boolean val) {
-                Utils.setprefb("fbelt", val);
-                Config.fbelt = val;
-                a = val;
-                FBelt fbelt = gameui().fbelt;
-                if (fbelt != null) {
-                    if (val)
-                        fbelt.show();
-                    else
-                        fbelt.hide();
-                }
-            }
-        });
-        appender.add(new CheckBox("Highlight empty/finished drying frames") {
-            {
-                a = Config.showdframestatus;
-            }
-
-            public void set(boolean val) {
-                Utils.setprefb("showdframestatus", val);
-                Config.showdframestatus = val;
-                a = val;
-            }
-        });
-
-        display.add(new Button(220, "Reset Windows (req. logout)") {
-            @Override
-            public void click() {
-                for (String wndcap : Window.persistentwnds)
-                    Utils.delpref(wndcap + "_c");
-                Utils.delpref("mmapc");
-                Utils.delpref("mmapwndsz");
-                Utils.delpref("mmapsz");
-                Utils.delpref("quickslotsc");
-                Utils.delpref("chatsz");
-                Utils.delpref("chatvis");
-                Utils.delpref("gui-bl-visible");
-                Utils.delpref("gui-br-visible");
-                Utils.delpref("gui-ul-visible");
-                Utils.delpref("gui-ur-visible");
-                Utils.delpref("menu-visible");
-                Utils.delpref("haven.study.position");
-                Utils.delpref("fbelt_c");
-                Utils.delpref("fbelt_vertical");
-            }
-        }, new Coord(200, 320));
+		appender.add(new CheckBox("Show F-key toolbar") {
+	            {
+	                a = Config.fbelt;
+	            }
+	
+	            public void set(boolean val) {
+	                Utils.setprefb("fbelt", val);
+	                Config.fbelt = val;
+	                a = val;
+	                FBelt fbelt = gameui().fbelt;
+	                if (fbelt != null) {
+	                    if (val)
+	                        fbelt.show();
+	                    else
+	                        fbelt.hide();
+	                }
+	            }
+		});
+		appender.add(new CheckBox("Highlight empty/finished drying frames") {
+	        {
+	            a = Config.showdframestatus;
+	        }
+	
+	        public void set(boolean val) {
+	            Utils.setprefb("showdframestatus", val);
+	            Config.showdframestatus = val;
+	            a = val;
+	        }
+	    });
     }
 
     private void initMap() {
@@ -1266,6 +1245,17 @@ public class OptWnd extends Window {
 
             public void set(boolean val) {
                 Utils.setprefb("combshowkeys", val);
+                Config.combshowkeys = val;
+                a = val;
+            }
+        });
+        appender.add(new CheckBox("Aggro players in proximity to the mouse cursor") {
+            {
+                a = Config.proximityaggro;
+            }
+
+            public void set(boolean val) {
+                Utils.setprefb("proximityaggro", val);
                 Config.combshowkeys = val;
                 a = val;
             }
@@ -1768,8 +1758,14 @@ public class OptWnd extends Window {
         Button resetWndBtn = new Button(220, "Reset Windows (req. logout)") {
             @Override
             public void click() {
-                for (String wndcap : Window.persistentwnds)
-                    Utils.delpref(wndcap + "_c");
+                try {
+                    for (String key : Utils.prefs().keys()) {
+                        if (key.endsWith("_c")) {
+                            Utils.delpref(key);
+                        }
+                    }
+                } catch (BackingStoreException e) {
+                }
                 Utils.delpref("mmapc");
                 Utils.delpref("mmapwndsz");
                 Utils.delpref("mmapsz");
@@ -1777,7 +1773,6 @@ public class OptWnd extends Window {
                 Utils.delpref("chatsz");
                 Utils.delpref("chatvis");
                 Utils.delpref("menu-visible");
-                Utils.delpref("fbelt_c");
                 Utils.delpref("fbelt_vertical");
             }
         };
@@ -1855,7 +1850,7 @@ public class OptWnd extends Window {
         });
         appender.add(new Label("Automatic selecton:"));
 
-        CheckListbox flowerlist = new CheckListbox(140, 16) {
+        CheckListbox flowerlist = new CheckListbox(140, 17) {
             @Override
             protected void itemclick(CheckListboxItem itm, int button) {
                 super.itemclick(itm, button);

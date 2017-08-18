@@ -92,12 +92,6 @@ public class Window extends Widget implements DTarget {
     public int cmw;
     private UI.Grab dm = null;
     private Coord doff;
-    public static final Set<String> persistentwnds = new HashSet<String>(
-            Arrays.asList("Timers", "Inventory", "Equipment", "Crafting", "Character Sheet", "Kith & Kin", "Crate",
-                    "Cupboard", "Barrel", "Table", "Cauldron", "Stockpile", "Tub", "Ore Smelter", "Land survey",
-                    "Quiver", "Stone Casket", "Chicken Coop", "Extraction Press", "Oven", "Large Chest",
-                    "Herbalist Table", "Kiln", "Finery Forge", "Stone Column", "Steelbox", "Wooden Chest", "Search...",
-                    "Belt"));
 
     @RName("wnd")
     public static class $_ implements Factory {
@@ -291,7 +285,7 @@ public class Window extends Widget implements DTarget {
         if (dm != null) {
             dm.remove();
             dm = null;
-            if (persistentwnds.contains(origcap))
+            if (!origcap.equals("Options"))
                 Utils.setprefc(origcap + "_c", this.c);
         } else {
             super.mouseup(c, button);

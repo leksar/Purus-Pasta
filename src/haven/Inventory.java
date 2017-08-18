@@ -166,17 +166,20 @@ public class Inventory extends Widget implements DTarget {
 
     public List<WItem> getIdenticalItems(GItem item) {
         List<WItem> items = new ArrayList<WItem>();
-        String name = item.spr().getname();
-        String resname = item.resource().name;
-        for (Widget wdg = child; wdg != null; wdg = wdg.next) {
+        GSprite sprite = item.spr();
+        if (sprite != null) {
+            String name = sprite.getname();
+            String resname = item.resource().name;
+            for (Widget wdg = child; wdg != null; wdg = wdg.next) {
                 if (wdg instanceof WItem) {
-                    GSprite sprite = ((WItem) wdg).item.spr();
+                    sprite = ((WItem) wdg).item.spr();
                     if (sprite != null) {
                         Resource res = ((WItem) wdg).item.resource();
                         if (res != null && res.name.equals(resname) && (name == null || name.equals(sprite.getname())))
                             items.add((WItem) wdg);
                     }
                 }
+            }
         }
         return items;
     }
